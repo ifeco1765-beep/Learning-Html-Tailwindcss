@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Event Details | Nice-Xclusive Events Platform</title>
+  <link rel="stylesheet" href="/tailwind/src/output.css">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=Montserrat:wght@300;400;500;600&display=swap"
+    rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@4.9.0/fonts/remixicon.css" rel="stylesheet">
+
+  <style>
+    .font-cinzel {
+      font-family: 'Cinzel', serif;
+    }
+
+    .font-cormorant {
+      font-family: 'Cormorant Garamond', serif;
+    }
+
+    body {
+      font-family: 'Montserrat', sans-serif;
+    }
+
+    .gold-text {
+      font-family: 'Cinzel', serif;
+      background: linear-gradient(135deg, #F0C040 0%, #C9A84C 50%, #8B6914 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity .7s ease, transform .7s ease;
+    }
+
+    .reveal.in-view {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .reveal-delay-1.in-view {
+      transition-delay: .1s;
+    }
+
+    .reveal-delay-2.in-view {
+      transition-delay: .2s;
+    }
+
+    /* lightbox */
+    #lightbox {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      background: rgba(0, 0, 0, 0.92);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+
+    #lightbox.active {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    #lightbox img {
+      max-width: 90vw;
+      max-height: 85vh;
+      border-radius: 16px;
+      box-shadow: 0 0 60px rgba(234, 179, 8, 0.2);
+      transform: scale(0.9);
+      transition: transform 0.3s ease;
+      object-fit: contain;
+    }
+
+    #lightbox.active img {
+      transform: scale(1);
+    }
+
+    #lightbox-close {
+      position: absolute;
+      top: 20px;
+      right: 24px;
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 2rem;
+      cursor: pointer;
+      transition: color 0.2s;
+      background: none;
+      border: none;
+    }
+
+    #lightbox-close:hover {
+      color: #eab308;
+    }
+
+    .zoom-img {
+      cursor: zoom-in;
+      transition: transform 0.3s ease;
+    }
+
+    .zoom-img:hover {
+      transform: scale(1.02);
+    }
+
+    /* mobile menu */
+    #mobile-menu {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.35s ease;
+    }
+
+    #mobile-menu.open {
+      max-height: 600px;
+    }
+  </style>
+</head>
+
+<body class="relative min-h-screen bg-[#06030F] text-white overflow-x-hidden">
+
+  <div class="fixed inset-0 pointer-events-none z-0"
+    style="background:radial-gradient(ellipse 70% 60% at 20% 40%,rgba(80,20,120,0.4) 0%,transparent 65%),radial-gradient(ellipse 50% 50% at 80% 70%,rgba(60,10,100,0.25) 0%,transparent 60%);">
+  </div>
+
+  <!-- LIGHTBOX -->
+  <div id="lightbox">
+    <button id="lightbox-close" aria-label="Close"><i class="ri-close-line"></i></button>
+    <img id="lightbox-img" src="" alt="Event image" />
+  </div>
+
+  <!-- NAVBAR -->
+  <header class="relative z-50">
+    <nav id="main-nav"
+      class="w-full bg-[#050816]/90 backdrop-blur-xl border-b border-yellow-500/20 sticky top-0 left-0 z-50 transition-all duration-300">
+      <div class="max-w-7xl mx-auto px-6 lg:px-10">
+        <div class="flex items-center justify-between h-20">
+          <div class="flex items-center gap-3">
+            <div
+              class="w-14 h-14 rounded-xl border border-yellow-500 flex items-center justify-center bg-gradient-to-br from-yellow-400 to-yellow-700 shadow-lg shadow-yellow-500/20">
+              <span class="font-cinzel text-2xl font-bold text-black">NX</span>
+            </div>
+            <div>
+              <p class="font-cinzel text-white text-xl font-semibold tracking-wide">Nice-Xclusive</p>
+              <p class="text-yellow-500 text-xs tracking-[4px] uppercase">Events Platform</p>
+            </div>
+          </div>
+          <ul class="hidden lg:flex items-center gap-10 text-white font-medium text-sm">
+            <li><a href="index.html" class="font-cinzel hover:text-yellow-400 transition">Home</a></li>
+            <li><a href="Aboutus.html" class="font-cinzel hover:text-yellow-400 transition">About Us</a></li>
+            <li><a href="/tailwind/src/index.html#events"
+                class="font-cinzel text-yellow-400 border-b border-yellow-400 pb-0.5">Events</a></li>
+            <li><a href="Services.html" class="font-cinzel hover:text-yellow-400 transition">Services</a></li>
+           
+            <li><a href="Contact-us.html" class="font-cinzel hover:text-yellow-400 transition">Contact</a></li>
+          </ul>
+          <div class="hidden lg:flex items-center gap-4">
+            <a href="sign-in.html"
+              class="font-cinzel px-5 py-2.5 border border-yellow-500 text-yellow-400 rounded-xl hover:bg-yellow-500 hover:text-black transition text-sm">Sign
+              In</a>
+            <a href="sign-up.html"
+              class="font-cinzel px-5 py-2.5 bg-yellow-500 text-black font-semibold rounded-xl hover:bg-yellow-400 transition shadow-lg shadow-yellow-500/30 text-sm">Create
+              Account</a>
+          </div>
+          <button id="hamburger"
+            class="lg:hidden text-yellow-500 text-3xl focus:outline-none cursor-pointer hover:text-yellow-300 transition"
+            aria-label="Toggle menu">
+            <i id="ham-icon" class="ri-menu-line"></i>
+          </button>
+        </div>
+      </div>
+      <div id="mobile-menu" class="lg:hidden bg-[#0b1023] border-t border-yellow-500/20">
+        <ul class="flex flex-col p-6 gap-5 text-white font-medium">
+          <li><a href="index.html" class="font-cinzel hover:text-yellow-400 text-sm">Home</a></li>
+          <li><a href="Aboutus.html" class="font-cinzel hover:text-yellow-400 text-sm">About Us</a></li>
+          <li><a href="/tailwind/src/index.html#events" class="font-cinzel text-yellow-400 text-sm">Events</a></li>
+          <li><a href="Services.html" class="font-cinzel hover:text-yellow-400 text-sm">Services</a></li>
+         
+          <li><a href="Contact-us.html" class="font-cinzel hover:text-yellow-400 text-sm">Contact</a></li>
+          <li class="flex flex-col gap-3 pt-2">
+            <a href="sign-in.html"
+              class="font-cinzel w-full py-3 border border-yellow-500 text-yellow-400 rounded-xl text-center text-sm">Sign
+              In</a>
+            <a href="sign-up.html"
+              class="font-cinzel w-full py-3 bg-yellow-500 text-black font-semibold rounded-xl text-center text-sm">Create
+              Account</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+  </header>
+
+  <main class="relative z-10 max-w-7xl mx-auto px-6 lg:px-10 py-16 space-y-16">
+
+    <!-- Page Header -->
+    <div class="text-center reveal">
+      <div class="inline-flex items-center gap-3 mb-4">
+        <span class="w-9 h-px bg-yellow-500 block"></span>
+        <span class="font-cinzel text-yellow-500 text-[10px] font-semibold tracking-[0.4em] uppercase">Upcoming
+          Events</span>
+        <span class="w-9 h-px bg-yellow-500 block"></span>
+      </div>
+      <h1 class="gold-text text-5xl lg:text-6xl font-bold mb-4">Event Details</h1>
+      <p class="font-cormorant text-white/70 text-lg max-w-2xl mx-auto leading-relaxed">
+        Explore full details and secure your spot at Nigeria's finest events.
+      </p>
+    </div>
+
+    <!-- ══════ EVENT 1: RegTech Africa ══════ -->
+    <!-- <article id="event-details">
+      <img id="event-banner" src="" alt="">
+
+      <h2 id="event-title"></h2>
+
+      <p id="event-category"></p>
+
+      <p id="event-description"></p>
+
+      <p id="event-date"></p>
+
+      <p id="event-time"></p>
+
+      <p id="event-price"></p>
+
+      <p id="event-venue"></p>
+
+      <p id="event-seats"></p>
+    </article> -->
+
+
+
+
+
+
+    <!-- ══════ EVENT 2: Binge Experience ══════ -->
+    <article class="reveal reveal-delay-1" id="event-details">
+      <div class="grid grid-cols-1 lg:grid-cols-[1.3fr_0.7fr] gap-8">
+
+        <div
+          class="relative bg-white/[0.03] border border-yellow-500/20 rounded-3xl overflow-hidden before:absolute before:top-0 before:left-0 before:right-0 before:h-0.5 before:bg-gradient-to-r before:from-transparent before:via-yellow-500 before:to-transparent">
+          <div class="relative h-60 overflow-hidden">
+            <img id="event-banner" src="" alt="Binge Experience 2026"
+              class="zoom-img w-full h-full object-cover object-center" />
+            <div class="absolute inset-0 pointer-events-none"
+              style="background:linear-gradient(to top,rgba(6,3,15,0.6),transparent 60%);"></div>
+          </div>
+
+          <div class="p-7">
+            <div class="flex flex-wrap items-center gap-3 mb-4">
+              <span
+                class="font-cinzel text-[10px] tracking-widest uppercase bg-yellow-500/15 border border-yellow-500/30 text-yellow-400 px-3 py-1 rounded-full" id="event-category"></span>
+              <span class="flex items-center gap-1 text-white/60 text-xs"><i
+                  class="ri-map-pin-line text-yellow-500/70 text-xs"></i></span>
+            </div>
+
+            <h2 class="font-cinzel text-2xl font-bold text-white mb-3" id="event-title"></h2>
+            <p class="font-cormorant text-white/65 text-lg mb-6 leading-relaxed" id="event-description"></p>
+
+            <div class="grid grid-cols-3 gap-3 mb-7">
+              <div class="bg-white/[0.04] border border-yellow-500/15 rounded-2xl p-4 text-center">
+                <p class="font-cinzel text-yellow-500/70 text-[9px] tracking-widest uppercase mb-1">Date</p>
+                <p class="font-cinzel text-white font-semibold text-xs" id="event-date">May 24, 2026</p>
+              </div>
+              <div class="bg-white/[0.04] border border-yellow-500/15 rounded-2xl p-4 text-center">
+                <p class="font-cinzel text-yellow-500/70 text-[9px] tracking-widest uppercase mb-1">Time</p>
+                <p class="font-cinzel text-white font-semibold text-xs" id="event-time">12:00 PM</p>
+              </div>
+              <div class="bg-white/[0.04] border border-yellow-500/15 rounded-2xl p-4 text-center">
+                <p class="font-cinzel text-yellow-500/70 text-[9px] tracking-widest uppercase mb-1">Price</p>
+                <p class="font-cinzel font-bold text-xs gold-text" id="event-price">₦2,000–₦5,000</p>
+              </div>
+            </div>
+
+            <div class="bg-white/[0.03] border border-yellow-500/15 rounded-2xl p-6">
+              <h3 class="font-cinzel text-white font-semibold text-sm mb-5">Event Details</h3>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <p class="font-cinzel text-yellow-500 text-[10px] tracking-widest uppercase mb-2">About This Event</p>
+                  <p class="font-cormorant text-white/70 text-base leading-relaxed" id="event-about"></p>
+                </div>
+                <div class="space-y-5">
+                  <div>
+                    <p class="font-cinzel text-yellow-500 text-[10px] tracking-widest uppercase mb-2">What's Included
+                    </p>
+                    <ul class="space-y-1.5" id="event-included-list">
+                    </ul>
+                  </div>
+                  <div>
+                    <p class="font-cinzel text-yellow-500 text-[10px] tracking-widest uppercase mb-2">Who Should Attend
+                    </p>
+                    <p class="font-cormorant text-white/65 text-base leading-relaxed" id="event-who-attend"></p>
+                  </div>
+                  <div>
+                    <p class="font-cinzel text-yellow-500 text-[10px] tracking-widest uppercase mb-2">Location</p>
+                    <p class="flex items-start gap-2 text-white/65 text-sm">
+  <i class="ri-map-pin-line text-yellow-500 mt-0.5"></i>
+  <span id="event-venue-full"></span>
+</p>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="bg-white/[0.03] border border-yellow-500/15 rounded-2xl p-6">
+              <div class="flex items-center justify-between mb-5 flex-wrap gap-2">
+                <h3 class="font-cinzel text-white font-semibold text-sm">Attendee Reviews</h3>
+                <div id="reviews-summary" class="hidden items-center gap-2">
+                  <div id="reviews-avg-stars" class="flex items-center gap-0.5"></div>
+                  <span id="reviews-avg-text" class="text-white/50 text-xs font-cormorant"></span>
+                </div>
+              </div>
+              <div id="reviews-list" class="space-y-4"></div>
+              <div id="reviews-empty" class="hidden text-center py-6">
+                <i class="ri-chat-quote-line text-white/20 text-2xl mb-2 block"></i>
+                <p class="font-cormorant text-white/40 text-sm">No reviews yet — be the first to attend and share your
+                  thoughts!</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div
+          class="relative bg-white/[0.03] border border-yellow-500/20 rounded-3xl overflow-hidden before:absolute before:top-0 before:left-0 before:right-0 before:h-0.5 before:bg-gradient-to-r before:from-transparent before:via-yellow-500 before:to-transparent h-fit">
+          <div class="p-7">
+            <div class="inline-flex items-center gap-3 mb-4">
+              <span class="w-6 h-px bg-yellow-500 block"></span>
+              <span class="font-cinzel text-yellow-500 text-[10px] tracking-[0.4em] uppercase">Booking Summary</span>
+            </div>
+            <h3 class="font-cinzel text-2xl font-bold text-white mb-2">Reserve Your Seat</h3>
+            <p class="font-cormorant text-white/60 text-base mb-6 leading-relaxed">Secure your ticket now and get ready
+              for the most vibrant night of the year.</p>
+            <div class="space-y-3 mb-6">
+              <div
+                class="flex items-center justify-between bg-white/[0.04] border border-yellow-500/15 rounded-xl px-5 py-4">
+                <p class="font-cinzel text-white/60 text-xs uppercase tracking-wider">Available Seats</p>
+                <p class="font-cinzel text-white font-semibold text-sm" id="event-seats">300 Seats</p>
+              </div>
+              <div
+                class="flex items-center justify-between bg-white/[0.04] border border-yellow-500/15 rounded-xl px-5 py-4">
+                <p class="font-cinzel text-white/60 text-xs uppercase tracking-wider">Duration</p>
+                <p class="font-cinzel text-white font-semibold text-sm" id="event-duration">4 Hours</p>
+              </div>
+              
+                <div class="flex items-center justify-between bg-white/[0.04] border border-yellow-500/15 rounded-xl px-5 py-4">
+  <p class="font-cinzel text-white/60 text-xs uppercase tracking-wider">Venue</p>
+  <p class="font-cinzel text-white font-semibold text-xs text-right" id="event-venue-summary"></p>
+</div>
+              <div class="flex items-center justify-between bg-yellow-500/10 border border-yellow-500/30 rounded-xl px-5 py-4">
+  <p class="font-cinzel text-yellow-400 text-xs uppercase tracking-wider">Ticket Price</p>
+  <p class="font-cinzel font-bold text-lg gold-text" id="event-price-summary"></p>
+</div>
+            
+            <a id="purchase-ticket-link" href="Tickets.html"
+   class="font-cinzel block w-full py-4 bg-yellow-500 hover:bg-yellow-400 text-black font-bold text-sm tracking-widest uppercase rounded-xl text-center transition duration-300 shadow-lg shadow-yellow-500/20 hover:-translate-y-0.5">
+  Purchase Ticket →
+</a>
+            <p class="text-white/40 text-[10px] text-center mt-3">Secured by Paystack · SSL encrypted</p>
+          </div>
+        </div>
+
+      </div>
+    </article>
+
+    <!-- ══════ EVENT 3: Kodek Africa ══════ -->
+    <!-- <article class="reveal reveal-delay-2">
+      <div class="grid grid-cols-1 lg:grid-cols-[1.3fr_0.7fr] gap-8">
+
+        <div
+          class="relative bg-white/[0.03] border border-yellow-500/20 rounded-3xl overflow-hidden before:absolute before:top-0 before:left-0 before:right-0 before:h-0.5 before:bg-gradient-to-r before:from-transparent before:via-yellow-500 before:to-transparent">
+          <div class="relative h-60 overflow-hidden">
+            <img
+              src="https://learn.programming-hero.com/wp-content/uploads/2025/11/why-2026-best-year-to-learn-web-development.webp"
+              alt="Kodek Africa 2026" class="zoom-img w-full h-full object-cover object-top" />
+            <div class="absolute inset-0 pointer-events-none"
+              style="background:linear-gradient(to top,rgba(6,3,15,0.6),transparent 60%);"></div>
+          </div>
+
+          <div class="p-7">
+            <div class="flex flex-wrap items-center gap-3 mb-4">
+              <span
+                class="font-cinzel text-[10px] tracking-widest uppercase bg-yellow-500/15 border border-yellow-500/30 text-yellow-400 px-3 py-1 rounded-full">Workshop</span>
+              <span class="flex items-center gap-1 text-white/60 text-xs"><i
+                  class="ri-map-pin-line text-yellow-500/70 text-xs"></i> Iyiagu Estate, Awka</span>
+            </div>
+
+            <h2 class="font-cinzel text-2xl font-bold text-white mb-3">Kodek Africa — Web Dev Workshop 2026</h2>
+            <p class="font-cormorant text-white/65 text-lg mb-6 leading-relaxed">Kodek Africa is on the mission of
+              empowering bright minds in Africa and driving technological innovation. A full-day hands-on workshop
+              covering HTML, CSS, JavaScript, and deployment.</p>
+
+            <div class="grid grid-cols-3 gap-3 mb-7">
+              <div class="bg-white/[0.04] border border-yellow-500/15 rounded-2xl p-4 text-center">
+                <p class="font-cinzel text-yellow-500/70 text-[9px] tracking-widest uppercase mb-1">Date</p>
+                <p class="font-cinzel text-white font-semibold text-xs">June 30, 2026</p>
+              </div>
+              <div class="bg-white/[0.04] border border-yellow-500/15 rounded-2xl p-4 text-center">
+                <p class="font-cinzel text-yellow-500/70 text-[9px] tracking-widest uppercase mb-1">Time</p>
+                <p class="font-cinzel text-white font-semibold text-xs">9:00 AM</p>
+              </div>
+              <div class="bg-white/[0.04] border border-yellow-500/15 rounded-2xl p-4 text-center">
+                <p class="font-cinzel text-yellow-500/70 text-[9px] tracking-widets uppercase mb-1">Price</p>
+                <p class="font-cinzel font-bold text-xs gold-text">₦15,000</p>
+              </div>
+            </div>
+
+            <div class="bg-white/[0.03] border border-yellow-500/15 rounded-2xl p-6">
+              <h3 class="font-cinzel text-white font-semibold text-sm mb-5">Event Details</h3>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <p class="font-cinzel text-yellow-500 text-[10px] tracking-widest uppercase mb-2">About This Event</p>
+                  <p class="font-cormorant text-white/70 text-base leading-relaxed">Kodek Africa is a full-day intensive
+                    coding workshop where participants build real web projects from scratch. This conference provides
+                    scholarships, funds tech education programs, and creates mentorship opportunities for aspiring tech
+                    professionals across Africa.</p>
+                </div>
+                <div class="space-y-5">
+                  <div>
+                    <p class="font-cinzel text-yellow-500 text-[10px] tracking-widest uppercase mb-2">What's Included
+                    </p>
+                    <ul class="space-y-1.5">
+                      <li class="flex items-center gap-2 text-white/70 text-sm"><span
+                          class="text-yellow-500 text-xs">✦</span> Keynote sessions with tech leaders</li>
+                      <li class="flex items-center gap-2 text-white/70 text-sm"><span
+                          class="text-yellow-500 text-xs">✦</span> Hands-on workshops</li>
+                      <li class="flex items-center gap-2 text-white/70 text-sm"><span
+                          class="text-yellow-500 text-xs">✦</span> Mentorship opportunities</li>
+                      <li class="flex items-center gap-2 text-white/70 text-sm"><span
+                          class="text-yellow-500 text-xs">✦</span> QR code e-ticket via email</li>
+                    </ul>
+                  </div>
+                  <div>
+                    <p class="font-cinzel text-yellow-500 text-[10px] tracking-widest uppercase mb-2">Who Should Attend
+                    </p>
+                    <p class="font-cormorant text-white/65 text-base leading-relaxed">Aspiring developers, designers,
+                      data analysts, mobile app developers, and anyone passionate about technology and innovation in
+                      Africa.</p>
+                  </div>
+                  <div>
+                    <p class="font-cinzel text-yellow-500 text-[10px] tracking-widest uppercase mb-2">Location</p>
+                    <p class="flex items-start gap-2 text-white/65 text-sm"><i
+                        class="ri-map-pin-line text-yellow-500 mt-0.5"></i> Plot No. A/127 Iyiagu Housing Estate, Awka,
+                      Anambra State</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div
+          class="relative bg-white/[0.03] border border-yellow-500/20 rounded-3xl overflow-hidden before:absolute before:top-0 before:left-0 before:right-0 before:h-0.5 before:bg-gradient-to-r before:from-transparent before:via-yellow-500 before:to-transparent h-fit">
+          <div class="p-7">
+            <div class="inline-flex items-center gap-3 mb-4">
+              <span class="w-6 h-px bg-yellow-500 block"></span>
+              <span class="font-cinzel text-yellow-500 text-[10px] tracking-[0.4em] uppercase">Booking Summary</span>
+            </div>
+            <h3 class="font-cinzel text-2xl font-bold text-white mb-2">Reserve Your Seat</h3>
+            <p class="font-cormorant text-white/60 text-base mb-6 leading-relaxed">Secure your spot at this hands-on
+              coding workshop and invest in your future today.</p>
+            <div class="space-y-3 mb-6">
+              <div
+                class="flex items-center justify-between bg-white/[0.04] border border-yellow-500/15 rounded-xl px-5 py-4">
+                <p class="font-cinzel text-white/60 text-xs uppercase tracking-wider">Available Seats</p>
+                <p class="font-cinzel text-white font-semibold text-sm">50 Seats</p>
+              </div>
+              <div
+                class="flex items-center justify-between bg-white/[0.04] border border-yellow-500/15 rounded-xl px-5 py-4">
+                <p class="font-cinzel text-white/60 text-xs uppercase tracking-wider">Duration</p>
+                <p class="font-cinzel text-white font-semibold text-sm">8 Hours</p>
+              </div>
+              <div
+                class="flex items-center justify-between bg-white/[0.04] border border-yellow-500/15 rounded-xl px-5 py-4">
+                <p class="font-cinzel text-white/60 text-xs uppercase tracking-wider">Venue</p>
+                <p class="font-cinzel text-white font-semibold text-xs text-right">State House Banquet Hall</p>
+              </div>
+              <div
+                class="flex items-center justify-between bg-yellow-500/10 border border-yellow-500/30 rounded-xl px-5 py-4">
+                <p class="font-cinzel text-yellow-400 text-xs uppercase tracking-wider">Ticket Price</p>
+                <p class="font-cinzel font-bold text-lg gold-text">₦15,000</p>
+              </div>
+            </div>
+            <a href="Tickets.html"
+              class="font-cinzel block w-full py-4 bg-yellow-500 hover:bg-yellow-400 text-black font-bold text-sm tracking-widest uppercase rounded-xl text-center transition duration-300 shadow-lg shadow-yellow-500/20 hover:-translate-y-0.5">
+              Purchase Ticket →
+            </a>
+            <p class="text-white/40 text-[10px] text-center mt-3">Secured by Paystack · SSL encrypted</p>
+          </div>
+        </div>
+
+      </div>
+    </article> -->
+
+    <div class="text-center text-yellow-500/20 text-lg tracking-[8px]">— ✦ —</div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="relative z-10 border-t border-yellow-500/20 py-12 mt-10">
+    <div class="max-w-7xl mx-auto px-6 lg:px-10">
+      <div class="grid gap-8 md:grid-cols-4 mb-8">
+        <div>
+          <h4 class="font-cinzel text-xl font-bold mb-4 text-white">Nice-Xclusive</h4>
+          <p class="font-cormorant text-white/70 text-sm">A premium platform for discovering and booking events you
+            love.</p>
+        </div>
+        <div>
+          <h4 class="font-cinzel text-xl font-bold mb-4 text-white">Quick Links</h4>
+          <ul class="space-y-2">
+            <li><a href="Aboutus.html" class="font-cinzel text-white/70 hover:text-yellow-400 transition text-xs">About
+                Us</a></li>
+            <li><a href="Services.html"
+                class="font-cinzel text-white/70 hover:text-yellow-400 transition text-xs">Services</a></li>
+            <li><a href="Contact-us.html"
+                class="font-cinzel text-white/70 hover:text-yellow-400 transition text-xs">Contact</a></li>
+            <li><a href="terms.html" class="font-cinzel text-white/70 hover:text-yellow-400 transition text-xs">Terms &
+                Policy</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="font-cinzel text-xl font-bold mb-4 text-white">Categories</h4>
+          <ul class="space-y-2">
+            <li><a href="#" class="font-cinzel text-white/70 hover:text-yellow-400 transition text-xs">Tech Events</a>
+            </li>
+            <li><a href="#" class="font-cinzel text-white/70 hover:text-yellow-400 transition text-xs">Music & Arts</a>
+            </li>
+            <li><a href="#" class="font-cinzel text-white/70 hover:text-yellow-400 transition text-xs">Workshops</a>
+            </li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="font-cinzel text-xl font-bold mb-4 text-white">Follow Us</h4>
+          <div class="flex gap-4">
+            <a href="#"
+              class="w-9 h-9 rounded-lg border border-yellow-500/20 bg-white/[0.04] flex items-center justify-center text-white/70 hover:border-yellow-500 hover:text-yellow-400 transition font-bold text-sm">f</a>
+            <a href="#"
+              class="w-9 h-9 rounded-lg border border-yellow-500/20 bg-white/[0.04] flex items-center justify-center text-white/70 hover:border-yellow-500 hover:text-yellow-400 transition font-bold text-sm">X</a>
+            <a href="#"
+              class="w-9 h-9 rounded-lg border border-yellow-500/20 bg-white/[0.04] flex items-center justify-center text-white/70 hover:border-yellow-500 hover:text-yellow-400 transition text-base">📷</a>
+            <a href="#"
+              class="w-9 h-9 rounded-lg border border-yellow-500/20 bg-white/[0.04] flex items-center justify-center text-white/70 hover:border-yellow-500 hover:text-yellow-400 transition font-bold text-sm">in</a>
+          </div>
+        </div>
+      </div>
+      <div class="border-t border-white/10 pt-6 text-center font-cinzel text-white/40 text-xs">
+        © 2026 Nice-Exclusive Event Booking Platform. All rights reserved.
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+
+      const params = new URLSearchParams(window.location.search);
+      const eventId = params.get("id");
+
+      const events = JSON.parse(localStorage.getItem("events")) || [];
+
+      const event = events.find(e => String(e.id) === String(eventId));
+
+if (!event) {
+    alert("Event not found.");
+    window.location.href = "my-events.html";
+    return;
+}
+
+      console.log(event);
+
+if (event) {
+  document.getElementById("event-title").textContent = event.name;
+  document.getElementById("event-category").textContent = event.category;
+  document.getElementById("event-description").textContent = event.description;
+  document.getElementById("event-date").textContent = event.date;
+  document.getElementById("event-time").textContent = event.time;
+  document.getElementById("event-price").textContent = "₦" + Number(event.ticketPrice).toLocaleString("en-NG");
+  document.getElementById("event-seats").textContent = event.totalTickets + " Seats";
+  document.getElementById("event-banner").src = event.banner;
+  document.getElementById("event-banner").alt = event.name;
+
+  const fullVenue = event.venue + ", " + event.city;
+  document.getElementById("event-venue-full").textContent = fullVenue;
+  document.getElementById("event-venue-summary").textContent = fullVenue;
+
+  document.getElementById("event-price-summary").textContent =
+    "₦" + Number(event.ticketPrice).toLocaleString("en-NG");
+
+  document.getElementById("purchase-ticket-link").href = "Tickets.html?id=" + event.id;
+
+  // About / What's Included / Who Should Attend / Duration — now pulled from real event data
+  document.getElementById("event-about").textContent =
+    event.description || "No description provided.";
+
+  const includedList = document.getElementById("event-included-list");
+  if (includedList) {
+    const items = Array.isArray(event.whatsIncluded) ? event.whatsIncluded.filter(Boolean) : [];
+    includedList.innerHTML = items.length
+      ? items.map(item =>
+          `<li class="flex items-center gap-2 text-white/70 text-sm"><span class="text-yellow-500 text-xs">✦</span> ${item}</li>`
+        ).join("")
+      : `<li class="flex items-center gap-2 text-white/70 text-sm"><span class="text-yellow-500 text-xs">✦</span> Details to be announced</li>`;
+  }
+
+  document.getElementById("event-who-attend").textContent =
+    event.whoShouldAttend || "Open to everyone — all are welcome!";
+
+  document.getElementById("event-duration").textContent =
+    event.duration || "TBA";
+
+  // Attendee Reviews — filtered by this event's id
+  const allReviews = JSON.parse(localStorage.getItem("reviews")) || [];
+  const eventReviews = allReviews
+    .filter(r => r.eventId === event.id)
+    .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
+  const reviewsListEl = document.getElementById("reviews-list");
+  const reviewsEmptyEl = document.getElementById("reviews-empty");
+  const reviewsSummaryEl = document.getElementById("reviews-summary");
+
+  function starsMarkupRO(rating) {
+    let html = "";
+    for (let i = 1; i <= 5; i++) {
+      html += `<i class="${i <= rating ? 'ri-star-fill text-yellow-400' : 'ri-star-line text-white/20'} text-sm"></i>`;
+    }
+    return html;
+  }
+
+  if (eventReviews.length === 0) {
+    reviewsListEl.innerHTML = "";
+    reviewsEmptyEl.classList.remove("hidden");
+    reviewsSummaryEl.classList.add("hidden");
+  } else {
+    reviewsEmptyEl.classList.add("hidden");
+
+    const avg = eventReviews.reduce((sum, r) => sum + (Number(r.rating) || 0), 0) / eventReviews.length;
+    document.getElementById("reviews-avg-stars").innerHTML = starsMarkupRO(Math.round(avg));
+    document.getElementById("reviews-avg-text").textContent =
+      `${avg.toFixed(1)} out of 5 (${eventReviews.length} review${eventReviews.length > 1 ? "s" : ""})`;
+    reviewsSummaryEl.classList.remove("hidden");
+    reviewsSummaryEl.classList.add("flex");
+
+    reviewsListEl.innerHTML = eventReviews.map(r => `
+      <div class="border-b border-white/5 pb-4 last:border-0 last:pb-0">
+        <div class="flex items-center justify-between gap-3 flex-wrap">
+          <p class="font-cinzel text-white text-sm font-semibold">${r.attendeeName || "Attendee"}</p>
+          <div class="flex items-center gap-0.5">${starsMarkupRO(r.rating)}</div>
+        </div>
+        ${r.comment ? `<p class="font-cormorant text-white/60 text-sm mt-1.5 leading-relaxed">${r.comment}</p>` : ""}
+        <p class="text-white/30 text-[10px] mt-1.5">${new Date(r.createdAt).toLocaleDateString("en-NG", { day: "numeric", month: "short", year: "numeric" })}</p>
+      </div>
+    `).join("");
+  }
+}
+
+// localStorage.removeItem("bookings")
+
+      /* 1. HAMBURGER */
+      const hamburger = document.getElementById('hamburger');
+      const mobileMenu = document.getElementById('mobile-menu');
+      const hamIcon = document.getElementById('ham-icon');
+      hamburger.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const open = mobileMenu.classList.toggle('open');
+        hamIcon.className = open ? 'ri-close-line' : 'ri-menu-line';
+      });
+      mobileMenu.querySelectorAll('a').forEach(a => {
+        a.addEventListener('click', () => { mobileMenu.classList.remove('open'); hamIcon.className = 'ri-menu-line'; });
+      });
+      document.addEventListener('click', (e) => {
+        if (!mobileMenu.contains(e.target) && !hamburger.contains(e.target)) {
+          mobileMenu.classList.remove('open'); hamIcon.className = 'ri-menu-line';
+        }
+      });
+
+      /* 2. NAVBAR SHADOW */
+      const nav = document.getElementById('main-nav');
+      window.addEventListener('scroll', () => {
+        nav.classList.toggle('shadow-lg', window.scrollY > 40);
+        nav.classList.toggle('shadow-black/40', window.scrollY > 40);
+      });
+
+      /* 3. SCROLL REVEAL */
+      const revealObserver = new IntersectionObserver((entries) => {
+        entries.forEach(e => {
+          if (e.isIntersecting) { e.target.classList.add('in-view'); revealObserver.unobserve(e.target); }
+        });
+      }, { threshold: 0.08 });
+      document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+      /* 4. LIGHTBOX */
+      const lightbox = document.getElementById('lightbox');
+      const lightboxImg = document.getElementById('lightbox-img');
+      const lightboxClose = document.getElementById('lightbox-close');
+      document.querySelectorAll('.zoom-img').forEach(img => {
+        img.addEventListener('click', () => {
+          lightboxImg.src = img.src;
+          lightboxImg.alt = img.alt || 'Event image';
+          lightbox.classList.add('active');
+          document.body.style.overflow = 'hidden';
+        });
+      });
+      lightboxClose.addEventListener('click', closeLightbox);
+      lightbox.addEventListener('click', (e) => { if (e.target === lightbox) closeLightbox(); });
+      document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeLightbox(); });
+      function closeLightbox() {
+        lightbox.classList.remove('active');
+        document.body.style.overflow = '';
+        setTimeout(() => { lightboxImg.src = ''; }, 300);
+      }
+
+
+      if (event) {
+
+        document.getElementById("event-title").textContent = event.name;
+
+        document.getElementById("event-category").textContent = event.category;
+
+        document.getElementById("event-description").textContent =
+          event.description;
+
+        document.getElementById("event-date").textContent =
+          event.date;
+
+        document.getElementById("event-time").textContent =
+          event.time;
+
+        document.getElementById("event-price").textContent =
+          "₦" + Number(event.ticketPrice).toLocaleString("en-NG");
+
+       const fullVenue = event.venue + ", " + event.city;
+document.getElementById("event-venue-full").textContent = fullVenue;
+document.getElementById("event-venue-summary").textContent = fullVenue;
+document.getElementById("event-price-summary").textContent =
+  "₦" + Number(event.ticketPrice).toLocaleString("en-NG");
+
+        document.getElementById("event-seats").textContent =
+          event.totalTickets + " Seats";
+
+        document.getElementById("event-banner").src =
+          event.banner;
+      }
+
+    });
+  </script>
+
+</body>
+
+</html>

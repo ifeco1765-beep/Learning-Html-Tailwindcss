@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Payment Successful | Nice-Xclusive Events Platform</title>
+
+    <link rel="stylesheet" href="/tailwind/src/output.css" />
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Cormorant+Garamond:wght@400;500;600;700&family=Montserrat:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+</head>
+
+<body class="relative min-h-screen bg-[#06030F] text-white overflow-x-hidden [font-family:Montserrat,sans-serif]">
+
+    <!-- Background Glow -->
+    <div
+        class="fixed inset-0 -z-10 bg-[radial-gradient(circle_at_top_right,rgba(234,179,8,0.18),transparent_40%),radial-gradient(circle_at_bottom_left,rgba(234,179,8,0.12),transparent_35%)]">
+    </div>
+
+    <!-- Top Navigation -->
+
+    <header class="sticky top-0 z-50 border-b border-yellow-500/20 backdrop-blur-xl bg-[#06030F]/80">
+
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+
+            <div class="flex items-center justify-between h-20">
+
+                <!-- Logo -->
+
+                <a href="dashboard.html" class="flex items-center gap-3 group">
+
+                    <div
+                        class="w-11 h-11 rounded-xl bg-yellow-500 text-black flex items-center justify-center font-black text-lg shadow-lg shadow-yellow-500/30 group-hover:rotate-6 transition">
+
+                        NX
+
+                    </div>
+
+                    <div>
+
+                        <h1 class="font-cinzel text-lg font-bold tracking-[0.25em] uppercase">
+
+                            Nice-Xclusive
+
+                        </h1>
+
+                        <p class="text-xs text-gray-400 tracking-[0.30em] uppercase">
+
+                            Events Platform
+
+                        </p>
+
+                    </div>
+
+                </a>
+
+                <!-- Dashboard Button -->
+
+                <a href="dashboard.html"
+                    class="px-5 py-2.5 rounded-xl border border-yellow-500/30 hover:border-yellow-400 bg-yellow-500/10 hover:bg-yellow-500 text-yellow-400 hover:text-black transition-all duration-300 font-semibold">
+
+                    ← Dashboard
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </header>
+
+    <!-- Hero -->
+
+    <section class="py-14">
+
+        <div class="max-w-5xl mx-auto px-6">
+
+            <div
+                class="rounded-3xl border border-yellow-500/20 bg-white/5 backdrop-blur-xl p-10 relative overflow-hidden">
+
+                <!-- Gold Line -->
+
+                <div
+                    class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-yellow-500 to-transparent">
+                </div>
+
+                <!-- Success Icon -->
+
+                <div class="flex justify-center">
+
+                    <div
+                        class="w-24 h-24 rounded-full bg-green-500/15 border border-green-500/30 flex items-center justify-center">
+
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-12 h-12 text-green-400" fill="none"
+                            viewBox="0 0 24 24" stroke="currentColor">
+
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+
+                        </svg>
+
+                    </div>
+
+                </div>
+
+                <h2 class="mt-8 text-center font-cinzel text-4xl font-bold text-yellow-400">
+
+                    Payment Successful
+
+                </h2>
+
+                <p class="mt-4 text-center text-gray-300 max-w-2xl mx-auto leading-8">
+
+                    Your payment has been confirmed successfully.
+                    Your event ticket has been generated and saved.
+                    You can download your ticket below or return to your dashboard
+                    to view all your upcoming events.
+
+                </p>
+
+                <!-- Ticket Card -->
+
+                <div id="ticketPDF">
+
+                    <div
+                        class="mt-12 rounded-2xl border border-yellow-500/20 bg-black/30 backdrop-blur-xl overflow-hidden">
+
+                        <!-- Card Header -->
+
+                        <div class="px-8 py-6 border-b border-yellow-500/20 flex items-center justify-between">
+
+                            <div>
+
+                                <h3 class="font-cinzel text-2xl text-yellow-400">
+
+                                    Event Ticket
+
+                                </h3>
+
+                                <p class="text-sm text-gray-400">
+
+                                    Nice-Xclusive Secure Ticket
+
+                                </p>
+
+                            </div>
+
+                            <span
+                                class="px-4 py-2 rounded-full bg-green-500/20 text-green-400 border border-green-500/30 text-sm font-semibold">
+
+                                PAID
+
+                            </span>
+
+                        </div>
+
+                        <!-- Ticket Details -->
+
+                        <div class="p-8">
+
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+
+                                <!-- LEFT COLUMN -->
+                                <div class="space-y-6">
+
+                                    <div>
+
+                                        <p class="text-sm text-gray-400">
+
+                                            Event Name
+
+                                        </p>
+
+                                        <h4 id="eventName" class="mt-1 text-xl font-semibold">
+
+                                            Loading...
+
+                                        </h4>
+
+                                    </div>
+
+                                    <div>
+
+                                        <p class="text-sm text-gray-400">
+
+                                            Ticket Type
+
+                                        </p>
+
+                                        <h4 id="ticketType" class="mt-1 text-xl font-semibold">
+
+                                            Loading...
+
+                                        </h4>
+
+                                    </div>
+
+                                    <div>
+
+                                        <p class="text-sm text-gray-400">
+
+                                            Selected Seats
+
+                                        </p>
+
+                                        <h4 id="selectedSeats" class="mt-1 text-xl font-semibold">
+
+                                            Loading...
+
+                                        </h4>
+
+                                    </div>
+
+                                    <div>
+
+                                        <p class="text-sm text-gray-400">
+
+                                            Quantity
+
+                                        </p>
+
+                                        <h4 id="quantity" class="mt-1 text-xl font-semibold">
+
+                                            Loading...
+
+                                        </h4>
+
+                                    </div>
+
+                                </div>
+
+                                <!-- RIGHT COLUMN -->
+
+                                <div class="space-y-6">
+                                    <div>
+
+                                        <p class="text-sm text-gray-400">
+                                            Amount Paid
+                                        </p>
+
+                                        <h4 id="amountPaid" class="mt-1 text-xl font-bold text-yellow-400">
+                                            ₦0
+                                        </h4>
+
+                                    </div>
+
+                                    <div>
+
+                                        <p class="text-sm text-gray-400">
+                                            Ticket ID
+                                        </p>
+
+                                        <h4 id="ticketId" class="mt-1 font-semibold break-all">
+                                            Loading...
+                                        </h4>
+
+                                    </div>
+
+                                    <div>
+
+                                        <p class="text-sm text-gray-400">
+                                            Order ID
+                                        </p>
+
+                                        <h4 id="orderId" class="mt-1 font-semibold break-all">
+                                            Loading...
+                                        </h4>
+
+                                    </div>
+
+                                    <div>
+
+                                        <p class="text-sm text-gray-400">
+                                            Payment Reference
+                                        </p>
+
+                                        <h4 id="paymentReference" class="mt-1 font-semibold break-all text-yellow-300">
+                                            Loading...
+                                        </h4>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                            <!-- Divider -->
+
+                            <div class="my-10 border-t border-yellow-500/20"></div>
+
+                            <!-- Customer Information -->
+
+                            <h3 class="font-cinzel text-2xl text-yellow-400 mb-6">
+
+                                Customer Information
+
+                            </h3>
+
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+                                <div>
+
+                                    <p class="text-sm text-gray-400">
+                                        Customer Name
+                                    </p>
+
+                                    <h4 id="customerName" class="mt-2 font-semibold">
+                                        Loading...
+                                    </h4>
+
+                                </div>
+
+                                <div>
+
+                                    <p class="text-sm text-gray-400">
+                                        Email Address
+                                    </p>
+
+                                    <h4 id="customerEmail" class="mt-2 font-semibold break-all">
+                                        Loading...
+                                    </h4>
+
+                                </div>
+
+                                <div>
+
+                                    <p class="text-sm text-gray-400">
+                                        Purchase Date
+                                    </p>
+
+                                    <h4 id="purchaseDate" class="mt-2 font-semibold">
+                                        Loading...
+                                    </h4>
+
+                                </div>
+
+                            </div>
+
+                            <!-- QR Code -->
+
+                            <div class="mt-10 border-t border-yellow-500/20 pt-8">
+
+                                <h3 class="font-cinzel text-2xl text-yellow-400 mb-6 text-center">
+
+                                    Event Check-in QR Code
+
+                                </h3>
+
+                                <div class="flex flex-col items-center">
+
+                                    <div id="qrcode" class="bg-white p-4 rounded-xl">
+                                    </div>
+
+                                    <p class="mt-5 text-sm text-gray-400 text-center">
+
+                                        Present this QR code at the event entrance for verification.
+
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+                            <!-- Action Buttons -->
+
+                            <div class="mt-12 flex flex-col md:flex-row gap-5">
+
+                                <button id="downloadTicket"
+                                    class="flex-1 py-4 rounded-xl bg-yellow-500 hover:bg-yellow-400 text-black font-bold transition">
+
+                                    Download Ticket
+
+                                </button>
+
+                                <button id="backDashboard"
+                                    class="flex-1 py-4 rounded-xl border border-yellow-500/30 hover:bg-yellow-500 hover:text-black transition font-semibold">
+
+                                    Back to Dashboard
+
+                                </button>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- Footer -->
+
+    <footer class="border-t border-yellow-500/20 py-8 text-center text-sm text-gray-500">
+
+        © 2026 Nice-Xclusive Events Platform.
+        Secure Ticketing powered by Nice-Xclusive.
+
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script>
+        // ================================
+        // NICE-XCLUSIVE TICKET SUCCESS PAGE
+        // ================================
+
+        const purchase = JSON.parse(localStorage.getItem("ticketPurchase"));
+
+        if (!purchase) {
+
+            alert("No ticket purchase found.");
+
+            window.location.href = "dashboard.html";
+
+        }
+
+        // ================================
+        // HELPERS
+        // ================================
+
+        function formatCurrency(amount) {
+
+            return new Intl.NumberFormat("en-NG", {
+
+                style: "currency",
+
+                currency: "NGN",
+
+                minimumFractionDigits: 0
+
+            }).format(amount);
+
+        }
+
+        function formatDate(dateString) {
+
+            const date = new Date(dateString);
+
+            return date.toLocaleString("en-NG", {
+
+                weekday: "long",
+
+                year: "numeric",
+
+                month: "long",
+
+                day: "numeric",
+
+                hour: "2-digit",
+
+                minute: "2-digit"
+
+            });
+
+        }
+
+        // ================================
+        // POPULATE PAGE
+        // ================================
+
+        document.getElementById("eventName").textContent =
+            purchase.eventName || "-";
+
+        document.getElementById("ticketType").textContent =
+            purchase.ticketType || "-";
+
+        document.getElementById("selectedSeats").textContent =
+            Array.isArray(purchase.selectedSeats)
+                ? purchase.selectedSeats.join(", ")
+                : purchase.selectedSeats || "-";
+
+        document.getElementById("quantity").textContent =
+            purchase.quantity ?? "-";
+
+        document.getElementById("amountPaid").textContent =
+            formatCurrency(purchase.amountPaid);
+
+        document.getElementById("ticketId").textContent =
+            purchase.ticketId;
+
+        document.getElementById("orderId").textContent =
+            purchase.orderId;
+
+        document.getElementById("paymentReference").textContent =
+            purchase.paymentReference;
+
+        document.getElementById("customerName").textContent =
+            purchase.customerName;
+
+        document.getElementById("customerEmail").textContent =
+            purchase.email;
+
+        document.getElementById("purchaseDate").textContent =
+            formatDate(purchase.purchaseDate);
+
+
+
+        // ================================
+        // GENERATE QR CODE
+        // ================================
+
+        const qrData = JSON.stringify({
+
+            ticketId: purchase.ticketId,
+
+            orderId: purchase.orderId,
+
+            paymentReference: purchase.paymentReference,
+
+            eventId: purchase.eventId,
+
+            eventName: purchase.eventName,
+
+            customer: purchase.customerName,
+
+            email: purchase.email,
+
+            seat: purchase.selectedSeats,
+
+            quantity: purchase.quantity
+
+        });
+
+        new QRCode(document.getElementById("qrcode"), {
+
+            text: qrData,
+
+            width: 180,
+
+            height: 180,
+
+            correctLevel: QRCode.CorrectLevel.H
+
+        });
+
+        // ================================
+        // DOWNLOAD TICKET
+        // ================================
+
+       document.getElementById("downloadTicket").addEventListener("click", () => {
+
+    const { jsPDF } = window.jspdf;
+
+    const pdf = new jsPDF({
+
+        orientation: "portrait",
+
+        unit: "mm",
+
+        format: "a4"
+
+    });
+
+    
+    let y = 20;
+
+    // Title
+
+    pdf.setFont("helvetica", "bold");
+    pdf.setFontSize(22);
+    pdf.text("NICE-XCLUSIVE EVENTS", 105, y, { align: "center" });
+
+    y += 10;
+
+    pdf.setFontSize(18);
+    pdf.text("EVENT TICKET", 105, y, { align: "center" });
+
+    y += 15;
+
+    pdf.setLineWidth(0.5);
+    pdf.line(20, y, 190, y);
+
+    y += 12;
+
+    pdf.setFont("helvetica", "normal");
+    pdf.setFontSize(12);
+
+    pdf.text(`Event: ${purchase.eventName}`, 20, y);
+    y += 10;
+
+    pdf.text(`Ticket Type: ${purchase.ticketType}`, 20, y);
+    y += 10;
+
+    pdf.text(`Seat(s): ${Array.isArray(purchase.selectedSeats)
+        ? purchase.selectedSeats.join(", ")
+        : purchase.selectedSeats}`, 20, y);
+    y += 10;
+
+    pdf.text(`Quantity: ${purchase.quantity}`, 20, y);
+    y += 10;
+
+    pdf.text(`Amount Paid: ₦${purchase.amountPaid.toLocaleString()}`, 20, y);
+    y += 10;
+
+    pdf.text(`Ticket ID: ${purchase.ticketId}`, 20, y);
+    y += 10;
+
+    pdf.text(`Order ID: ${purchase.orderId}`, 20, y);
+    y += 10;
+
+    pdf.text(`Reference: ${purchase.paymentReference}`, 20, y);
+    y += 10;
+
+    pdf.text(`Customer: ${purchase.customerName}`, 20, y);
+    y += 10;
+
+    pdf.text(`Email: ${purchase.email}`, 20, y);
+    y += 10;
+
+    pdf.text(`Purchase Date: ${formatDate(purchase.purchaseDate)}`, 20, y);
+
+    y += 20;
+
+    pdf.setDrawColor(212, 175, 55);
+    pdf.rect(20, y, 170, 40);
+
+    pdf.setFont("helvetica", "bold");
+    pdf.text("Present this ticket at the event entrance.", 105, y + 15, {
+        align: "center"
+    });
+
+    pdf.setFont("helvetica", "normal");
+    pdf.text("Powered by Nice-Xclusive Events Platform", 105, y + 28, {
+        align: "center"
+    });
+
+    pdf.save(`${purchase.ticketId}.pdf`);
+
+});
+
+        // ================================
+        // BACK TO DASHBOARD
+        // ================================
+
+        document
+            .getElementById("backDashboard")
+            .addEventListener("click", () => {
+
+                // If you later support different dashboards,
+                // change this logic to read the user type.
+
+                const userType =
+                    localStorage.getItem("nx_user_type") ||
+                    "attendee";
+
+                if (userType === "organizer") {
+
+                    window.location.href = "organizer.html";
+
+                } else {
+
+                    window.location.href = "dashboard.html";
+
+                }
+
+            });
+
+    </script>
+
+</body>
+
+</html>

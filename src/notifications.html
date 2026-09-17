@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="stylesheet" href="./output.css" />
+</head>
+<body class="bg-black text-white">
+
+    <!--
+  Nice-Xclusive Notification Panel
+  ---------------------------------
+  Drop this whole block (markup + script) into organizer-dashboard.html
+  and dashboard.html (attendee), wherever the bell icon should sit —
+  typically inside your top navbar.
+
+  How it knows which dashboard it's on:
+  Add a data-dashboard attribute to <body>, e.g.:
+    <body data-dashboard="organizer">   on organizer-dashboard.html
+    <body data-dashboard="attendee">    on dashboard.html
+  The panel reads that once on load and behaves accordingly —
+  no other setup needed.
+-->
+
+<div id="nx-notification-panel" class="relative inline-block">
+  <!-- Bell trigger -->
+  <button
+    id="nx-bell-btn"
+    type="button"
+    aria-haspopup="true"
+    aria-expanded="false"
+    aria-label="Notifications"
+    class="relative flex items-center justify-center w-10 h-10 rounded-full border border-amber-400/30 text-amber-100 hover:border-amber-400/70 hover:bg-white/5 transition-colors"
+  >
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="w-5 h-5">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082a23.848 23.848 0 0 0 5.454-1.31A8.967 8.967 0 0 1 18 9.75V9A6 6 0 0 0 6 9v.75a8.967 8.967 0 0 1-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 0 1-5.714 0m5.714 0a3 3 0 1 1-5.714 0" />
+    </svg>
+    <span
+      id="nx-badge"
+      class="hidden absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 rounded-full bg-amber-400 text-black text-[10px] font-bold leading-[18px] text-center"
+    ></span>
+  </button>
+
+  <!-- Dropdown -->
+  <div
+    id="nx-dropdown"
+    class="hidden absolute right-0 mt-3 w-80 max-h-96 overflow-y-auto rounded-xl border border-amber-400/20 bg-neutral-950/98 shadow-2xl shadow-black/50 z-50"
+  >
+    <div class="flex items-center justify-between px-4 py-3 border-b border-white/10">
+      <h3 class="font-cinzel text-sm tracking-wide text-amber-100">Notifications</h3>
+      <button id="nx-mark-all" type="button" class="font-cormorant text-xs text-amber-300/80 hover:text-amber-200">
+        Mark all as read
+      </button>
+    </div>
+    <div id="nx-list"><!-- populated by script --></div>
+  </div>
+</div>
+
+<script>
+  (function () {
+    const dashboard = document.body.getAttribute("data-dashboard") || "attendee";
+    const STORAGE_KEY = dashboard === "organizer" ? "nx_organizer_notifications" : "nx_attendee_notifications";
+
+    const bellBtn = document.getElementById("nx-bell-btn");
+    const dropdown = document.getElementById("nx-dropdown");
+    const badge = document.getElementById("nx-badge");
+    const list = document.getElementById("nx-list");
+    const markAllBtn = document.getElementById("nx-mark-all");
+
+    function read() {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      return raw ? JSON.parse(raw) : [];
+    }
+
+    function write(notifications) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(notifications));
+    }
+
+    function add({ title, message, link = "" }) {
+      const notifications = read();
+      notifications.unshift({
+        id: `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+        title,
+        message,
+        link,
+        read: false,
+        createdAt: new Date().toISOString(),
+      });
+      write(notifications);
+      render();
+    }
+
+    function markRead(id) {
+      write(read().map((n) => (n.id === id ? { ...n, read: true } : n)));
+      render();
+    }
+
+    function markAllRead() {
+      write(read().map((n) => ({ ...n, read: true })));
+      render();
+    }
+
+    function timeAgo(iso) {
+      const seconds = Math.floor((Date.now() - new Date(iso).getTime()) / 1000);
+      if (seconds < 60) return "Just now";
+      const minutes = Math.floor(seconds / 60);
+      if (minutes < 60) return `${minutes}m ago`;
+      const hours = Math.floor(minutes / 60);
+      if (hours < 24) return `${hours}h ago`;
+      const days = Math.floor(hours / 24);
+      if (days < 7) return `${days}d ago`;
+      return new Date(iso).toLocaleDateString();
+    }
+
+    function render() {
+      const notifications = read();
+      const unread = notifications.filter((n) => !n.read).length;
+
+      badge.classList.toggle("hidden", unread === 0);
+      badge.textContent = unread > 9 ? "9+" : String(unread);
+
+      if (notifications.length === 0) {
+        const emptyMessage =
+          dashboard === "organizer"
+            ? "New sign-ups and ticket purchases will show up here."
+            : "Updates about your booked events will show up here.";
+        list.innerHTML = `<p class="font-cormorant text-sm text-neutral-400 px-4 py-8 text-center">${emptyMessage}</p>`;
+        return;
+      }
+
+      list.innerHTML = notifications
+        .map(
+          (n) => `
+            <div
+              class="nx-item flex gap-2 items-start px-4 py-3 border-b border-white/5 cursor-pointer hover:bg-white/5 ${n.read ? "opacity-60" : ""}"
+              data-id="${n.id}"
+            >
+              ${n.read ? "" : '<span class="mt-1.5 w-1.5 h-1.5 rounded-full bg-amber-400 shrink-0"></span>'}
+              <div>
+                <p class="font-cinzel text-xs tracking-wide text-amber-100">${n.title}</p>
+                <p class="font-cormorant text-sm text-neutral-300">${n.message}</p>
+                <p class="font-cormorant text-xs text-neutral-500 mt-1">${timeAgo(n.createdAt)}</p>
+              </div>
+            </div>
+          `
+        )
+        .join("");
+
+      list.querySelectorAll(".nx-item").forEach((el) => {
+        el.addEventListener("click", () => {
+          const id = el.getAttribute("data-id");
+          markRead(id);
+          const n = read().find((x) => x.id === id);
+          if (n && n.link) window.location.href = n.link;
+        });
+      });
+    }
+
+    bellBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      const isOpen = !dropdown.classList.contains("hidden");
+      dropdown.classList.toggle("hidden");
+      bellBtn.setAttribute("aria-expanded", String(!isOpen));
+    });
+
+    document.addEventListener("click", (e) => {
+      if (!document.getElementById("nx-notification-panel").contains(e.target)) {
+        dropdown.classList.add("hidden");
+        bellBtn.setAttribute("aria-expanded", "false");
+      }
+    });
+
+    markAllBtn.addEventListener("click", markAllRead);
+
+    // Expose functions so the rest of the app can push notifications in.
+    // Call these from wherever the relevant action already happens in your code.
+    window.NXNotify = {
+      // Organizer side
+      newSignup(attendeeName, eventName, link = "") {
+        if (dashboard !== "organizer") return;
+        add({
+          title: "New Sign-Up",
+          message: `${attendeeName} just signed up for "${eventName}".`,
+          link,
+        });
+      },
+      ticketPurchased(attendeeName, eventName, ticketCount = 1, link = "") {
+        if (dashboard !== "organizer") return;
+        add({
+          title: "Ticket Purchased",
+          message: `${attendeeName} bought ${ticketCount} ticket${ticketCount > 1 ? "s" : ""} for "${eventName}".`,
+          link,
+        });
+      },
+      // Attendee side
+      eventTimeChanged(eventName, newTime, link = "") {
+        if (dashboard !== "attendee") return;
+        add({
+          title: `Time Changed: ${eventName}`,
+          message: `New start time: ${newTime}.`,
+          link,
+        });
+      },
+      eventUpdated(eventName, updateMessage, link = "") {
+        if (dashboard !== "attendee") return;
+        add({
+          title: `Update: ${eventName}`,
+          message: updateMessage,
+          link,
+        });
+      },
+      bookingConfirmed(eventName, link = "") {
+        if (dashboard !== "attendee") return;
+        add({
+          title: "Booking Confirmed",
+          message: `Your booking for "${eventName}" is confirmed.`,
+          link,
+        });
+      },
+    };
+
+    render();
+  })();
+</script>
+
+</body>
+</html>
+
+
+
+
+

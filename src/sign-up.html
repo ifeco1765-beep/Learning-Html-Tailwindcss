@@ -1,0 +1,1033 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Create Account | Nice-Xclusive Events Platform</title>
+
+<script>
+  (function () {
+    var user =
+      JSON.parse(localStorage.getItem("loggedInUser")) ||
+      JSON.parse(localStorage.getItem("currentUser"));
+
+    if (user) {
+      window.location.replace(user.role === "organizer" ? "organizer.html" : "dashboard.html");
+    }
+  })();
+</script>
+
+  <link rel="stylesheet" href="/tailwind/src/output.css">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=Montserrat:wght@300;400;500;600&display=swap"
+    rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@4.9.0/fonts/remixicon.css" rel="stylesheet">
+
+  <style>
+    .font-cinzel {
+      font-family: 'Cinzel', serif;
+    }
+
+    .font-cormorant {
+      font-family: 'Cormorant Garamond', serif;
+    }
+
+    body {
+      font-family: 'Montserrat', sans-serif;
+    }
+
+    .gold-text {
+      font-family: 'Cinzel', serif;
+      background: linear-gradient(135deg, #F0C040 0%, #C9A84C 50%, #8B6914 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    @keyframes fadeUp {
+      0% {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes popIn {
+      0% {
+        opacity: 0;
+        transform: scale(0.9);
+      }
+
+      100% {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    @keyframes shakeX {
+
+      0%,
+      100% {
+        transform: translateX(0);
+      }
+
+      20%,
+      60% {
+        transform: translateX(-6px);
+      }
+
+      40%,
+      80% {
+        transform: translateX(6px);
+      }
+    }
+
+    .fade-up {
+      animation: fadeUp 0.7s ease forwards;
+      opacity: 0;
+    }
+
+    .fade-up-1 {
+      animation-delay: 0.1s;
+    }
+
+    .fade-up-2 {
+      animation-delay: 0.2s;
+    }
+
+    .fade-up-3 {
+      animation-delay: 0.3s;
+    }
+
+    .fade-up-4 {
+      animation-delay: 0.4s;
+    }
+
+    .shake {
+      animation: shakeX 0.4s ease;
+    }
+
+    .success-pop {
+      animation: popIn 0.35s ease;
+    }
+
+    /* password toggle */
+    .pw-wrap {
+      position: relative;
+    }
+
+    .pw-wrap input {
+      padding-right: 3rem;
+    }
+
+    .pw-toggle {
+      position: absolute;
+      right: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: rgba(255, 255, 255, 0.4);
+      cursor: pointer;
+      font-size: 1.1rem;
+      transition: color 0.2s;
+    }
+
+    .pw-toggle:hover {
+      color: #eab308;
+    }
+
+    /* strength bar */
+    #strength-bar {
+      height: 3px;
+      border-radius: 2px;
+      transition: width 0.4s ease, background 0.4s ease;
+      width: 0%;
+    }
+
+    /* dark inputs */
+    .dark-input {
+      width: 100%;
+      padding: 0.875rem 1rem;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(234, 179, 8, 0.2);
+      border-radius: 0.75rem;
+      color: white;
+      font-size: 0.875rem;
+      transition: border-color 0.3s, background 0.3s;
+      outline: none;
+    }
+
+    .dark-input::placeholder {
+      color: rgba(255, 255, 255, 0.3);
+    }
+
+    .dark-input:focus {
+      border-color: #eab308;
+      background: rgba(234, 179, 8, 0.05);
+    }
+
+    select.dark-input option {
+      background: #06030F;
+      color: white;
+    }
+
+    /* step indicator */
+    .step-circle {
+      width: 2.25rem;
+      height: 2.25rem;
+      border-radius: 9999px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Cinzel', serif;
+      font-size: 0.8rem;
+      font-weight: 700;
+      border: 1.5px solid rgba(255, 255, 255, 0.15);
+      color: rgba(255, 255, 255, 0.35);
+      background: rgba(255, 255, 255, 0.03);
+      transition: all 0.35s ease;
+      flex-shrink: 0;
+    }
+
+    .step-circle.is-current {
+      border-color: #eab308;
+      color: #eab308;
+      background: rgba(234, 179, 8, 0.08);
+      box-shadow: 0 0 0 4px rgba(234, 179, 8, 0.08);
+    }
+
+    .step-circle.is-done {
+      border-color: #eab308;
+      background: linear-gradient(135deg, #F0C040 0%, #C9A84C 50%, #8B6914 100%);
+      color: #06030F;
+    }
+
+    .step-line {
+      flex: 1;
+      height: 1.5px;
+      background: rgba(255, 255, 255, 0.12);
+      margin: 0 0.5rem;
+      transition: background 0.35s ease;
+    }
+
+    .step-line.is-done {
+      background: #eab308;
+    }
+
+    .step-label-text {
+      font-family: 'Cinzel', serif;
+      font-size: 0.6rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.35);
+      margin-top: 0.5rem;
+      transition: color 0.35s ease;
+      text-align: center;
+    }
+
+    .step-label-text.is-active {
+      color: #eab308;
+    }
+
+    /* mobile menu */
+    #mobile-menu {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.35s ease;
+    }
+
+    #mobile-menu.open {
+      max-height: 600px;
+    }
+  </style>
+</head>
+
+<body class="relative min-h-screen bg-[#06030F] text-white overflow-x-hidden">
+
+  <div class="fixed inset-0 pointer-events-none z-0"
+    style="background: radial-gradient(ellipse 80% 70% at 10% 50%, rgba(80,20,120,0.45) 0%, transparent 65%), radial-gradient(ellipse 50% 60% at 90% 30%, rgba(60,10,100,0.25) 0%, transparent 60%);">
+  </div>
+
+  <!-- NAVBAR (mobile only — desktop users see full split layout) -->
+  <nav id="main-nav"
+    class="lg:hidden w-full bg-[#050816]/90 backdrop-blur-xl border-b border-yellow-500/20 sticky top-0 z-50 transition-all duration-300">
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="flex items-center justify-between h-16">
+        <a href="index.html" class="flex items-center gap-3">
+          <div
+            class="w-10 h-10 rounded-xl border border-yellow-500 flex items-center justify-center bg-gradient-to-br from-yellow-400 to-yellow-700">
+            <span class="font-cinzel text-base font-bold text-black">NX</span>
+          </div>
+          <p class="font-cinzel text-white text-base font-semibold tracking-wide">Nice-Xclusive</p>
+        </a>
+        <button id="hamburger"
+          class="text-yellow-500 text-2xl focus:outline-none cursor-pointer hover:text-yellow-300 transition"
+          aria-label="Toggle menu">
+          <i id="ham-icon" class="ri-menu-line"></i>
+        </button>
+      </div>
+    </div>
+    <div id="mobile-menu" class="bg-[#0b1023] border-t border-yellow-500/20">
+      <ul class="flex flex-col p-5 gap-4 text-white font-medium text-sm">
+        <li><a href="index.html" class="font-cinzel hover:text-yellow-400">Home</a></li>
+        <li><a href="event-details.html" class="font-cinzel hover:text-yellow-400">Events</a></li>
+        <li><a href="sign-in.html" class="font-cinzel hover:text-yellow-400">Sign In</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="relative z-10 min-h-screen grid grid-cols-1 lg:grid-cols-2">
+
+    <!-- LEFT: Decorative panel -->
+    <div class="hidden lg:flex flex-col justify-between relative overflow-hidden">
+      <div class="absolute inset-0 bg-[#06030F]">
+        <!-- <img src="img/WhatsApp Image 2026-05-20 at 7.28.35 PM.jpeg" alt="Luxury event"
+          class="w-full h-full object-cover opacity-10" /> -->
+        <div class="absolute inset-0"
+          style="background: linear-gradient(135deg, rgba(6,3,15,0.75) 0%, rgba(80,20,120,0.4) 50%, rgba(6,3,15,0.85) 100%);">
+        </div>
+      </div>
+
+      <div class="relative z-10 p-12 flex flex-col justify-between h-full">
+
+        <!-- Logo -->
+        <a href="index.html" class="flex items-center gap-3">
+          <div
+            class="w-12 h-12 rounded-xl border border-yellow-500 flex items-center justify-center bg-gradient-to-br from-yellow-400 to-yellow-700 shadow-lg shadow-yellow-500/20">
+            <span class="font-cinzel text-lg font-bold text-black">NX</span>
+          </div>
+          <div>
+            <p class="font-cinzel text-white text-lg font-semibold tracking-wide">Nice-Xclusive</p>
+            <p class="text-yellow-500 text-[9px] tracking-[4px] uppercase">Events Platform</p>
+          </div>
+        </a>
+
+        <!-- Center branding -->
+        <div>
+          <div class="inline-flex items-center gap-3 mb-6">
+            <span class="w-8 h-px bg-yellow-500 block"></span>
+            <span class="font-cinzel text-yellow-500 text-[10px] font-semibold tracking-[0.4em] uppercase">Join Us
+              Today</span>
+          </div>
+          <h2 class="font-cinzel text-4xl font-bold text-white leading-tight mb-4">
+            Your Events.<br>Your Way.<br>All in One Place.
+          </h2>
+          <p class="font-cormorant text-white/60 text-lg leading-relaxed max-w-sm mb-8">
+            Create your free account and start discovering, booking, and organizing unforgettable events across Nigeria.
+          </p>
+
+          <!-- Feature highlights -->
+          <div class="space-y-4 mb-8">
+            <div class="flex items-center gap-4">
+              <div
+                class="w-10 h-10 rounded-xl bg-yellow-500/10 border border-yellow-500/20 flex items-center justify-center text-base">
+                🎟️</div>
+              <div>
+                <p class="font-cinzel text-white text-xs font-semibold">Instant Ticket Booking</p>
+                <p class="text-white/50 text-[10px]">Book any event in under 2 minutes</p>
+              </div>
+            </div>
+            <div class="flex items-center gap-4">
+              <div
+                class="w-10 h-10 rounded-xl bg-yellow-500/10 border border-yellow-500/20 flex items-center justify-center text-base">
+                📊</div>
+              <div>
+                <p class="font-cinzel text-white text-xs font-semibold">Organizer Dashboard</p>
+                <p class="text-white/50 text-[10px]">Manage events, tickets, and revenue in one place</p>
+              </div>
+            </div>
+            <div class="flex items-center gap-4">
+              <div
+                class="w-10 h-10 rounded-xl bg-yellow-500/10 border border-yellow-500/20 flex items-center justify-center text-base">
+                💳</div>
+              <div>
+                <p class="font-cinzel text-white text-xs font-semibold">Secure Payments</p>
+                <p class="text-white/50 text-[10px]">Paystack & Flutterwave supported</p>
+              </div>
+            </div>
+            <div class="flex items-center gap-4">
+              <div
+                class="w-10 h-10 rounded-xl bg-yellow-500/10 border border-yellow-500/20 flex items-center justify-center text-base">
+                🎁</div>
+              <div>
+                <p class="font-cinzel text-white text-xs font-semibold">Loyalty Rewards</p>
+                <p class="text-white/50 text-[10px]">Earn points on every booking you make</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Testimonial -->
+          <div class="bg-white/[0.04] border border-yellow-500/20 rounded-2xl p-5">
+            <p class="font-cormorant text-white/70 text-base italic leading-relaxed mb-3">
+              "I organized my first corporate event using Nice-Xclusive and it was seamless from start to finish!"
+            </p>
+            <div class="flex items-center gap-3">
+              <div
+                class="w-8 h-8 rounded-full bg-gradient-to-br from-yellow-400 to-orange-500 flex items-center justify-center font-cinzel text-black text-xs font-bold">
+                EO</div>
+              <div>
+                <p class="font-cinzel text-yellow-400 text-xs font-semibold">Emeka Okafor</p>
+                <p class="text-white/40 text-[10px]">Event Organizer · Abuja, Nigeria</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Stats -->
+        <div class="flex gap-8 pt-6 border-t border-yellow-500/20">
+          <div>
+            <p class="font-cinzel text-2xl font-bold gold-text">Free</p>
+            <p class="text-white/50 text-xs mt-1">To Register</p>
+          </div>
+          <div class="w-px bg-yellow-500/20"></div>
+          <div>
+            <p class="font-cinzel text-2xl font-bold gold-text">500+</p>
+            <p class="text-white/50 text-xs mt-1">Events Live</p>
+          </div>
+          <div class="w-px bg-yellow-500/20"></div>
+          <div>
+            <p class="font-cinzel text-2xl font-bold gold-text">1000+</p>
+            <p class="text-white/50 text-xs mt-1">Members</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- RIGHT: Sign up form -->
+    <div class="flex flex-col justify-center px-6 sm:px-12 lg:px-16 py-12">
+
+      <!-- Heading -->
+      <div class="mb-8 fade-up fade-up-1">
+        <div class="inline-flex items-center gap-3 mb-4">
+          <span class="w-7 h-px bg-yellow-500 block"></span>
+          <span class="font-cinzel text-yellow-500 text-[10px] font-semibold tracking-[0.4em] uppercase">Create
+            Account</span>
+        </div>
+        <h2 class="font-cinzel text-3xl font-bold text-white mb-2">Join Nice-Xclusive</h2>
+      </div>
+
+      <!-- Form -->
+      <form id="signup-form" novalidate class="space-y-5 fade-up fade-up-3">
+
+        <!-- Step progress -->
+        <div class="mb-6">
+          <div class="flex items-center" id="step-indicator">
+            <div class="flex flex-col items-center">
+              <div class="step-circle" data-step-circle="1">1</div>
+            </div>
+            <div class="step-line" data-step-line="1"></div>
+            <div class="flex flex-col items-center">
+              <div class="step-circle" data-step-circle="2">2</div>
+            </div>
+            <div class="step-line" data-step-line="2"></div>
+            <div class="flex flex-col items-center">
+              <div class="step-circle" data-step-circle="3">3</div>
+            </div>
+          </div>
+          <div class="flex mt-1">
+            <span class="step-label-text flex-1" data-step-label-text="1">Details</span>
+            <span class="step-label-text flex-1" data-step-label-text="2">Password</span>
+            <span class="step-label-text flex-1" data-step-label-text="3">Done</span>
+          </div>
+        </div>
+
+        <!-- STEP 1: Account type + name + contact -->
+        <div class="form-step space-y-5" data-step="1">
+          <div class="flex flex-col gap-2">
+            <label for="account-type"
+              class="font-cinzel text-yellow-500 text-[10px] font-semibold tracking-widest uppercase">I'm signing up
+              as</label>
+            <div class="relative">
+              <select id="account-type" class="dark-input appearance-none cursor-pointer pr-10">
+                <option value="attendee">Attendee — browse & book events</option>
+                <option value="organizer">Organizer — host & manage events</option>
+              </select>
+              <i class="ri-arrow-down-s-line absolute right-4 top-1/2 -translate-y-1/2 text-yellow-500/70 pointer-events-none text-lg"></i>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div class="flex flex-col gap-2">
+              <label class="font-cinzel text-yellow-500 text-[10px] font-semibold tracking-widest uppercase">First
+                Name</label>
+              <input id="su-fname" type="text" placeholder="John" class="dark-input" />
+            </div>
+            <div class="flex flex-col gap-2">
+              <label class="font-cinzel text-yellow-500 text-[10px] font-semibold tracking-widest uppercase">Last
+                Name</label>
+              <input id="su-lname" type="text" placeholder="Doe" class="dark-input" />
+            </div>
+          </div>
+          <div class="flex flex-col gap-2">
+            <label class="font-cinzel text-yellow-500 text-[10px] font-semibold tracking-widest uppercase">Email
+              Address</label>
+            <input id="su-email" type="email" placeholder="john@example.com" autocomplete="email" class="dark-input" />
+          </div>
+
+          <div class="flex flex-col gap-2">
+            <label class="font-cinzel text-yellow-500 text-[10px] font-semibold tracking-widest uppercase">Phone
+              Number</label>
+            <input id="su-phone" type="tel" placeholder="+234 800 000 0000" class="dark-input" />
+          </div>
+
+          <!-- Organizer-only fields (shown inline, doesn't add a wizard step) -->
+          <div id="org-fields" class="space-y-5 hidden">
+            <div class="flex flex-col gap-2">
+              <label class="font-cinzel text-yellow-500 text-[10px] font-semibold tracking-widest uppercase">Organization
+                / Company Name</label>
+              <input id="su-org" type="text" placeholder="Your company or brand name" class="dark-input" />
+            </div>
+            <div class="flex flex-col gap-2">
+              <label class="font-cinzel text-yellow-500 text-[10px] font-semibold tracking-widest uppercase">Event
+                Category</label>
+              <select id="su-category" class="dark-input appearance-none cursor-pointer">
+                <option value="" disabled selected class="bg-[#06030F]">What kind of events do you host?</option>
+                <option class="bg-[#06030F]">Technology</option>
+                <option class="bg-[#06030F]">Music & Entertainment</option>
+                <option class="bg-[#06030F]">Corporate</option>
+                <option class="bg-[#06030F]">Fashion</option>
+                <option class="bg-[#06030F]">Sports</option>
+                <option class="bg-[#06030F]">Arts & Culture</option>
+                <option class="bg-[#06030F]">Workshop & Training</option>
+                <option class="bg-[#06030F]">Other</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- STEP 2: Password -->
+        <div class="form-step space-y-5 hidden" data-step="2">
+          <div class="flex flex-col gap-2">
+            <label
+              class="font-cinzel text-yellow-500 text-[10px] font-semibold tracking-widest uppercase">Password</label>
+            <div class="pw-wrap">
+              <input id="su-password" type="password" placeholder="Create a strong password" autocomplete="new-password"
+                class="dark-input" />
+              <span class="pw-toggle" id="pw-toggle-1"><i class="ri-eye-off-line"></i></span>
+            </div>
+            <!-- Strength bar -->
+            <div class="w-full bg-white/[0.06] rounded-full h-1 mt-1">
+              <div id="strength-bar"></div>
+            </div>
+            <p id="strength-label" class="text-[10px] text-white/40"></p>
+
+            <!-- Live requirements checklist -->
+            <ul class="space-y-1.5 mt-2" id="pw-checklist">
+              <li class="flex items-center gap-2 text-xs text-white/40" data-rule="len">
+                <i class="ri-checkbox-circle-fill text-sm text-white/15"></i> At least 8 characters
+              </li>
+              <li class="flex items-center gap-2 text-xs text-white/40" data-rule="upper">
+                <i class="ri-checkbox-circle-fill text-sm text-white/15"></i> One uppercase letter
+              </li>
+              <li class="flex items-center gap-2 text-xs text-white/40" data-rule="num">
+                <i class="ri-checkbox-circle-fill text-sm text-white/15"></i> One number
+              </li>
+              <li class="flex items-center gap-2 text-xs text-white/40" data-rule="special">
+                <i class="ri-checkbox-circle-fill text-sm text-white/15"></i> One special character
+              </li>
+            </ul>
+          </div>
+
+          <div class="flex flex-col gap-2">
+            <label class="font-cinzel text-yellow-500 text-[10px] font-semibold tracking-widest uppercase">Confirm
+              Password</label>
+            <div class="pw-wrap">
+              <input id="su-confirm" type="password" placeholder="Repeat your password" autocomplete="new-password"
+                class="dark-input" />
+              <span class="pw-toggle" id="pw-toggle-2"><i class="ri-eye-off-line"></i></span>
+            </div>
+          </div>
+
+          <label class="flex items-start gap-3 cursor-pointer pt-1">
+            <input id="su-terms" type="checkbox" class="mt-0.5 w-4 h-4 accent-yellow-500 cursor-pointer" />
+            <span class="text-white/60 text-xs leading-relaxed">
+              I agree to the
+              <a href="terms.html"
+                class="text-yellow-400 hover:text-yellow-300 transition underline underline-offset-2">Terms of Service</a>
+              and
+              <a href="terms.html#privacy"
+                class="text-yellow-400 hover:text-yellow-300 transition underline underline-offset-2">Privacy Policy</a>
+            </span>
+          </label>
+        </div>
+
+        <!-- STEP 3: Done -->
+        <div class="form-step hidden text-center py-4" data-step="3">
+          <div
+            class="mx-auto mb-5 w-16 h-16 rounded-full flex items-center justify-center success-pop"
+            style="background: linear-gradient(135deg, #F0C040 0%, #C9A84C 50%, #8B6914 100%);">
+            <i class="ri-check-line text-3xl text-[#06030F]"></i>
+          </div>
+          <h3 class="font-cinzel text-2xl font-bold text-white mb-2">You're all set<span id="su-done-name"></span>!</h3>
+          <p class="font-cormorant text-white/60 text-base leading-relaxed mb-2">
+            Your Nice-Xclusive account has been created. Sign in to start exploring events.
+          </p>
+          <p class="text-white/30 text-xs">Redirecting to sign in…</p>
+        </div>
+
+        <!-- Error / Success (visible on every step) -->
+        <div id="su-error"
+          class="hidden py-3 px-4 bg-red-500/10 border border-red-500/30 rounded-xl text-red-400 text-sm font-cormorant">
+        </div>
+
+        <!-- Step navigation -->
+        <div class="flex gap-3" id="step-nav">
+          <button type="button" id="step-back-btn"
+            class="hidden font-cinzel flex-1 py-4 bg-white/[0.04] border border-yellow-500/20 text-white/70 font-bold text-sm tracking-widest uppercase rounded-xl text-center transition duration-300 hover:border-yellow-500/40 hover:text-white">
+            ← Back
+          </button>
+          <button type="button" id="step-next-btn"
+            class="font-cinzel flex-1 py-4 bg-yellow-500 hover:bg-yellow-400 text-black font-bold text-sm tracking-widest uppercase rounded-xl text-center transition duration-300 shadow-lg shadow-yellow-500/20 hover:-translate-y-0.5">
+            Continue →
+          </button>
+          <button type="submit" id="su-btn"
+            class="hidden font-cinzel flex-1 py-4 bg-yellow-500 hover:bg-yellow-400 text-black font-bold text-sm tracking-widest uppercase rounded-xl text-center transition duration-300 shadow-lg shadow-yellow-500/20 hover:-translate-y-0.5">
+            Create Account →
+          </button>
+          <a href="sign-in.html" id="su-goto-signin"
+            class="hidden font-cinzel flex-1 py-4 bg-yellow-500 hover:bg-yellow-400 text-black font-bold text-sm tracking-widest uppercase rounded-xl text-center transition duration-300 shadow-lg shadow-yellow-500/20 hover:-translate-y-0.5">
+            Go to Sign In →
+          </a>
+        </div>
+
+        <!-- Already have an account -->
+        <p class="font-cormorant text-white/60 text-base text-center" id="su-signin-hint">
+          Already have an account?
+          <a href="sign-in.html"
+            class="text-yellow-400 hover:text-yellow-300 transition underline underline-offset-2">Sign in here</a>
+        </p>
+
+        <!-- Divider -->
+        <div class="flex items-center gap-4" id="su-divider">
+          <div class="flex-1 h-px bg-yellow-500/15"></div>
+          <span class="text-white/30 text-xs">or sign up with</span>
+          <div class="flex-1 h-px bg-yellow-500/15"></div>
+        </div>
+
+        <!-- Social -->
+        <div class="grid grid-cols-2 gap-3" id="su-social">
+          <button type="button" onclick="socialSignup('Google')"
+            class="font-cinzel flex items-center justify-center gap-2 py-3 bg-white/[0.04] border border-yellow-500/20 rounded-xl text-white/70 text-xs font-medium hover:border-yellow-500/40 hover:text-white transition">
+            <i class="ri-google-fill text-base"></i> Google
+          </button>
+          <button type="button" onclick="socialSignup('GitHub')"
+            class="font-cinzel flex items-center justify-center gap-2 py-3 bg-white/[0.04] border border-yellow-500/20 rounded-xl text-white/70 text-xs font-medium hover:border-yellow-500/40 hover:text-white transition">
+            <i class="ri-github-line text-base"></i> GitHub
+          </button>
+        </div>
+
+      </form>
+
+      <!-- Footer -->
+      <p class="text-white/30 text-[10px] text-center mt-8 leading-relaxed fade-up fade-up-4">
+        © 2026 Nice-Xclusive Events Platform. All rights reserved.<br>
+        <a href="terms.html" class="hover:text-yellow-400 transition">Terms</a> ·
+        <a href="terms.html#privacy" class="hover:text-yellow-400 transition">Privacy</a> ·
+        <a href="Contact-us.html" class="hover:text-yellow-400 transition">Support</a>
+      </p>
+
+    </div>
+  </div>
+
+  <script>
+    /* ─── ACCOUNT TYPE (dropdown) ─── */
+    const accountTypeSelect = document.getElementById('account-type');
+
+    // Restore last selection
+    const savedTab = localStorage.getItem('nx_signup_tab');
+    if (savedTab === 'organizer') {
+      accountTypeSelect.value = 'organizer';
+    }
+
+    function toggleOrgFields() {
+      const orgFields = document.getElementById('org-fields');
+      if (orgFields) orgFields.classList.toggle('hidden', accountTypeSelect.value !== 'organizer');
+    }
+
+    /* ─── SOCIAL SIGNUP ─── */
+    function socialSignup(provider) {
+      const btns = document.querySelectorAll('#su-social button');
+      btns.forEach(b => b.disabled = true);
+      const clicked = Array.from(btns).find(b => b.textContent.includes(provider));
+      if (clicked) clicked.innerHTML = `<i class="ri-loader-4-line animate-spin text-base"></i> Connecting…`;
+      setTimeout(() => { window.location.href = 'sign-in.html'; }, 1200);
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+
+      /* HAMBURGER */
+      const hamburger = document.getElementById('hamburger');
+      const mobileMenu = document.getElementById('mobile-menu');
+      const hamIcon = document.getElementById('ham-icon');
+      if (hamburger) {
+        hamburger.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const open = mobileMenu.classList.toggle('open');
+          hamIcon.className = open ? 'ri-close-line' : 'ri-menu-line';
+        });
+        mobileMenu.querySelectorAll('a').forEach(a => {
+          a.addEventListener('click', () => { mobileMenu.classList.remove('open'); hamIcon.className = 'ri-menu-line'; });
+        });
+        document.addEventListener('click', (e) => {
+          if (!mobileMenu.contains(e.target) && !hamburger.contains(e.target)) {
+            mobileMenu.classList.remove('open'); hamIcon.className = 'ri-menu-line';
+          }
+        });
+      }
+
+      /* STEP WIZARD */
+      const steps = Array.from(document.querySelectorAll('.form-step'));
+      const backBtn = document.getElementById('step-back-btn');
+      const nextBtn = document.getElementById('step-next-btn');
+      const submitBtn = document.getElementById('su-btn');
+      const gotoSigninBtn = document.getElementById('su-goto-signin');
+      const errorBox = document.getElementById('su-error');
+      const signinHint = document.getElementById('su-signin-hint');
+      const divider = document.getElementById('su-divider');
+      const social = document.getElementById('su-social');
+      let currentIndex = 0;
+
+      function activeSteps() {
+        return steps; // 3 fixed macro-steps: Details, Password, Done
+      }
+
+      function clearStepError() {
+        errorBox.classList.add('hidden');
+      }
+
+      function showStepError(msg) {
+        errorBox.textContent = msg;
+        errorBox.classList.remove('hidden');
+        errorBox.classList.add('shake');
+        setTimeout(() => errorBox.classList.remove('shake'), 400);
+      }
+
+      function renderStep() {
+        const visible = activeSteps();
+        steps.forEach(s => s.classList.add('hidden'));
+        visible[currentIndex].classList.remove('hidden');
+
+        // Update numbered circle indicator
+        visible.forEach((_, i) => {
+          const circle = document.querySelector(`[data-step-circle="${i + 1}"]`);
+          const label = document.querySelector(`[data-step-label-text="${i + 1}"]`);
+          const line = document.querySelector(`[data-step-line="${i + 1}"]`);
+          circle.classList.remove('is-current', 'is-done');
+          label.classList.remove('is-active');
+          if (i < currentIndex) {
+            circle.classList.add('is-done');
+            circle.innerHTML = '<i class="ri-check-line"></i>';
+          } else if (i === currentIndex) {
+            circle.classList.add('is-current');
+            circle.textContent = i + 1;
+            label.classList.add('is-active');
+          } else {
+            circle.textContent = i + 1;
+          }
+          if (line) line.classList.toggle('is-done', i < currentIndex);
+        });
+
+        const isDone = currentIndex === visible.length - 1;
+        backBtn.classList.toggle('hidden', currentIndex === 0 || isDone);
+        nextBtn.classList.toggle('hidden', currentIndex === visible.length - 2 || isDone);
+        submitBtn.classList.toggle('hidden', currentIndex !== visible.length - 2);
+        gotoSigninBtn.classList.toggle('hidden', !isDone);
+
+        // Hide sign-in hint / social sign up once on the Done screen
+        signinHint.classList.toggle('hidden', isDone);
+        divider.classList.toggle('hidden', isDone);
+        social.classList.toggle('hidden', isDone);
+      }
+
+      function validateStep(stepEl) {
+        const stepNum = stepEl.dataset.step;
+
+        if (stepNum === '1') {
+          if (!document.getElementById('su-fname').value.trim()) { showStepError('Please enter your first name.'); return false; }
+          if (!document.getElementById('su-lname').value.trim()) { showStepError('Please enter your last name.'); return false; }
+          const email = document.getElementById('su-email').value.trim();
+          const phone = document.getElementById('su-phone').value.trim();
+          if (!email) { showStepError('Please enter your email address.'); return false; }
+          if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { showStepError('Please enter a valid email address.'); return false; }
+          if (!phone) { showStepError('Please enter your phone number.'); return false; }
+          if (accountTypeSelect.value === 'organizer') {
+            if (!document.getElementById('su-org').value.trim()) { showStepError('Please enter your organization/company name.'); return false; }
+            if (!document.getElementById('su-category').value) { showStepError('Please select an event category.'); return false; }
+          }
+        }
+
+        if (stepNum === '2') {
+          const password = document.getElementById('su-password').value;
+          const confirm = document.getElementById('su-confirm').value;
+          if (password.length < 8) { showStepError('Password must be at least 8 characters.'); return false; }
+          if (password !== confirm) { showStepError('Passwords do not match.'); return false; }
+          if (!document.getElementById('su-terms').checked) { showStepError('Please agree to the Terms of Service to continue.'); return false; }
+        }
+
+        return true;
+      }
+
+      nextBtn.addEventListener('click', () => {
+        const visible = activeSteps();
+        if (!validateStep(visible[currentIndex])) return;
+        clearStepError();
+        currentIndex++;
+        renderStep();
+      });
+
+      backBtn.addEventListener('click', () => {
+        clearStepError();
+        currentIndex--;
+        renderStep();
+      });
+
+      accountTypeSelect.addEventListener('change', () => {
+        localStorage.setItem('nx_signup_tab', accountTypeSelect.value);
+        toggleOrgFields();
+      });
+
+      toggleOrgFields();
+      renderStep();
+
+      /* PASSWORD TOGGLES */
+      function setupToggle(toggleId, inputId) {
+        document.getElementById(toggleId).addEventListener('click', function () {
+          const input = document.getElementById(inputId);
+          const icon = this.querySelector('i');
+          if (input.type === 'password') { input.type = 'text'; icon.className = 'ri-eye-line'; }
+          else { input.type = 'password'; icon.className = 'ri-eye-off-line'; }
+        });
+      }
+      setupToggle('pw-toggle-1', 'su-password');
+      setupToggle('pw-toggle-2', 'su-confirm');
+
+      /* PASSWORD STRENGTH */
+      const pwInput = document.getElementById('su-password');
+      const strengthBar = document.getElementById('strength-bar');
+      const strengthLabel = document.getElementById('strength-label');
+
+      pwInput.addEventListener('input', () => {
+        const val = pwInput.value;
+        const rules = {
+          len: val.length >= 8,
+          upper: /[A-Z]/.test(val),
+          num: /[0-9]/.test(val),
+          special: /[^A-Za-z0-9]/.test(val)
+        };
+        let score = Object.values(rules).filter(Boolean).length;
+
+        const levels = [
+          { label: '', color: 'transparent', width: '0%' },
+          { label: 'Weak', color: '#ef4444', width: '25%' },
+          { label: 'Fair', color: '#f97316', width: '50%' },
+          { label: 'Good', color: '#eab308', width: '75%' },
+          { label: 'Strong', color: '#22c55e', width: '100%' },
+        ];
+        const level = levels[score];
+        strengthBar.style.width = level.width;
+        strengthBar.style.background = level.color;
+        strengthLabel.textContent = level.label;
+        strengthLabel.style.color = level.color;
+
+        // Live checklist
+        Object.keys(rules).forEach(rule => {
+          const item = document.querySelector(`#pw-checklist [data-rule="${rule}"]`);
+          const icon = item.querySelector('i');
+          if (rules[rule]) {
+            item.classList.remove('text-white/40');
+            item.classList.add('text-green-400');
+            icon.classList.remove('text-white/15');
+            icon.classList.add('text-green-400');
+          } else {
+            item.classList.add('text-white/40');
+            item.classList.remove('text-green-400');
+            icon.classList.add('text-white/15');
+            icon.classList.remove('text-green-400');
+          }
+        });
+      });
+
+      /* localStorage — save form draft */
+      const DRAFT_KEY = 'nx_signup_draft';
+      const draftFields = ['su-fname', 'su-lname', 'su-email', 'su-phone', 'su-org'];
+
+      function saveDraft() {
+        const draft = {};
+        draftFields.forEach(id => { const el = document.getElementById(id); if (el) draft[id] = el.value; });
+        localStorage.setItem(DRAFT_KEY, JSON.stringify(draft));
+      }
+      function restoreDraft() {
+        const raw = localStorage.getItem(DRAFT_KEY);
+        if (!raw) return;
+        const draft = JSON.parse(raw);
+        draftFields.forEach(id => { const el = document.getElementById(id); if (el && draft[id]) el.value = draft[id]; });
+      }
+      let saveTimer;
+      draftFields.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.addEventListener('input', () => { clearTimeout(saveTimer); saveTimer = setTimeout(saveDraft, 600); });
+      });
+      restoreDraft();
+
+      /* FORM VALIDATION + SUBMIT */
+      const form = document.getElementById('signup-form');
+
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        errorBox.classList.add('hidden');
+
+        const fname = document.getElementById('su-fname').value.trim();
+        const lname = document.getElementById('su-lname').value.trim();
+        const email = document.getElementById('su-email').value.trim();
+        const phone = document.getElementById('su-phone').value.trim();
+        const password = document.getElementById('su-password').value;
+        const confirm = document.getElementById('su-confirm').value;
+        const terms = document.getElementById('su-terms').checked;
+        const tab = accountTypeSelect.value;
+
+        if (!fname) { showError('Please enter your first name.'); return; }
+        if (!lname) { showError('Please enter your last name.'); return; }
+        if (!email) { showError('Please enter your email address.'); return; }
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { showError('Please enter a valid email address.'); return; }
+        if (!phone) { showError('Please enter your phone number.'); return; }
+        if (password.length < 8) { showError('Password must be at least 8 characters.'); return; }
+        if (password !== confirm) { showError('Passwords do not match.'); return; }
+        if (!terms) { showError('Please agree to the Terms of Service to continue.'); return; }
+
+        if (tab === "organizer") {
+          const organization = document.getElementById("su-org").value.trim();
+          const category = document.getElementById("su-category").value;
+
+          if (!organization) {
+            showError("Please enter your organization/company name.");
+            return;
+          }
+
+          if (!category) {
+            showError("Please select an event category.");
+            return;
+          }
+        }
+
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Creating account...';
+
+        // // Save user info to localStorage
+        // localStorage.setItem('nx_user_email',  email);
+        // localStorage.setItem('nx_user_name',   fname + ' ' + lname);
+        // localStorage.setItem('nx_user_type',   tab);
+        // localStorage.setItem('nx_last_login',  new Date().toISOString());
+        // localStorage.removeItem(DRAFT_KEY);
+
+        // Save complete user information
+        // const currentUser = {
+        //   firstName: fname,
+        //   lastName: lname,
+        //   fullName: `${fname} ${lname}`,
+        //   email: email,
+        //   phone: phone,
+        //   role: tab,
+        //   organization: document.getElementById("su-org").value.trim(),
+        //   category: document.getElementById("su-category").value,
+        //   joined: new Date().toISOString()
+        // };
+
+        const orgInput = document.getElementById("su-org");
+        const categoryInput = document.getElementById("su-category");
+
+        const currentUser = {
+  firstName: fname,
+  lastName: lname,
+  fullName: `${fname} ${lname}`,
+  email,
+  password,
+  phone,
+  role: tab,
+  organization: orgInput ? orgInput.value.trim() : "",
+  category: categoryInput ? categoryInput.value : "",
+  joined: new Date().toISOString(),
+
+  // User data
+  rewardPoints: 0,
+
+  // Tickets purchased
+  orders: [],
+
+  // Events the user has booked
+  bookedEvents: [],
+
+  // Saved/Favorite events
+  favoriteEvents: [],
+
+  // User notifications
+  notifications: []
+};
+
+        let users = JSON.parse(localStorage.getItem("users")) || [];
+
+// Check whether the email already exists
+const emailExists = users.some(user =>
+    user.email.toLowerCase() === email.toLowerCase()
+);
+
+if (emailExists) {
+    showError("This email has already been used to register.");
+
+    submitBtn.disabled = false;
+    submitBtn.textContent = "Create Account →";
+
+    return;
+}
+
+// Add new user
+users.push(currentUser);
+
+// Save updated users array
+localStorage.setItem("users", JSON.stringify(users));
+
+// Welcome notification — shows up in the bell dropdown once they log in
+const notifications = JSON.parse(localStorage.getItem("nx_notifications")) || [];
+notifications.push({
+  id: "n_" + Date.now() + "_" + Math.random().toString(36).slice(2, 7),
+  forRole: currentUser.role,
+  forEmail: currentUser.email,
+  type: "signup",
+  eventId: null,
+  eventName: "",
+  message: `Welcome to Nice-Xclusive, ${fname}! 🎉 We're glad you're here.`,
+  timestamp: Date.now(),
+  read: false
+});
+localStorage.setItem("nx_notifications", JSON.stringify(notifications));
+
+localStorage.removeItem(DRAFT_KEY);
+
+        setTimeout(() => {
+          document.getElementById('su-done-name').textContent = `, ${fname}`;
+          currentIndex = activeSteps().length - 1;
+          renderStep();
+
+          setTimeout(() => {
+            window.location.href = "sign-in.html";
+          }, 2200);
+        }, 700);
+      });
+
+      function showError(msg) {
+        errorBox.textContent = msg;
+        errorBox.classList.remove('hidden');
+        errorBox.classList.add('shake');
+        setTimeout(() => errorBox.classList.remove('shake'), 400);
+      }
+
+    });
+  </script>
+
+</body>
+
+</html>

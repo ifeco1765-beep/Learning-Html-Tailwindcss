@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Redeem Points | Nice-Xclusive</title>
+  <link rel="stylesheet" href="./output.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" />
+</head>
+<body class="bg-[#06030f] text-white min-h-screen flex">
+
+  <div class="fixed inset-0 pointer-events-none -z-10"
+    style="background: radial-gradient(circle at 20% 0%, rgba(120,40,160,0.18), transparent 55%),
+           radial-gradient(circle at 90% 20%, rgba(120,40,160,0.12), transparent 50%),
+           #06030f;">
+  </div>
+
+  <!-- SIDEBAR -->
+  <aside class="w-64 shrink-0 border-r border-yellow-500/10 bg-black/40 backdrop-blur-sm flex flex-col h-screen sticky top-0">
+    <div class="flex items-center gap-3 px-5 py-6 border-b border-yellow-500/10">
+      <div class="w-10 h-10 rounded-xl bg-yellow-500 flex items-center justify-center font-cinzel font-bold text-black">NX</div>
+      <div>
+        <p class="font-cinzel text-sm font-bold text-white leading-tight">Nice-Xclusive</p>
+        <p class="font-cinzel text-[9px] tracking-[0.25em] text-yellow-500/70 uppercase">Events Platform</p>
+      </div>
+    </div>
+
+    <nav class="flex-1 px-3 py-6 space-y-1 overflow-y-auto">
+      <p class="font-cinzel text-yellow-500/50 text-[9px] tracking-[0.3em] uppercase px-3 mb-3">Main</p>
+      <a href="/tailwind/src/dashboard.html" class="flex items-center gap-3 px-3 py-3 rounded-xl text-sm font-medium text-white/60 hover:bg-yellow-500/10 hover:text-yellow-400 transition duration-200"><span class="text-lg"><i class="ri-home-5-line"></i></span> <span class="font-cinzel text-xs">Dashboard</span></a>
+      <a href="/tailwind/src/index.html#events" class="flex items-center gap-3 px-3 py-3 rounded-xl text-sm font-medium text-white/60 hover:bg-yellow-500/10 hover:text-yellow-400 transition duration-200"><span class="text-lg"><i class="ri-search-2-line"></i></span> <span class="font-cinzel text-xs">Browse Events</span></a>
+      <a href="my-tickets.html" class="flex items-center gap-3 px-3 py-3 rounded-xl text-sm font-medium text-white/60 hover:bg-yellow-500/10 hover:text-yellow-400 transition duration-200"><span class="text-lg"><i class="ri-coupon-3-line"></i></span> <span class="font-cinzel text-xs">My Tickets</span></a>
+      <a href="/tailwind/src/saved-events.html" class="flex items-center gap-3 px-3 py-3 rounded-xl text-sm font-medium text-white/60 hover:bg-yellow-500/10 hover:text-yellow-400 transition duration-200"><span class="text-lg"><i class="ri-poker-hearts-line"></i></span> <span class="font-cinzel text-xs">Saved Events</span></a>
+      <a href="/tailwind/src/my-schedule.html" class="flex items-center gap-3 px-3 py-3 rounded-xl text-sm font-medium text-white/60 hover:bg-yellow-500/10 hover:text-yellow-400 transition duration-200"><span class="text-lg"><i class="ri-calendar-2-fill"></i></span> <span class="font-cinzel text-xs">My Schedule</span></a>
+
+      <p class="font-cinzel text-yellow-500/50 text-[9px] tracking-[0.3em] uppercase px-3 mt-6 mb-3">Activity</p>
+      <a href="order-history.html" class="flex items-center gap-3 px-3 py-3 rounded-xl text-sm font-medium text-white/60 hover:bg-yellow-500/10 hover:text-yellow-400 transition duration-200"><span class="text-lg"><i class="ri-file-history-line"></i></span> <span class="font-cinzel text-xs">Order History</span></a>
+      <a href="#" class="flex items-center gap-3 px-3 py-3 rounded-xl text-sm font-medium text-white/60 hover:bg-yellow-500/10 hover:text-yellow-400 transition duration-200"><span class="text-lg"><i class="ri-star-line"></i></span> <span class="font-cinzel text-xs">My Reviews</span></a>
+      <a href="/tailwind/src/redeem-points.html" class="flex items-center gap-3 px-3 py-3 rounded-xl text-sm font-medium bg-yellow-500/10 border-l-[3px] border-yellow-500 text-yellow-400 transition duration-200"><span class="text-lg"><i class="ri-gift-line"></i></span> <span class="font-cinzel text-xs">Rewards & Points</span></a>
+
+      <p class="font-cinzel text-yellow-500/50 text-[9px] tracking-[0.3em] uppercase px-3 mt-6 mb-3">Account</p>
+      
+      <a href="settings.html" class="flex items-center gap-3 px-3 py-3 rounded-xl text-sm font-medium text-white/60 hover:bg-yellow-500/10 hover:text-yellow-400 transition duration-200"><span class="text-lg"><i class="ri-settings-2-line"></i></span> <span class="font-cinzel text-xs">Settings</span></a>
+      <button id="logout-btn" class="flex items-center gap-3 w-full px-3 py-3 rounded-xl text-sm font-medium text-white/60 hover:bg-red-500/10 hover:text-red-400 transition duration-200 cursor-pointer"><span class="text-lg"><i class="ri-door-open-line"></i></span> <span class="font-cinzel text-xs">Logout</span></button>
+    </nav>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <div class="flex-1 min-w-0">
+    <header class="flex items-center justify-between px-8 py-6 border-b border-yellow-500/10">
+      <div>
+        <h1 class="font-cinzel text-2xl font-bold text-white">Redeem Points</h1>
+        <p class="font-cormorant text-white/50 text-sm mt-1">Turn your loyalty points into a discount on your next ticket.</p>
+      </div>
+    </header>
+
+    <main class="px-8 py-8 max-w-3xl space-y-6">
+
+      <!-- Balance -->
+      <div class="relative bg-gradient-to-br from-yellow-500/15 to-yellow-500/5 border border-yellow-500/30 rounded-3xl overflow-hidden before:absolute before:top-0 before:left-0 before:right-0 before:h-0.5 before:bg-gradient-to-r before:from-transparent before:via-yellow-500 before:to-transparent p-8">
+        <p class="font-cinzel text-yellow-500/80 text-[10px] tracking-widest uppercase mb-2">Available Points</p>
+        <p id="redeem-balance" class="font-cinzel text-4xl font-bold gold-text mb-1">0</p>
+        <p class="font-cormorant text-white/50 text-sm">500 points = ₦1,000 off your next ticket.</p>
+      </div>
+
+      <!-- Redeem form -->
+      <div class="relative bg-white/[0.03] border border-yellow-500/20 rounded-3xl overflow-hidden before:absolute before:top-0 before:left-0 before:right-0 before:h-0.5 before:bg-gradient-to-r before:from-transparent before:via-yellow-500 before:to-transparent p-8">
+        <h3 class="font-cinzel text-white font-bold text-lg mb-1">Redeem for a Discount Code</h3>
+        <p class="font-cormorant text-white/50 text-sm mb-6">Choose how many points to spend, in multiples of 500.</p>
+
+        <form id="redeem-form" class="space-y-5">
+          <div class="flex flex-col gap-2">
+            <label class="font-cinzel text-yellow-500 text-[10px] font-semibold tracking-widest uppercase">Points to Redeem</label>
+            <select id="redeem-amount" class="w-full px-4 py-3.5 bg-white/[0.04] border border-yellow-500/20 rounded-xl text-white text-sm focus:outline-none focus:border-yellow-500 transition"></select>
+          </div>
+
+          <div id="redeem-msg" class="hidden text-xs px-4 py-3 rounded-xl"></div>
+
+          <button type="submit"
+            class="font-cinzel px-6 py-3.5 bg-yellow-500 hover:bg-yellow-400 text-black font-bold text-xs tracking-widest uppercase rounded-xl transition shadow-lg shadow-yellow-500/20 hover:-translate-y-0.5">
+            Generate Discount Code
+          </button>
+        </form>
+      </div>
+
+      <!-- Redemption history -->
+      <div>
+        <p class="font-cinzel text-yellow-500/70 text-[10px] tracking-[0.3em] uppercase mb-3">Your Codes</p>
+
+        <div id="redeem-empty" class="hidden text-center py-14 relative bg-white/[0.03] border border-yellow-500/20 rounded-2xl">
+          <p class="font-cormorant text-white/50 text-base">No codes generated yet.</p>
+        </div>
+
+        <div id="redeem-history" class="space-y-3"></div>
+      </div>
+
+    </main>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+
+      const user =
+        JSON.parse(localStorage.getItem("loggedInUser")) ||
+        JSON.parse(localStorage.getItem("currentUser"));
+
+      if (!user) {
+        window.location.href = "sign-in.html";
+        return;
+      }
+
+      const POINTS_PER_BLOCK = 500;
+      const NAIRA_PER_BLOCK = 1000;
+
+      function getAllBookings() {
+        return JSON.parse(localStorage.getItem("bookings")) || [];
+      }
+
+      function getMyRedemptions() {
+        const all = JSON.parse(localStorage.getItem("rewardRedemptions")) || [];
+        return all.filter(r => r.email === user.email)
+          .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+      }
+
+      function getEarnedPoints() {
+        const myBookings = getAllBookings().filter(b => b.attendeeEmail === user.email);
+        const totalSpent = myBookings.reduce((sum, b) => sum + (Number(b.totalPaid) || 0), 0);
+        return Math.floor(totalSpent / 100); // same 1 point per ₦100 rule used on the dashboard
+      }
+
+      function getSpentPoints() {
+        return getMyRedemptions().reduce((sum, r) => sum + (Number(r.pointsUsed) || 0), 0);
+      }
+
+      function getAvailablePoints() {
+        return Math.max(getEarnedPoints() - getSpentPoints(), 0);
+      }
+
+      function generateCode() {
+        return "NX-" + Math.random().toString(36).slice(2, 8).toUpperCase();
+      }
+
+      function formatNaira(n) {
+        return "₦" + Number(n || 0).toLocaleString("en-NG");
+      }
+
+      function formatDate(dateStr) {
+        const d = new Date(dateStr);
+        if (isNaN(d)) return dateStr || "";
+        return d.toLocaleDateString(undefined, { day: "numeric", month: "short", year: "numeric" });
+      }
+
+      function populateAmountOptions() {
+        const available = getAvailablePoints();
+        const select = document.getElementById("redeem-amount");
+        select.innerHTML = "";
+
+        const maxBlocks = Math.floor(available / POINTS_PER_BLOCK);
+        if (maxBlocks < 1) {
+          select.innerHTML = `<option value="">Not enough points yet</option>`;
+          document.querySelector("#redeem-form button[type=submit]").disabled = true;
+          document.querySelector("#redeem-form button[type=submit]").classList.add("opacity-40", "cursor-not-allowed");
+          return;
+        }
+
+        for (let i = 1; i <= maxBlocks; i++) {
+          const pts = i * POINTS_PER_BLOCK;
+          const naira = i * NAIRA_PER_BLOCK;
+          const opt = document.createElement("option");
+          opt.value = pts;
+          opt.textContent = `${pts} points → ${formatNaira(naira)} off`;
+          select.appendChild(opt);
+        }
+      }
+
+      function renderBalance() {
+        document.getElementById("redeem-balance").textContent = getAvailablePoints().toLocaleString("en-NG");
+      }
+
+      function statusBadge(used) {
+        return used
+          ? `<span class="font-cinzel text-[10px] px-2.5 py-1 rounded-full font-semibold tracking-wide bg-white/10 text-white/50">Used</span>`
+          : `<span class="font-cinzel text-[10px] px-2.5 py-1 rounded-full font-semibold tracking-wide bg-green-500/15 text-green-400">Active</span>`;
+      }
+
+      function renderHistory() {
+        const redemptions = getMyRedemptions();
+        const empty = document.getElementById("redeem-empty");
+        const list = document.getElementById("redeem-history");
+
+        if (redemptions.length === 0) {
+          empty.classList.remove("hidden");
+          list.innerHTML = "";
+          return;
+        }
+        empty.classList.add("hidden");
+
+        list.innerHTML = redemptions.map(r => `
+          <div class="relative bg-white/[0.03] border border-yellow-500/20 rounded-2xl overflow-hidden before:absolute before:top-0 before:left-0 before:right-0 before:h-0.5 before:bg-gradient-to-r before:from-transparent before:via-yellow-500 before:to-transparent p-5 flex items-center justify-between gap-4">
+            <div>
+              <p class="font-cinzel text-yellow-400 text-sm font-bold tracking-wide">${r.code}</p>
+              <p class="text-white/40 text-xs mt-1">${formatNaira(r.discountAmount)} off · ${r.pointsUsed} points · ${formatDate(r.createdAt)}</p>
+            </div>
+            ${statusBadge(r.used)}
+          </div>
+        `).join("");
+      }
+
+      function showMsg(text, isError) {
+        const el = document.getElementById("redeem-msg");
+        el.textContent = text;
+        el.classList.remove("hidden");
+        el.classList.toggle("bg-red-500/10", isError);
+        el.classList.toggle("border", true);
+        el.classList.toggle("border-red-500/30", isError);
+        el.classList.toggle("text-red-400", isError);
+        el.classList.toggle("bg-green-500/10", !isError);
+        el.classList.toggle("border-green-500/30", !isError);
+        el.classList.toggle("text-green-400", !isError);
+      }
+
+      document.getElementById("redeem-form").addEventListener("submit", (e) => {
+        e.preventDefault();
+        const pointsUsed = Number(document.getElementById("redeem-amount").value);
+
+        if (!pointsUsed || pointsUsed > getAvailablePoints()) {
+          showMsg("Please select a valid amount of points.", true);
+          return;
+        }
+
+        const discountAmount = (pointsUsed / POINTS_PER_BLOCK) * NAIRA_PER_BLOCK;
+        const redemptions = JSON.parse(localStorage.getItem("rewardRedemptions")) || [];
+        redemptions.unshift({
+          id: `rr_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`,
+          email: user.email,
+          code: generateCode(),
+          pointsUsed,
+          discountAmount,
+          used: false,
+          createdAt: new Date().toISOString(),
+        });
+        localStorage.setItem("rewardRedemptions", JSON.stringify(redemptions));
+
+        showMsg("Discount code generated! Use it at checkout on your next ticket purchase.", false);
+        renderBalance();
+        populateAmountOptions();
+        renderHistory();
+      });
+
+      // sidebar logout
+      document.getElementById("logout-btn").addEventListener("click", () => {
+        if (confirm("Are you sure you want to log out of Nice-Xclusive?")) {
+          localStorage.removeItem("loggedInUser");
+          localStorage.removeItem("currentUser");
+          window.location.href = "sign-in.html";
+        }
+      });
+
+      renderBalance();
+      populateAmountOptions();
+      renderHistory();
+    });
+  </script>
+
+</body>
+</html>

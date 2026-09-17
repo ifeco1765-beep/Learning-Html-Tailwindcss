@@ -1,0 +1,830 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Dashboard | Nice-Xclusive Events Platform</title>
+  <link rel="stylesheet" href="/tailwind/src/output.css">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=Montserrat:wght@300;400;500;600&display=swap"
+    rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@4.9.0/fonts/remixicon.css" rel="stylesheet">
+  <link rel="stylesheet" href="css/dashboard-shell.css">
+  <script src="js/shared/notifications.js" defer></script>
+  <style>
+    @media (min-width: 1024px) {
+      #sidebar {
+        position: sticky !important;
+        top: 0 !important;
+        height: 100vh !important;
+      }
+    }
+
+    /* Custom scrollbar for sidebar nav */
+    #sidebar nav {
+      scrollbar-width: thin;
+      scrollbar-color: rgba(234, 179, 8, 0.35) transparent;
+    }
+
+    #sidebar nav::-webkit-scrollbar {
+      width: 5px;
+    }
+
+    #sidebar nav::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    #sidebar nav::-webkit-scrollbar-thumb {
+      background-color: rgba(234, 179, 8, 0.35);
+      border-radius: 9999px;
+    }
+
+    #sidebar nav::-webkit-scrollbar-thumb:hover {
+      background-color: rgba(234, 179, 8, 0.6);
+    }
+  </style>
+</head>
+
+<body class="relative min-h-screen bg-[#06030F] text-white overflow-x-hidden" data-dashboard="attendee">
+
+  <!-- Background glow -->
+  <div class="fixed inset-0 pointer-events-none z-0"
+    style="background:radial-gradient(ellipse 70% 60% at 15% 30%,rgba(80,20,120,0.35) 0%,transparent 65%),radial-gradient(ellipse 50% 50% at 85% 70%,rgba(60,10,100,0.2) 0%,transparent 60%);">
+  </div>
+
+  <!-- Sidebar overlay (mobile) -->
+  <div id="sidebar-overlay"></div>
+
+  <!-- Logout confirm modal -->
+  <div id="logout-confirm">
+    <div class="bg-[#0d0a1a] border border-yellow-500/30 rounded-2xl p-8 max-w-sm w-full mx-4 text-center">
+      <p class="text-3xl mb-4"><i class="ri-door-open-line"></i></p>
+      <h3 class="font-cinzel text-white text-lg font-bold mb-2">Logging Out</h3>
+      <p class="font-cormorant text-white/60 text-base mb-6">Are you sure you want to log out of Nice-Xclusive?</p>
+      <div class="flex gap-3">
+        <button id="logout-cancel"
+          class="font-cinzel flex-1 py-3 border border-yellow-500/30 text-yellow-400 rounded-xl text-sm hover:bg-yellow-500/10 transition">Cancel</button>
+        <button id="logout-confirm-btn"
+          class="font-cinzel flex-1 py-3 bg-red-500 hover:bg-red-400 text-white rounded-xl text-sm font-bold transition">Yes,
+          Logout</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="relative z-10 lg:grid lg:grid-cols-[256px_1fr] min-h-screen">
+
+    <!-- ── SIDEBAR ── -->
+    <aside id="sidebar"
+      class="w-64 min-h-screen bg-black border-r border-yellow-500/20 flex flex-col fixed top-0 left-0 h-full z-40 lg:sticky lg:top-0 lg:h-screen">
+
+      <!-- Logo -->
+      <div class="px-6 py-6 border-b border-yellow-500/20">
+        <a href="/tailwind/src/index.html" class="flex items-center gap-3">
+          <div
+            class="w-10 h-10 rounded-xl border border-yellow-500 flex items-center justify-center bg-gradient-to-br from-yellow-400 to-yellow-700 shadow-md shadow-yellow-500/20">
+            <span class="font-cinzel text-base font-bold text-black">NX</span>
+          </div>
+          <div>
+            <h1 class="font-cinzel text-white text-sm font-semibold tracking-wide">Nice-Xclusive</h1>
+            <p class="text-yellow-500 text-[8px] tracking-[3px] uppercase">Events Platform</p>
+          </div>
+        </a>
+      </div>
+
+      <!-- Nav -->
+      <nav class="flex-1 px-3 py-6 space-y-1 overflow-y-auto">
+
+        <p class="font-cinzel text-yellow-500/50 text-[9px] tracking-[0.3em] uppercase px-3 mb-3">Main</p>
+
+        <a href="/tailwind/src/dashboard.html"
+          class="flex items-center gap-3 px-3 py-3 rounded-xl text-sm font-medium bg-yellow-500/10 border-l-[3px] border-yellow-500 text-yellow-400 transition duration-200">
+          <span class="text-lg"><i class="ri-home-5-line"></i></span> <span class="font-cinzel text-xs">Dashboard</span>
+        </a>
+        <a href="/tailwind/src/index.html#events"
+          class="flex items-center gap-3 px-3 py-3 rounded-xl text-sm font-medium text-white/60 hover:bg-yellow-500/10 hover:text-yellow-400 transition duration-200">
+          <span class="text-lg"><i class="ri-search-2-line"></i></span> <span class="font-cinzel text-xs">Browse
+            Events</span>
+        </a>
+        <a href="my-tickets.html"
+          class="flex items-center gap-3 px-3 py-3 rounded-xl text-sm font-medium text-white/60 hover:bg-yellow-500/10 hover:text-yellow-400 transition duration-200">
+          <span class="text-lg"><i class="ri-coupon-3-line"></i></span> <span class="font-cinzel text-xs">My
+            Tickets</span>
+          <span
+            class="ml-auto bg-yellow-500 text-black text-[10px] font-bold rounded-full w-5 h-5 flex items-center justify-center badge-pulse"
+            id="ticket-badge">3</span>
+        </a>
+        <a href="/tailwind/src/saved-events.html"
+          class="flex items-center gap-3 px-3 py-3 rounded-xl text-sm font-medium text-white/60 hover:bg-yellow-500/10 hover:text-yellow-400 transition duration-200">
+          <span class="text-lg"><i class="ri-poker-hearts-line"></i></span> <span class="font-cinzel text-xs">Saved
+            Events</span>
+        </a>
+        <a href="/tailwind/src/my-schedule.html"
+          class="flex items-center gap-3 px-3 py-3 rounded-xl text-sm font-medium text-white/60 hover:bg-yellow-500/10 hover:text-yellow-400 transition duration-200">
+          <span class="text-lg"><i class="ri-calendar-2-fill"></i></span> <span class="font-cinzel text-xs">My
+            Schedule</span>
+        </a>
+
+        <p class="font-cinzel text-yellow-500/50 text-[9px] tracking-[0.3em] uppercase px-3 mt-6 mb-3">Activity</p>
+
+        <a href="order-history.html"
+          class="flex items-center gap-3 px-3 py-3 rounded-xl text-sm font-medium text-white/60 hover:bg-yellow-500/10 hover:text-yellow-400 transition duration-200">
+          <span class="text-lg"><i class="ri-file-history-line"></i></span> <span class="font-cinzel text-xs">Order
+            History</span>
+        </a>
+        <a href="my-reviews.html"
+          class="flex items-center gap-3 px-3 py-3 rounded-xl text-sm font-medium text-white/60 hover:bg-yellow-500/10 hover:text-yellow-400 transition duration-200">
+          <span class="text-lg"><i class="ri-star-line"></i></span> <span class="font-cinzel text-xs">My Reviews</span>
+        </a>
+        <!-- <a href="#rewards-section"
+          class="flex items-center gap-3 px-3 py-3 rounded-xl text-sm font-medium text-white/60 hover:bg-yellow-500/10 hover:text-yellow-400 transition duration-200">
+          <span class="text-lg"><i class="ri-gift-line"></i></span> <span class="font-cinzel text-xs">Rewards &
+            Points</span>
+          <span
+            class="ml-auto bg-yellow-500/20 text-yellow-400 text-[10px] font-bold rounded-full px-2 py-0.5">New</span>
+        </a> -->
+
+        <p class="font-cinzel text-yellow-500/50 text-[9px] tracking-[0.3em] uppercase px-3 mt-6 mb-3">Account</p>
+
+
+
+
+        <a href="settings.html"
+          class="flex items-center gap-3 px-3 py-3 rounded-xl text-sm font-medium text-white/60 hover:bg-yellow-500/10 hover:text-yellow-400 transition duration-200">
+          <span class="text-lg"><i class="ri-settings-2-line"></i></span> <span
+            class="font-cinzel text-xs">Settings</span>
+        </a>
+        <button id="logout-btn"
+          class="flex items-center gap-3 w-full px-3 py-3 rounded-xl text-sm font-medium text-white/60 hover:bg-red-500/10 hover:text-red-400 transition duration-200 cursor-pointer">
+          <span class="text-lg"><i class="ri-door-open-line"></i></span> <span class="font-cinzel text-xs">Logout</span>
+        </button>
+      </nav>
+
+      <!-- User card -->
+      <div class="px-4 py-4 border-t border-yellow-500/20">
+        <div class="flex items-center gap-3 bg-white/[0.03] rounded-xl p-3">
+          <div id="avatar"
+            class="w-9 h-9 rounded-full bg-gradient-to-br from-yellow-400 to-yellow-700 flex items-center justify-center font-cinzel text-black text-sm font-bold">
+          </div>
+          <div class="flex-1 min-w-0">
+            <p id="sidebar-name" class="text-white text-xs font-semibold truncate">User</p>
+            <p class="text-yellow-500 text-[10px] truncate">Pro Member ✦</p>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- ── MAIN CONTENT ── -->
+    <div class="flex flex-col min-w-0">
+
+      <!-- Top bar -->
+      <header
+        class="sticky top-0 z-30 bg-[#06030F]/90 backdrop-blur-xl border-b border-yellow-500/20 px-6 py-4 flex items-center justify-between">
+        <div class="flex items-center gap-4">
+          <button id="sidebar-toggle"
+            class="lg:hidden cursor-pointer text-yellow-500 text-2xl hover:text-yellow-300 transition">
+            <i id="sidebar-ham-icon" class="ri-menu-line"></i>
+          </button>
+          <div>
+            <h2 class="font-cinzel text-lg font-semibold text-white">My Dashboard</h2>
+            <p id="welcome-text" class="text-white/40 text-xs"></p>
+          </div>
+        </div>
+        <div class="flex items-center gap-3">
+
+          <div class="relative" id="nx-notif-wrapper">
+
+            <!-- BELL BUTTON -->
+            <button id="nx-notif-bell" type="button"
+              class="relative w-10 h-10 rounded-xl bg-white/[0.04] border border-yellow-500/20 flex items-center justify-center hover:border-yellow-500/50 transition">
+              <i class="ri-notification-3-line text-yellow-400 text-lg"></i>
+              <span id="nx-notif-badge"
+                class="hidden absolute -top-1.5 -right-1.5 min-w-[18px] h-[18px] px-1 rounded-full bg-yellow-500 text-black text-[10px] font-bold font-cinzel flex items-center justify-center">
+                0
+              </span>
+            </button>
+
+            <!-- DROPDOWN PANEL -->
+            <div id="nx-notif-panel"
+              class="hidden absolute right-0 top-full mt-3 w-80 max-h-96 overflow-y-auto bg-[#12091F] border border-yellow-500/20 rounded-xl shadow-2xl z-[9999]">
+
+              <div class="flex items-center justify-between px-4 py-3 border-b border-yellow-500/10">
+                <p class="font-cinzel text-white text-sm font-semibold">Notifications</p>
+                <button id="nx-notif-mark-all" type="button"
+                  class="font-cinzel text-[10px] tracking-widest uppercase text-yellow-400 hover:text-yellow-300 transition">
+                  Mark all read
+                </button>
+              </div>
+
+              <div id="nx-notif-list" class="divide-y divide-yellow-500/10">
+                <!-- items injected by JS -->
+              </div>
+
+              <div id="nx-notif-empty" class="hidden px-4 py-8 text-center">
+                <i class="ri-notification-off-line text-white/20 text-2xl mb-2 block"></i>
+                <p class="font-cormorant text-white/40 text-sm">No notifications yet</p>
+              </div>
+
+            </div>
+          </div>
+
+          <a href="/tailwind/src/index.html#events"
+            class="hidden sm:flex items-center gap-2 px-4 py-2 bg-yellow-500 hover:bg-yellow-400 text-black font-bold text-xs tracking-wider uppercase rounded-xl transition duration-300 shadow-md shadow-yellow-500/20 font-cinzel">
+            <i class="ri-search-2-line"></i> Browse Events
+          </a>
+        </div>
+      </header>
+
+      <!-- Page body -->
+      <main class="flex-1 px-6 py-8 overflow-y-auto">
+
+        <!-- Welcome banner -->
+        <div
+          class="reveal relative bg-yellow-500/10 border border-yellow-500/25 rounded-2xl p-8 mb-8 overflow-hidden before:absolute before:top-0 before:left-0 before:right-0 before:h-px before:bg-gradient-to-r before:from-transparent before:via-yellow-500 before:to-transparent">
+          <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            <div>
+              <p class="font-cinzel text-yellow-500 text-[10px] tracking-widest uppercase mb-2">Pro Member</p>
+              <h3 id="banner-name" class="font-cinzel text-2xl font-bold text-white mb-1">Good morning ✨</h3>
+              <p id="banner-upcoming-text" class="font-cormorant text-white/50 text-base">You have <span
+                  class="text-yellow-400 font-semibold">0
+                  upcoming events</span> this week. Don't miss out!</p>
+            </div>
+            <div class="flex items-center gap-3">
+              <!-- <div class="text-center px-5 py-3 bg-white/[0.04] border border-yellow-500/20 rounded-xl">
+                <p id="points-display" class="font-cinzel text-2xl font-bold gold-text"></p>
+                <p class="text-white/40 text-[10px] mt-1 uppercase tracking-wider">Points</p>
+              </div> -->
+              <div class="text-center px-5 py-3 bg-white/[0.04] border border-yellow-500/20 rounded-xl">
+                <p id="banner-events-count" class="font-cinzel text-2xl font-bold text-white">0</p>
+                <p class="text-white/40 text-[10px] mt-1 uppercase tracking-wider">Events</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Stats row -->
+        <div class="grid grid-cols-2 xl:grid-cols-4 gap-5 mb-8">
+
+          <div
+            class="reveal reveal-delay-1 relative bg-white/[0.03] border border-yellow-500/20 rounded-2xl p-6 overflow-hidden hover:border-yellow-500/40 transition duration-300 before:absolute before:top-0 before:left-0 before:right-0 before:h-0.5 before:bg-gradient-to-r before:from-transparent before:via-yellow-500 before:to-transparent">
+            <p class="font-cinzel text-white/50 text-[10px] uppercase tracking-widest mb-3">Tickets Owned</p>
+            <p id="stat-tickets-owned" class="font-cinzel text-3xl font-bold text-white mb-1">0</p>
+            <p id="stat-tickets-sub" class="text-yellow-400 text-xs">0 upcoming</p>
+            <div class="absolute bottom-4 right-5 text-4xl opacity-10"><i class="ri-coupon-3-line"></i></div>
+          </div>
+
+          <div
+            class="reveal reveal-delay-2 relative bg-white/[0.03] border border-yellow-500/20 rounded-2xl p-6 overflow-hidden hover:border-yellow-500/40 transition duration-300 before:absolute before:top-0 before:left-0 before:right-0 before:h-0.5 before:bg-gradient-to-r before:from-transparent before:via-yellow-500 before:to-transparent">
+            <p class="font-cinzel text-white/50 text-[10px] uppercase tracking-widest mb-3">Saved Events</p>
+            <p id="stat-saved-events" class="font-cinzel text-3xl font-bold text-white mb-1">0</p>
+            <p id="stat-saved-sub" class="text-green-400 text-xs">0 ending soon</p>
+            <div class="absolute bottom-4 right-5 text-4xl opacity-10"><i class="ri-poker-hearts-line"></i></div>
+          </div>
+
+          <div
+            class="reveal reveal-delay-3 relative bg-white/[0.03] border border-yellow-500/20 rounded-2xl p-6 overflow-hidden hover:border-yellow-500/40 transition duration-300 before:absolute before:top-0 before:left-0 before:right-0 before:h-0.5 before:bg-gradient-to-r before:from-transparent before:via-yellow-500 before:to-transparent">
+            <p class="font-cinzel text-white/50 text-[10px] uppercase tracking-widest mb-3">Total Spent</p>
+            <p id="stat-total-spent" class="font-cinzel text-3xl font-bold gold-text mb-1">₦0</p>
+            <p class="text-white/30 text-xs">Across all events</p>
+            <div class="absolute bottom-4 right-5 text-4xl opacity-10"><i class="ri-money-dollar-circle-line"></i></div>
+          </div>
+
+          <!-- <div
+            class="reveal reveal-delay-4 relative bg-white/[0.03] border border-yellow-500/20 rounded-2xl p-6 overflow-hidden hover:border-yellow-500/40 transition duration-300 before:absolute before:top-0 before:left-0 before:right-0 before:h-0.5 before:bg-gradient-to-r before:from-transparent before:via-yellow-500 before:to-transparent">
+            <p class="font-cinzel text-white/50 text-[10px] uppercase tracking-widest mb-3">Reward Points</p>
+            <p id="stat-reward-points" class="font-cinzel text-3xl font-bold text-white mb-1">0</p>
+            <p id="stat-points-sub" class="text-yellow-400 text-xs">0 to next tier</p>
+            <div class="absolute bottom-4 right-5 text-4xl opacity-10"><i class="ri-gift-line"></i></div>
+          </div> -->
+
+        </div>
+
+        <!-- Middle row -->
+        <div class="grid grid-cols-1 xl:grid-cols-3 gap-6 mb-8">
+
+          <!-- Upcoming tickets -->
+          <div class="reveal xl:col-span-2 bg-white/[0.03] border border-yellow-500/20 rounded-2xl overflow-hidden">
+            <div class="flex items-center justify-between px-6 py-5 border-b border-yellow-500/20">
+              <h3 class="font-cinzel text-sm font-semibold text-white">My Upcoming Tickets</h3>
+              <a href="my-tickets.html"
+                class="font-cinzel text-yellow-400 text-xs hover:text-yellow-300 transition">View all →</a>
+            </div>
+            <div id="upcoming-tickets-list" class="divide-y divide-yellow-500/10">
+              <!-- injected by JS -->
+            </div>
+            <div id="upcoming-tickets-empty" class="hidden px-6 py-10 text-center">
+              <i class="ri-ticket-2-line text-white/20 text-2xl mb-2 block"></i>
+              <p class="font-cormorant text-white/40 text-sm">No upcoming tickets yet.</p>
+              <a href="index.html#events"
+                class="inline-block mt-3 px-5 py-2 rounded-lg bg-yellow-500 text-black text-xs font-cinzel font-semibold hover:bg-yellow-400 transition">
+                Browse Events
+              </a>
+            </div>
+          </div>
+
+          <!-- Quick actions + Notifications -->
+          <div class="flex flex-col gap-5">
+
+            <div class="reveal bg-white/[0.03] border border-yellow-500/20 rounded-2xl p-6">
+              <h3 class="font-cinzel text-sm font-semibold text-white mb-5">Quick Actions</h3>
+              <div class="space-y-3">
+                <a href="/tailwind/src/index.html#events"
+                  class="font-cinzel flex items-center gap-3 w-full px-4 py-3 bg-yellow-500 hover:bg-yellow-400 text-black font-bold text-xs tracking-wider uppercase rounded-xl transition duration-300">
+                  <i class="ri-search-2-line"></i> Browse Events
+                </a>
+                <a href="download-tickets.html"
+                  class="font-cinzel flex items-center gap-3 w-full px-4 py-3 bg-white/[0.04] border border-yellow-500/20 text-white/70 hover:border-yellow-500/50 hover:text-yellow-400 text-xs rounded-xl transition duration-300">
+                  <i class="ri-coupon-3-line"></i> Download Tickets
+                </a>
+                <a href="/tailwind/src/reedem-points.html"
+                  class="font-cinzel flex items-center gap-3 w-full px-4 py-3 bg-white/[0.04] border border-yellow-500/20 text-white/70 hover:border-yellow-500/50 hover:text-yellow-400 text-xs rounded-xl transition duration-300">
+                  <i class="ri-gift-line"></i> Redeem Points
+                </a>
+                <a href="/tailwind/src/Contact-us.html"
+                  class="font-cinzel flex items-center gap-3 w-full px-4 py-3 bg-white/[0.04] border border-yellow-500/20 text-white/70 hover:border-yellow-500/50 hover:text-yellow-400 text-xs rounded-xl transition duration-300">
+                  <i class="ri-customer-service-fill"></i> Get Support
+                </a>
+              </div>
+            </div>
+
+            
+
+          </div>
+        </div>
+
+        <!-- Bottom row -->
+        <div class="grid grid-cols-1 xl:grid-cols-2 gap-6 mb-8">
+
+          <!-- Recommended events — dynamically loaded from JSONPlaceholder API -->
+          <div class="reveal bg-white/[0.03] border border-yellow-500/20 rounded-2xl p-6">
+            <div class="flex items-center justify-between mb-6">
+              <h3 class="font-cinzel text-sm font-semibold text-white">Recommended For You</h3>
+              <a href="index.html" class="font-cinzel text-yellow-400 text-xs hover:text-yellow-300 transition">See all
+                →</a>
+            </div>
+            <div id="recommended-list" class="space-y-4">
+              <p class="font-cinzel text-white/30 text-xs text-center py-4">Loading recommendations...</p>
+            </div>
+          </div>
+
+          <!-- Order history -->
+          <div class="reveal bg-white/[0.03] border border-yellow-500/20 rounded-2xl p-6">
+            <div class="flex items-center justify-between mb-6">
+              <h3 class="font-cinzel text-sm font-semibold text-white">Order History</h3>
+              <a href="/tailwind/src/order-history.html"
+                class="font-cinzel text-yellow-400 text-xs hover:text-yellow-300 transition">View all →</a>
+            </div>
+            <div class="space-y-4" id="order-list">
+              <!-- dynamically rendered from localStorage -->
+            </div>
+          </div>
+
+        </div>
+
+
+
+        <div class="text-center mt-12 text-yellow-500/20 text-lg tracking-[8px]">— ✦ —</div>
+
+      </main>
+    </div>
+  </div>
+
+  <!-- ═══════ JAVASCRIPT ═══════ -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+
+      /* ─── 1. AUTH CHECK + PERSONALISATION ─── */
+      /* ─── AUTH GUARD ─── */
+
+      const user =
+        JSON.parse(localStorage.getItem("currentUser")) ||
+        JSON.parse(localStorage.getItem("loggedInUser"));
+
+      if (!user) {
+        window.location.replace("sign-in.html");
+        return;
+      }
+
+      if (user.role !== "attendee") {
+        window.location.replace("organizer.html");
+        return;
+      }
+
+      // Prevent Back button
+      history.pushState(null, "", location.href);
+
+      window.addEventListener("popstate", () => {
+        history.pushState(null, "", location.href);
+      });
+
+      // Reload if page came from browser cache
+      window.addEventListener("pageshow", (event) => {
+        if (event.persisted) {
+          window.location.reload();
+        }
+      });
+
+      document.getElementById('sidebar-name').textContent = user.fullName;
+      document.getElementById('welcome-text').textContent = `Welcome back, ${user.fullName} 👋`;
+      const hour = new Date().getHours();
+
+      let greeting = "Good evening";
+
+      if (hour < 12) {
+        greeting = "Good morning";
+      } else if (hour < 18) {
+        greeting = "Good afternoon";
+      }
+
+      document.getElementById("banner-name").textContent =
+        `${greeting}, ${user.fullName} ✨`;
+      document.getElementById('avatar').textContent = user.fullName.charAt(0).toUpperCase();
+
+      /* ─── 2. SIDEBAR TOGGLE (hamburger JS, no checkbox) ─── */
+      const sidebar = document.getElementById('sidebar');
+      const sidebarToggle = document.getElementById('sidebar-toggle');
+      const sidebarOverlay = document.getElementById('sidebar-overlay');
+      const hamIcon = document.getElementById('sidebar-ham-icon');
+
+      function openSidebar() {
+        sidebar.classList.add('open');
+        sidebarOverlay.classList.add('show');
+        hamIcon.className = 'ri-close-line';
+      }
+      function closeSidebar() {
+        sidebar.classList.remove('open');
+        sidebarOverlay.classList.remove('show');
+        hamIcon.className = 'ri-menu-line';
+      }
+
+      sidebarToggle.addEventListener('click', (e) => {
+        e.stopPropagation();
+        sidebar.classList.contains('open') ? closeSidebar() : openSidebar();
+      });
+      sidebarOverlay.addEventListener('click', closeSidebar);
+
+      // Close when a sidebar link is clicked on mobile
+      sidebar.querySelectorAll('a').forEach(a => {
+        a.addEventListener('click', () => {
+          if (window.innerWidth < 1024) closeSidebar();
+        });
+      });
+
+
+
+      /* ─── 3. LOGOUT with confirm modal ─── */
+      const logoutBtn = document.getElementById('logout-btn');
+      const logoutConfirm = document.getElementById('logout-confirm');
+      const logoutCancel = document.getElementById('logout-cancel');
+      const logoutConfirmBtn = document.getElementById('logout-confirm-btn');
+
+      logoutBtn.addEventListener('click', () => logoutConfirm.classList.add('show'));
+      logoutCancel.addEventListener('click', () => logoutConfirm.classList.remove('show'));
+      logoutConfirmBtn.addEventListener("click", () => {
+
+        localStorage.removeItem("loggedInUser");
+        localStorage.removeItem("currentUser");
+        localStorage.removeItem("nx_last_login");
+
+        window.location.replace("sign-in.html");
+
+      });
+
+      /* ─── 4. SCROLL REVEAL ─── */
+      const revealObserver = new IntersectionObserver((entries) => {
+        entries.forEach(e => {
+          if (e.isIntersecting) { e.target.classList.add('in-view'); revealObserver.unobserve(e.target); }
+        });
+      }, { threshold: 0.1 });
+      document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+
+      /* ─── REAL DASHBOARD STAT CARDS ─── */
+      const allBookings = JSON.parse(localStorage.getItem("bookings")) || [];
+      const myBookings = allBookings.filter(b => b.attendeeEmail === user.email);
+
+      const allEvents = JSON.parse(localStorage.getItem("events")) || [];
+      const allSaved = JSON.parse(localStorage.getItem("savedEvents")) || [];
+      const mySavedIds = allSaved.filter(s => s.email === user.email).map(s => s.eventId);
+      const mySavedEvents = allEvents.filter(ev => mySavedIds.includes(ev.id));
+
+      const totalTickets = myBookings.reduce(
+        (sum, b) => sum + (b.quantity || (b.seats ? b.seats.length : 1)), 0
+      );
+      const upcomingTickets = myBookings.filter(b => (b.status || "upcoming") === "upcoming")
+        .reduce((sum, b) => sum + (b.quantity || (b.seats ? b.seats.length : 1)), 0);
+
+      const now = new Date();
+      const savedEndingSoon = mySavedEvents.filter(ev => {
+        const d = new Date(ev.date);
+        if (isNaN(d)) return false;
+        const daysUntil = Math.round((d - now) / (1000 * 60 * 60 * 24));
+        return daysUntil >= 0 && daysUntil <= 7;
+      }).length;
+
+      const totalSpent = myBookings.reduce((sum, b) => sum + (Number(b.totalPaid) || 0), 0);
+
+      const ticketBadgeEl = document.getElementById("ticket-badge");
+      if (ticketBadgeEl) ticketBadgeEl.textContent = totalTickets;
+
+      // Simple points system: 1 point per ₦100 spent, next tier at 1000 points
+      const rewardPoints = Math.floor(totalSpent / 100);
+
+      /* ─── REWARDS TIER SYSTEM ─── */
+      const TIERS = [
+        { name: "Bronze", min: 0, icon: "🥉", discount: "" },
+        { name: "Silver", min: 250, icon: "🥈", discount: "5% discount on all bookings" },
+        { name: "Gold", min: 600, icon: "🥇", discount: "10% discount on all bookings" },
+        { name: "Platinum", min: 1000, icon: "🏆", discount: "15% discount + priority booking" },
+      ];
+
+      function getTierInfo(points) {
+        let currentIndex = 0;
+        for (let i = 0; i < TIERS.length; i++) {
+          if (points >= TIERS[i].min) currentIndex = i;
+        }
+        const current = TIERS[currentIndex];
+        const next = TIERS[currentIndex + 1] || null;
+        return { current, next, currentIndex };
+      }
+
+      const { current: currentTier, next: nextTier } = getTierInfo(rewardPoints);
+
+      // tier label + points fraction + progress bar
+      const tierLabelEl = document.getElementById("tier-label");
+      const pointsFractionEl = document.getElementById("points-fraction");
+      const pointsBarEl = document.getElementById("points-bar");
+      const pointsToNextEl = document.getElementById("points-to-next");
+
+      if (tierLabelEl) tierLabelEl.textContent = currentTier.name;
+
+      if (nextTier) {
+        if (pointsFractionEl) pointsFractionEl.textContent = `${rewardPoints} / ${nextTier.min}`;
+        const bandProgress = ((rewardPoints - currentTier.min) / (nextTier.min - currentTier.min)) * 100;
+        if (pointsBarEl) setTimeout(() => { pointsBarEl.style.width = Math.min(bandProgress, 100) + "%"; }, 500);
+        if (pointsToNextEl) pointsToNextEl.textContent = `${nextTier.min - rewardPoints} points to reach ${nextTier.name} tier`;
+      } else {
+        if (pointsFractionEl) pointsFractionEl.textContent = `${rewardPoints} / MAX`;
+        if (pointsBarEl) setTimeout(() => { pointsBarEl.style.width = "100%"; }, 500);
+        if (pointsToNextEl) pointsToNextEl.textContent = "You've reached the top tier!";
+      }
+
+      // current tier card
+      const tierCurrentIcon = document.getElementById("tier-current-icon");
+      const tierCurrentName = document.getElementById("tier-current-name");
+      const tierCurrentDesc = document.getElementById("tier-current-desc");
+      if (tierCurrentIcon) tierCurrentIcon.textContent = currentTier.icon;
+      if (tierCurrentName) tierCurrentName.textContent = currentTier.name + " Member";
+      if (tierCurrentDesc) tierCurrentDesc.textContent = currentTier.discount || "Keep booking to start earning perks";
+
+      // next tier card
+      const tierNextCard = document.getElementById("tier-next-card");
+      const tierNextIcon = document.getElementById("tier-next-icon");
+      const tierNextName = document.getElementById("tier-next-name");
+      const tierNextDesc = document.getElementById("tier-next-desc");
+      if (nextTier) {
+        if (tierNextIcon) tierNextIcon.textContent = nextTier.icon;
+        if (tierNextName) tierNextName.textContent = nextTier.name + " — Next Tier";
+        if (tierNextDesc) tierNextDesc.textContent = nextTier.discount;
+      } else if (tierNextCard) {
+        tierNextCard.innerHTML = `
+    <span class="text-3xl">👑</span>
+    <div>
+      <p class="font-cinzel text-yellow-400 text-xs font-semibold">Top Tier Reached</p>
+      <p class="text-white/40 text-[10px]">You're enjoying our best perks</p>
+    </div>
+  `;
+      }
+
+      // Pro Member banner — real points + real event count
+      const bannerPointsEl = document.getElementById("points-display");
+      if (bannerPointsEl) bannerPointsEl.textContent = rewardPoints.toLocaleString("en-NG");
+
+      const bannerEventsEl = document.getElementById("banner-events-count");
+      if (bannerEventsEl) {
+        const uniqueEventsBooked = new Set(myBookings.map(b => b.eventId)).size;
+        bannerEventsEl.textContent = uniqueEventsBooked;
+      }
+
+      // Upcoming events (booked, status "upcoming", event date within the next 7 days)
+      const upcomingEventIdsThisWeek = new Set(
+        myBookings
+          .filter(b => (b.status || "upcoming") === "upcoming")
+          .filter(b => {
+            const ev = allEvents.find(e => e.id === b.eventId);
+            if (!ev) return false;
+            const d = new Date(ev.date);
+            if (isNaN(d)) return false;
+            const daysUntil = Math.round((d - now) / (1000 * 60 * 60 * 24));
+            return daysUntil >= 0 && daysUntil <= 7;
+          })
+          .map(b => b.eventId)
+      );
+      const upcomingCountThisWeek = upcomingEventIdsThisWeek.size;
+
+      const bannerUpcomingTextEl = document.getElementById("banner-upcoming-text");
+      if (bannerUpcomingTextEl) {
+        if (upcomingCountThisWeek === 0) {
+          bannerUpcomingTextEl.innerHTML = `You have <span class="text-yellow-400 font-semibold">no upcoming events</span> this week. Time to browse something new!`;
+        } else {
+          const label = upcomingCountThisWeek === 1 ? "upcoming event" : "upcoming events";
+          bannerUpcomingTextEl.innerHTML = `You have <span class="text-yellow-400 font-semibold">${upcomingCountThisWeek} ${label}</span> this week. Don't miss out!`;
+        }
+      }
+
+      function animateCounter(el, target, prefix = "", suffix = "") {
+        if (!el) return;
+        let current = 0;
+        const step = Math.max(Math.ceil(target / 50), 1);
+        const timer = setInterval(() => {
+          current += step;
+          if (current >= target) { current = target; clearInterval(timer); }
+          el.textContent = prefix + current.toLocaleString("en-NG") + suffix;
+        }, 25);
+      }
+
+      animateCounter(document.getElementById("stat-tickets-owned"), totalTickets);
+      animateCounter(document.getElementById("stat-saved-events"), mySavedEvents.length);
+      animateCounter(document.getElementById("stat-total-spent"), totalSpent, "₦");
+      animateCounter(document.getElementById("stat-reward-points"), rewardPoints);
+
+      const ticketsSub = document.getElementById("stat-tickets-sub");
+      if (ticketsSub) ticketsSub.textContent = `${upcomingTickets} upcoming`;
+
+      const savedSub = document.getElementById("stat-saved-sub");
+      if (savedSub) savedSub.textContent = savedEndingSoon > 0 ? `${savedEndingSoon} ending soon` : "none ending soon";
+
+      /* ─── MY UPCOMING TICKETS (real data) ─── */
+      const upcomingTicketsListEl = document.getElementById("upcoming-tickets-list");
+      const upcomingTicketsEmptyEl = document.getElementById("upcoming-tickets-empty");
+
+      const todayStart = new Date(new Date().toDateString());
+
+      const upcomingTicketRows = myBookings
+        .filter(b => (b.status || "upcoming") === "upcoming")
+        .map(b => ({ booking: b, event: allEvents.find(e => e.id === b.eventId) }))
+        .filter(({ event }) => {
+          if (!event) return true; // keep even if the event record is missing, using booking fallback fields
+          const d = new Date(event.date);
+          return isNaN(d) || d >= todayStart;
+        })
+        .sort((a, b) => {
+          const da = a.event && !isNaN(new Date(a.event.date)) ? new Date(a.event.date) : new Date(8640000000000000);
+          const db = b.event && !isNaN(new Date(b.event.date)) ? new Date(b.event.date) : new Date(8640000000000000);
+          return da - db;
+        })
+        .slice(0, 5);
+
+      if (upcomingTicketRows.length === 0) {
+        upcomingTicketsListEl.innerHTML = "";
+        upcomingTicketsEmptyEl.classList.remove("hidden");
+      } else {
+        upcomingTicketsEmptyEl.classList.add("hidden");
+
+        upcomingTicketsListEl.innerHTML = upcomingTicketRows.map(({ booking, event }) => {
+          const name = (event && event.name) || booking.eventName || "Event";
+          const dateLabel = event ? event.date : "";
+          const venueLabel = event ? [event.venue, event.city].filter(Boolean).join(", ") : "";
+          const imgSrc = (event && event.banner) || "https://placehold.co/112x112/171021/F0C040?text=NX";
+          const priceLabel = "₦" + Number(booking.totalPaid || 0).toLocaleString("en-NG");
+
+          let badgeLabel = "Upcoming";
+          let badgeColor = "blue";
+          let subLabel = "";
+
+          if (event) {
+            const d = new Date(event.date);
+            if (!isNaN(d)) {
+              const daysUntil = Math.round((d - todayStart) / (1000 * 60 * 60 * 24));
+              if (daysUntil === 0) {
+                badgeLabel = "Today!"; badgeColor = "yellow"; subLabel = "Don't miss it";
+              } else if (daysUntil <= 14) {
+                badgeLabel = "Confirmed"; badgeColor = "green"; subLabel = `${daysUntil} day${daysUntil > 1 ? "s" : ""} left`;
+              } else {
+                badgeLabel = "Upcoming"; badgeColor = "blue"; subLabel = `${daysUntil} days left`;
+              }
+            }
+          }
+
+          return `
+      <div class="flex items-center gap-4 px-6 py-4 hover:bg-yellow-500/[0.03] transition">
+        <img src="${imgSrc}" class="w-14 h-14 rounded-xl object-cover" alt="${name}" />
+        <div class="flex-1 min-w-0">
+          <p class="font-cinzel text-white text-xs font-semibold truncate">${name}</p>
+          <p class="text-white/40 text-[10px] mt-0.5">${dateLabel}${venueLabel ? " · " + venueLabel : ""}</p>
+          <div class="flex items-center gap-2 mt-1.5">
+            <span class="font-cinzel bg-yellow-500/15 text-yellow-400 text-[9px] px-2 py-0.5 rounded-full">${booking.ticketType || "General"}</span>
+            <span class="text-white/30 text-[10px]">· ${priceLabel}</span>
+          </div>
+        </div>
+        <div class="text-right">
+          <span class="bg-${badgeColor}-500/15 text-${badgeColor}-400 text-[10px] px-2 py-1 rounded-full font-semibold">${badgeLabel}</span>
+          <p class="text-white/30 text-[10px] mt-1">${subLabel}</p>
+        </div>
+      </div>
+    `;
+        }).join("");
+      }
+
+
+      /* ─── 7. ORDER HISTORY ─── */
+
+      const orderList = document.getElementById("order-list");
+
+
+      const orders = allBookings.filter(b => b.attendeeEmail === user.email);
+
+      if (orders.length === 0) {
+
+        orderList.innerHTML = `
+        <div class="text-center py-8">
+            <p class="text-white/40">
+                You haven't booked any events yet.
+            </p>
+
+            <a href="index.html#events"
+               class="inline-block mt-4 px-5 py-2 rounded-lg bg-yellow-500 text-black font-semibold">
+                Browse Events
+            </a>
+        </div>
+    `;
+
+      } else {
+
+        // show most recent first, and cap to a handful since this is a dashboard widget
+        const recent = [...orders]
+          .sort((a, b) => new Date(b.bookedAt) - new Date(a.bookedAt))
+          .slice(0, 5);
+
+        orderList.innerHTML = recent.map((o, i) => `
+        <div class="flex items-center justify-between py-3 ${i < recent.length - 1
+            ? "border-b border-yellow-500/10"
+            : ""
+          }">
+
+            <div>
+                <p class="font-cinzel text-white text-xs font-medium">
+                    ${o.eventName}
+                </p>
+
+                <p class="text-white/40 text-[10px]">
+                    ${new Date(o.bookedAt).toLocaleDateString(undefined, { day: "numeric", month: "short", year: "numeric" })} · ${o.ticketType || "General"}
+                </p>
+            </div>
+
+            <div class="text-right">
+                <p class="text-yellow-400 text-xs font-semibold">
+                    ₦${Number(o.totalPaid || 0).toLocaleString("en-NG")}
+                </p>
+
+                <span class="bg-green-500/15 text-green-400 text-[9px] px-2 py-0.5 rounded-full">
+                    Paid
+                </span>
+            </div>
+
+        </div>
+    `).join("");
+
+      }
+
+
+
+      /* ─── 8. RECOMMENDED EVENTS — JSONPlaceholder API (dynamic render) ─── */
+      const eventIcons = ['🤖', '🎨', '💼', '🎭'];
+      const eventColors = [
+        'from-purple-500 to-blue-600',
+        'from-yellow-500 to-orange-600',
+        'from-green-500 to-teal-600',
+        'from-pink-500 to-red-600'
+      ];
+      const eventLocations = ['Lagos, Nigeria', 'Enugu, Nigeria', 'Abuja, Nigeria', 'Lagos, Nigeria'];
+      const eventDates = ['Jul 20, 2026', 'Aug 5, 2026', 'Aug 18, 2026', 'Sep 2, 2026'];
+
+      fetch('https://jsonplaceholder.typicode.com/users')
+        .then(res => res.json())
+        .then(users => {
+          const list = document.getElementById('recommended-list');
+          list.innerHTML = users.slice(0, 4).map((u, i) => `
+          <div class="flex items-center gap-4">
+            <div class="w-12 h-12 rounded-xl bg-gradient-to-br ${eventColors[i]} flex items-center justify-center text-2xl shrink-0">${eventIcons[i]}</div>
+            <div class="flex-1 min-w-0">
+              <p class="font-cinzel text-white text-xs font-semibold truncate">${u.company.name} Summit</p>
+              <p class="text-white/40 text-[10px]">${eventDates[i]} · ${eventLocations[i]}</p>
+            </div>
+            <a href="/tailwind/src/Tickets.html" class="font-cinzel px-3 py-1.5 border border-yellow-500/30 text-yellow-400 text-[10px] rounded-lg hover:bg-yellow-500/10 transition shrink-0">Book</a>
+          </div>
+        `).join('');
+        })
+        .catch(() => {
+          // Fallback if API fails
+          document.getElementById('recommended-list').innerHTML = `
+          <p class="font-cinzel text-white/30 text-xs text-center py-4">Could not load recommendations. <a href="event-details.html" class="text-yellow-400 hover:underline">Browse all events →</a></p>
+        `;
+        });
+
+    });
+  </script>
+
+</body>
+
+</html>

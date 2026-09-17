@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact Us | Nice-Xclusive Events Platform</title>
+  <link rel="stylesheet" href="/tailwind/src/output.css">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@4.9.0/fonts/remixicon.css" rel="stylesheet">
+
+  <style>
+    .font-cinzel    { font-family: 'Cinzel', serif; }
+    .font-cormorant { font-family: 'Cormorant Garamond', serif; }
+    body            { font-family: 'Montserrat', sans-serif; }
+
+    .gold-text {
+      font-family: 'Cinzel', serif;
+      background: linear-gradient(135deg, #F0C040 0%, #C9A84C 50%, #8B6914 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    @keyframes fadeUp  { 0% { opacity:0; transform:translateY(28px);} 100%{ opacity:1; transform:translateY(0);} }
+    @keyframes popIn   { 0% { opacity:0; transform:scale(0.9);} 100%{ opacity:1; transform:scale(1);} }
+    @keyframes shakeX  { 0%,100%{ transform:translateX(0);} 20%,60%{ transform:translateX(-6px);} 40%,80%{ transform:translateX(6px);} }
+
+    .reveal { opacity:0; transform:translateY(28px); transition: opacity .7s ease, transform .7s ease; }
+    .reveal.in-view { opacity:1; transform:translateY(0); }
+    .reveal-delay-1.in-view { transition-delay:.1s; }
+    .reveal-delay-2.in-view { transition-delay:.2s; }
+    .reveal-delay-3.in-view { transition-delay:.3s; }
+
+    .success-pop { animation: popIn .35s ease; }
+    .shake       { animation: shakeX .4s ease; }
+
+    /* inputs dark theme */
+    .dark-input {
+      width: 100%;
+      padding: 0.875rem 1rem;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(234,179,8,0.2);
+      border-radius: 0.75rem;
+      color: white;
+      font-size: 0.875rem;
+      transition: border-color 0.3s, background 0.3s;
+      outline: none;
+    }
+    .dark-input::placeholder { color: rgba(255,255,255,0.3); }
+    .dark-input:focus { border-color: #eab308; background: rgba(234,179,8,0.05); }
+    select.dark-input option { background: #06030F; color: white; }
+
+    /* mobile menu */
+    #mobile-menu { max-height:0; overflow:hidden; transition: max-height 0.35s ease; }
+    #mobile-menu.open { max-height:600px; }
+
+    /* char counter */
+    #char-count { color: rgba(255,255,255,0.4); font-size:10px; text-align:right; }
+    #char-count.over { color: #f87171; }
+  </style>
+</head>
+
+<body class="relative min-h-screen bg-[#06030F] text-white overflow-x-hidden">
+
+  <div class="fixed inset-0 pointer-events-none z-0" style="background: radial-gradient(ellipse 70% 60% at 20% 40%, rgba(80,20,120,0.4) 0%, transparent 65%), radial-gradient(ellipse 50% 50% at 80% 70%, rgba(60,10,100,0.25) 0%, transparent 60%);"></div>
+
+  <!-- NAVBAR -->
+  <header class="relative z-50">
+    <nav id="main-nav" class="w-full bg-[#050816]/90 backdrop-blur-xl border-b border-yellow-500/20 sticky top-0 left-0 z-50 transition-all duration-300">
+      <div class="max-w-7xl mx-auto px-6 lg:px-10">
+        <div class="flex items-center justify-between h-20">
+
+          <div class="flex items-center gap-3">
+            <div class="w-14 h-14 rounded-xl border border-yellow-500 flex items-center justify-center bg-gradient-to-br from-yellow-400 to-yellow-700 shadow-lg shadow-yellow-500/20">
+              <span class="font-cinzel text-2xl font-bold text-black">NX</span>
+            </div>
+            <div>
+              <p class="font-cinzel text-white text-xl font-semibold tracking-wide">Nice-Xclusive</p>
+              <p class="text-yellow-500 text-xs tracking-[4px] uppercase">Events Platform</p>
+            </div>
+          </div>
+
+          <ul class="hidden lg:flex items-center gap-10 text-white font-medium text-sm">
+            <li><a href="index.html"        class="font-cinzel hover:text-yellow-400 transition duration-300">Home</a></li>
+            <li><a href="Aboutus.html"       class="font-cinzel hover:text-yellow-400 transition duration-300">About Us</a></li>
+            <li><a href="/tailwind/src/index.html#events" class="font-cinzel hover:text-yellow-400 transition duration-300">Events</a></li>
+            <li><a href="Services.html"      class="font-cinzel hover:text-yellow-400 transition duration-300">Services</a></li>
+
+            <li><a href="Contact-us.html"    class="font-cinzel text-yellow-400 border-b border-yellow-400 pb-0.5">Contact</a></li>
+          </ul>
+
+          <div class="hidden lg:flex items-center gap-4">
+            <a href="sign-in.html"  class="font-cinzel px-5 py-2.5 border border-yellow-500 text-yellow-400 rounded-xl hover:bg-yellow-500 hover:text-black transition duration-300 text-sm">Sign In</a>
+            <a href="sign-up.html"  class="font-cinzel px-5 py-2.5 bg-yellow-500 text-black font-semibold rounded-xl hover:bg-yellow-400 transition duration-300 shadow-lg shadow-yellow-500/30 text-sm">Create Account</a>
+          </div>
+
+          <button id="hamburger" class="lg:hidden text-yellow-500 text-3xl focus:outline-none cursor-pointer hover:text-yellow-300 transition duration-300" aria-label="Toggle menu">
+            <i id="ham-icon" class="ri-menu-line"></i>
+          </button>
+        </div>
+      </div>
+
+      <div id="mobile-menu" class="lg:hidden bg-[#0b1023] border-t border-yellow-500/20">
+        <ul class="flex flex-col p-6 gap-5 text-white font-medium">
+          <li><a href="index.html"        class="font-cinzel hover:text-yellow-400 text-sm">Home</a></li>
+          <li><a href="Aboutus.html"       class="font-cinzel hover:text-yellow-400 text-sm">About Us</a></li>
+          <li><a href="/tailwind/src/index.html#events" class="font-cinzel hover:text-yellow-400 text-sm">Events</a></li>
+          <li><a href="Services.html"      class="font-cinzel hover:text-yellow-400 text-sm">Services</a></li>
+          
+          <li><a href="Contact-us.html"    class="font-cinzel text-yellow-400 text-sm">Contact</a></li>
+          <li class="flex flex-col gap-3 pt-2">
+            <a href="sign-in.html" class="font-cinzel w-full py-3 border border-yellow-500 text-yellow-400 rounded-xl text-center text-sm">Sign In</a>
+            <a href="sign-up.html" class="font-cinzel w-full py-3 bg-yellow-500 text-black font-semibold rounded-xl text-center text-sm">Create Account</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+  </header>
+
+  <main class="relative z-10 max-w-7xl mx-auto px-6 lg:px-10 py-20">
+
+    <!-- Page Header -->
+    <div class="text-center mb-20 reveal">
+      <div class="inline-flex items-center gap-3 mb-5">
+        <span class="w-9 h-px bg-yellow-500"></span>
+        <span class="font-cinzel text-yellow-500 text-[10px] font-semibold tracking-[0.4em] uppercase">Get In Touch</span>
+        <span class="w-9 h-px bg-yellow-500"></span>
+      </div>
+      <h1 class="font-cinzel text-5xl lg:text-6xl font-bold mb-4">
+        Contact <span class="gold-text">Nice-Xclusive</span>
+      </h1>
+      <p class="font-cormorant text-lg text-white/70 max-w-xl mx-auto leading-relaxed">
+        Have a question, want to list your event, or need help planning something unforgettable? We're here for you.
+      </p>
+    </div>
+
+    <!-- Contact Grid -->
+    <div class="grid grid-cols-1 lg:grid-cols-[1fr_1.4fr] gap-10 items-start">
+
+      <!-- LEFT: Info Cards -->
+      <div class="flex flex-col gap-5 reveal reveal-delay-1">
+
+        <div class="flex items-start gap-5 bg-white/[0.03] border border-yellow-500/20 rounded-2xl p-7 hover:border-yellow-500/50 hover:bg-yellow-500/[0.04] transition duration-300">
+          <div class="w-12 h-12 min-w-[48px] rounded-xl bg-yellow-500/10 border border-yellow-500/20 flex items-center justify-center text-xl">📍</div>
+          <div>
+            <h3 class="font-cinzel text-yellow-500 text-xs font-semibold tracking-widest uppercase mb-2">Our Location</h3>
+            <p class="text-white/70 text-sm leading-relaxed">Awka, Anambra State<br>Nigeria</p>
+          </div>
+        </div>
+
+        <div class="flex items-start gap-5 bg-white/[0.03] border border-yellow-500/20 rounded-2xl p-7 hover:border-yellow-500/50 hover:bg-yellow-500/[0.04] transition duration-300">
+          <div class="w-12 h-12 min-w-[48px] rounded-xl bg-yellow-500/10 border border-yellow-500/20 flex items-center justify-center text-xl">📞</div>
+          <div>
+            <h3 class="font-cinzel text-yellow-500 text-xs font-semibold tracking-widest uppercase mb-2">Phone</h3>
+            <p class="text-white/70 text-sm">+234 800 000 0000</p>
+            <p class="text-white/50 text-xs mt-1">Mon – Sat, 9am – 6pm</p>
+          </div>
+        </div>
+
+        <div class="flex items-start gap-5 bg-white/[0.03] border border-yellow-500/20 rounded-2xl p-7 hover:border-yellow-500/50 hover:bg-yellow-500/[0.04] transition duration-300">
+          <div class="w-12 h-12 min-w-[48px] rounded-xl bg-yellow-500/10 border border-yellow-500/20 flex items-center justify-center text-xl">✉️</div>
+          <div>
+            <h3 class="font-cinzel text-yellow-500 text-xs font-semibold tracking-widest uppercase mb-2">Email</h3>
+            <p class="text-white/70 text-sm">hello@nicexclusive.com</p>
+            <p class="text-white/70 text-sm">support@nicexclusive.com</p>
+          </div>
+        </div>
+
+        <div class="flex items-start gap-5 bg-white/[0.03] border border-yellow-500/20 rounded-2xl p-7 hover:border-yellow-500/50 hover:bg-yellow-500/[0.04] transition duration-300">
+          <div class="w-12 h-12 min-w-[48px] rounded-xl bg-yellow-500/10 border border-yellow-500/20 flex items-center justify-center text-xl">🕐</div>
+          <div>
+            <h3 class="font-cinzel text-yellow-500 text-xs font-semibold tracking-widest uppercase mb-2">Working Hours</h3>
+            <p class="text-white/70 text-sm leading-relaxed">Monday – Friday: 9am – 6pm<br>Saturday: 10am – 4pm<br>Sunday: Closed</p>
+          </div>
+        </div>
+
+        <div class="bg-white/[0.03] border border-yellow-500/20 rounded-2xl p-7">
+          <h3 class="font-cinzel text-yellow-500 text-xs font-semibold tracking-widest uppercase mb-5">Follow Us</h3>
+          <div class="flex gap-3">
+            <a href="#" class="w-11 h-11 rounded-xl border border-yellow-500/20 bg-white/[0.03] flex items-center justify-center text-white/70 hover:border-yellow-500 hover:bg-yellow-500/10 hover:-translate-y-1 transition duration-300 font-bold text-sm">f</a>
+            <a href="#" class="w-11 h-11 rounded-xl border border-yellow-500/20 bg-white/[0.03] flex items-center justify-center text-white/70 hover:border-yellow-500 hover:bg-yellow-500/10 hover:-translate-y-1 transition duration-300 font-bold text-sm">X</a>
+            <a href="#" class="w-11 h-11 rounded-xl border border-yellow-500/20 bg-white/[0.03] flex items-center justify-center text-white/70 hover:border-yellow-500 hover:bg-yellow-500/10 hover:-translate-y-1 transition duration-300 text-base">📷</a>
+            <a href="#" class="w-11 h-11 rounded-xl border border-yellow-500/20 bg-white/[0.03] flex items-center justify-center text-white/70 hover:border-yellow-500 hover:bg-yellow-500/10 hover:-translate-y-1 transition duration-300 font-bold text-sm">in</a>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- RIGHT: Form -->
+      <div class="reveal reveal-delay-2">
+        <div class="relative bg-white/[0.03] border border-yellow-500/20 rounded-2xl p-10 overflow-hidden before:absolute before:top-0 before:left-0 before:right-0 before:h-0.5 before:bg-gradient-to-r before:from-transparent before:via-yellow-500 before:to-transparent">
+
+          <h2 class="font-cinzel text-2xl font-semibold text-white mb-2">Send Us a Message</h2>
+          <p class="font-cormorant text-base text-white/60 mb-9 leading-relaxed">Fill in the details below and our team will respond within 24 hours.</p>
+
+          <form id="contact-form" novalidate>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-5">
+              <div class="flex flex-col gap-2">
+                <label class="font-cinzel text-yellow-500 text-[10px] font-semibold tracking-widest uppercase">First Name</label>
+                <input id="fname" type="text" placeholder="John" class="dark-input" />
+              </div>
+              <div class="flex flex-col gap-2">
+                <label class="font-cinzel text-yellow-500 text-[10px] font-semibold tracking-widest uppercase">Last Name</label>
+                <input id="lname" type="text" placeholder="Doe" class="dark-input" />
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-5">
+              <div class="flex flex-col gap-2">
+                <label class="font-cinzel text-yellow-500 text-[10px] font-semibold tracking-widest uppercase">Email Address</label>
+                <input id="email" type="email" placeholder="john@example.com" class="dark-input" />
+              </div>
+              <div class="flex flex-col gap-2">
+                <label class="font-cinzel text-yellow-500 text-[10px] font-semibold tracking-widest uppercase">Phone Number</label>
+                <input id="phone" type="tel" placeholder="+234 800 000 0000" class="dark-input" />
+              </div>
+            </div>
+
+            <div class="flex flex-col gap-2 mb-5">
+              <label class="font-cinzel text-yellow-500 text-[10px] font-semibold tracking-widest uppercase">Subject</label>
+              <select id="subject" class="dark-input appearance-none cursor-pointer">
+                <option value="" disabled selected class="bg-[#06030F]">Select a subject</option>
+                <option class="bg-[#06030F]">General Inquiry</option>
+                <option class="bg-[#06030F]">Event Booking</option>
+                <option class="bg-[#06030F]">List My Event</option>
+                <option class="bg-[#06030F]">Vendor Registration</option>
+                <option class="bg-[#06030F]">Technical Support</option>
+                <option class="bg-[#06030F]">Partnership</option>
+              </select>
+            </div>
+
+            <div class="flex flex-col gap-2 mb-2">
+              <label class="font-cinzel text-yellow-500 text-[10px] font-semibold tracking-widest uppercase">Message</label>
+              <textarea id="message" rows="5" placeholder="Tell us how we can help you..." class="dark-input resize-y"></textarea>
+              <p id="char-count">0 / 500 characters</p>
+            </div>
+
+            <!-- AI Smart Reply button -->
+            <div class="flex items-center gap-3 mb-7">
+              <button type="button" id="ai-reply-btn"
+                class="font-cinzel flex items-center gap-1.5 text-[10px] tracking-widest uppercase text-yellow-400 border border-yellow-500/30 px-3 py-1.5 rounded-lg hover:bg-yellow-500/10 transition cursor-pointer">
+                <i class="ri-sparkling-line"></i> AI Suggest Reply
+              </button>
+              <p id="ai-reply-status" class="hidden text-yellow-400/70 text-xs font-cormorant"></p>
+            </div>
+
+            <button type="submit" id="submit-btn"
+              class="font-cinzel w-full py-4 bg-yellow-500 hover:bg-yellow-400 text-black font-bold text-sm tracking-widest uppercase rounded-xl transition duration-300 shadow-lg shadow-yellow-500/20 hover:-translate-y-0.5">
+              ✉ Send Message
+            </button>
+
+            <div id="form-error" class="hidden mt-4 py-3 px-5 bg-red-500/10 border border-red-500/30 rounded-xl text-red-400 text-sm font-cormorant text-center"></div>
+            <div id="successMsg" class="hidden mt-5 text-center py-4 px-6 bg-yellow-500/10 border border-yellow-500/30 rounded-xl font-cormorant text-yellow-400 text-lg">
+              ✨ Thank you! Your message has been sent. We'll be in touch shortly.
+            </div>
+
+          </form>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="text-center mt-20 text-yellow-500/20 text-xl tracking-[8px]">— ✦ —</div>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="relative z-10 border-t border-yellow-500/20 py-10 mt-10">
+    <div class="max-w-7xl mx-auto px-6 lg:px-10 flex flex-wrap items-center justify-between gap-4">
+      <span class="font-cinzel text-yellow-500 text-sm tracking-wider">Nice-Xclusive Events Platform</span>
+      <span class="text-white/50 text-xs">© 2026 Nice-Xclusive. All rights reserved.</span>
+      <div class="flex gap-6">
+        <a href="terms.html#privacy" class="text-white/50 hover:text-yellow-400 text-xs transition font-cinzel">Privacy Policy</a>
+        <a href="terms.html"         class="text-white/50 hover:text-yellow-400 text-xs transition font-cinzel">Terms of Service</a>
+        <a href="#"                  class="text-white/50 hover:text-yellow-400 text-xs transition font-cinzel">FAQ</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+  document.addEventListener('DOMContentLoaded', function () {
+
+    /* 1. HAMBURGER */
+    const hamburger  = document.getElementById('hamburger');
+    const mobileMenu = document.getElementById('mobile-menu');
+    const hamIcon    = document.getElementById('ham-icon');
+    hamburger.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const open = mobileMenu.classList.toggle('open');
+      hamIcon.className = open ? 'ri-close-line' : 'ri-menu-line';
+    });
+    mobileMenu.querySelectorAll('a').forEach(a => {
+      a.addEventListener('click', () => { mobileMenu.classList.remove('open'); hamIcon.className = 'ri-menu-line'; });
+    });
+    document.addEventListener('click', (e) => {
+      if (!mobileMenu.contains(e.target) && !hamburger.contains(e.target)) {
+        mobileMenu.classList.remove('open'); hamIcon.className = 'ri-menu-line';
+      }
+    });
+
+    /* 2. NAVBAR SHADOW */
+    const nav = document.getElementById('main-nav');
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('shadow-lg',       window.scrollY > 40);
+      nav.classList.toggle('shadow-black/40', window.scrollY > 40);
+    });
+
+    /* 3. SCROLL REVEAL */
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) { e.target.classList.add('in-view'); revealObserver.unobserve(e.target); }
+      });
+    }, { threshold: 0.12 });
+    document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+    /* 4. localStorage — save form draft */
+    const DRAFT_KEY = 'nx_contact_draft';
+    const draftFields = ['fname', 'lname', 'email', 'phone', 'subject', 'message'];
+
+    function saveDraft() {
+      const draft = {};
+      draftFields.forEach(id => { const el = document.getElementById(id); if (el) draft[id] = el.value; });
+      localStorage.setItem(DRAFT_KEY, JSON.stringify(draft));
+    }
+    function restoreDraft() {
+      const raw = localStorage.getItem(DRAFT_KEY);
+      if (!raw) return;
+      const draft = JSON.parse(raw);
+      draftFields.forEach(id => { const el = document.getElementById(id); if (el && draft[id]) el.value = draft[id]; });
+      updateCharCount();
+    }
+
+    let saveTimer;
+    draftFields.forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.addEventListener('input', () => { clearTimeout(saveTimer); saveTimer = setTimeout(saveDraft, 600); });
+    });
+    restoreDraft();
+
+    /* 5. CHAR COUNTER */
+    const messageEl  = document.getElementById('message');
+    const charCountEl = document.getElementById('char-count');
+    function updateCharCount() {
+      const len = messageEl.value.length;
+      charCountEl.textContent = `${len} / 500 characters`;
+      charCountEl.classList.toggle('over', len > 500);
+    }
+    messageEl.addEventListener('input', updateCharCount);
+
+    /* 6. AI SMART REPLY (Anthropic API) */
+    document.getElementById('ai-reply-btn').addEventListener('click', async () => {
+      const subject = document.getElementById('subject').value;
+      const fname   = document.getElementById('fname').value.trim();
+      const statusEl = document.getElementById('ai-reply-status');
+
+      if (!subject || !fname) {
+        showError('Please enter your first name and select a subject so AI can suggest a relevant message.');
+        return;
+      }
+
+      const btn = document.getElementById('ai-reply-btn');
+      statusEl.classList.remove('hidden');
+      statusEl.textContent = 'Generating...';
+      btn.disabled = true;
+
+      try {
+        const res = await fetch('https://api.anthropic.com/v1/messages', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            model: 'claude-sonnet-4-6',
+            max_tokens: 1000,
+            messages: [{
+              role: 'user',
+              content: `Write a short, professional message from a customer named ${fname} to the Nice-Xclusive Events Platform support team regarding: "${subject}".
+The message should be polite, specific, and under 100 words. Return only the message text, no preamble or quotes.`
+            }]
+          })
+        });
+        const data = await res.json();
+        const text = data.content?.[0]?.text || '';
+        if (text) {
+          messageEl.value = text;
+          saveDraft();
+          updateCharCount();
+          statusEl.textContent = '✨ Message generated — edit as needed before sending.';
+        }
+      } catch {
+        statusEl.textContent = 'AI unavailable. Please type your message manually.';
+      } finally {
+        btn.disabled = false;
+      }
+    });
+
+    /* 7. FORM VALIDATION + SUBMIT */
+    const form      = document.getElementById('contact-form');
+    const submitBtn = document.getElementById('submit-btn');
+    const errorBox  = document.getElementById('form-error');
+    const successBox = document.getElementById('successMsg');
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      errorBox.classList.add('hidden');
+      successBox.classList.add('hidden');
+
+      const fname   = document.getElementById('fname').value.trim();
+      const email   = document.getElementById('email').value.trim();
+      const message = document.getElementById('message').value.trim();
+
+      if (!fname)                                         { showError('Please enter your first name.'); return; }
+      if (!email)                                         { showError('Please enter your email address.'); return; }
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))     { showError('Please enter a valid email address.'); return; }
+      if (!message)                                       { showError('Please write your message.'); return; }
+      if (message.length > 500)                           { showError('Message is too long — keep it under 500 characters.'); return; }
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Sending...';
+
+      setTimeout(() => {
+        successBox.classList.remove('hidden');
+        successBox.classList.add('success-pop');
+        form.reset();
+        updateCharCount();
+        localStorage.removeItem(DRAFT_KEY);
+        submitBtn.disabled = false;
+        submitBtn.textContent = '✉ Send Message';
+        setTimeout(() => successBox.classList.add('hidden'), 6000);
+      }, 900);
+    });
+
+    function showError(msg) {
+      errorBox.textContent = msg;
+      errorBox.classList.remove('hidden');
+      errorBox.classList.add('shake');
+      setTimeout(() => errorBox.classList.remove('shake'), 400);
+    }
+
+  });
+  </script>
+
+</body>
+</html>

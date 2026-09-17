@@ -1,0 +1,1460 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Create Event | Nice-Xclusive Events Platform</title>
+  <link rel="stylesheet" href="/tailwind/src/output.css">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=Montserrat:wght@300;400;500;600&display=swap"
+    rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@4.9.0/fonts/remixicon.css" rel="stylesheet">
+
+  <!-- ═══════ STYLES ═══════ -->
+  <style>
+    .font-cinzel {
+      font-family: 'Cinzel', serif;
+    }
+
+    .font-cormorant {
+      font-family: 'Cormorant Garamond', serif;
+    }
+
+    body {
+      font-family: 'Montserrat', sans-serif;
+    }
+
+    /* gradient text utility — avoids arbitrary Tailwind class warnings */
+    .gold-text {
+      font-family: 'Cinzel', serif;
+      background: linear-gradient(135deg, #F0C040 0%, #C9A84C 50%, #8B6914 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    @keyframes fadeUp {
+      0% {
+        opacity: 0;
+        transform: translateY(28px);
+      }
+
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes popIn {
+      0% {
+        opacity: 0;
+        transform: scale(0.9);
+      }
+
+      100% {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    @keyframes shakeX {
+
+      0%,
+      100% {
+        transform: translateX(0);
+      }
+
+      20%,
+      60% {
+        transform: translateX(-6px);
+      }
+
+      40%,
+      80% {
+        transform: translateX(6px);
+      }
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity .7s ease, transform .7s ease;
+    }
+
+    .reveal.in-view {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .reveal-delay-1.in-view {
+      transition-delay: .1s;
+    }
+
+    .reveal-delay-2.in-view {
+      transition-delay: .2s;
+    }
+
+    .reveal-delay-3.in-view {
+      transition-delay: .3s;
+    }
+
+    .reveal-delay-4.in-view {
+      transition-delay: .4s;
+    }
+
+    .reveal-delay-5.in-view {
+      transition-delay: .5s;
+    }
+
+    .reveal-delay-6.in-view {
+      transition-delay: .6s;
+    }
+
+    .success-pop {
+      animation: popIn .35s ease;
+    }
+
+    .shake {
+      animation: shakeX .4s ease;
+    }
+
+    .banner-pop {
+      animation: popIn .3s ease;
+    }
+
+    #live-preview.updated {
+      animation: popIn 0.25s ease;
+    }
+
+    .typing::after {
+      content: '|';
+      animation: blink 0.7s infinite;
+    }
+
+    @keyframes blink {
+
+      0%,
+      100% {
+        opacity: 1;
+      }
+
+      50% {
+        opacity: 0;
+      }
+    }
+
+    #mobile-menu {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.35s ease;
+    }
+
+    #mobile-menu.open {
+      max-height: 600px;
+    }
+
+    #category-dropdown {
+      transform-origin: top;
+      animation: dropdown .18s ease;
+    }
+
+    @keyframes dropdown {
+      from {
+        opacity: 0;
+        transform: translateY(-8px) scale(.98);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+  </style>
+</head>
+
+<body class="relative min-h-screen bg-[#06030F] text-white overflow-x-hidden">
+
+  <div class="fixed inset-0 pointer-events-none z-0"
+    style="background: radial-gradient(ellipse 70% 60% at 20% 40%, rgba(80,20,120,0.4) 0%, transparent 65%), radial-gradient(ellipse 50% 50% at 80% 70%, rgba(60,10,100,0.25) 0%, transparent 60%);">
+  </div>
+
+  <!-- NAVBAR -->
+  <header class="relative z-50">
+    <nav id="main-nav"
+      class="w-full bg-[#050816]/90 backdrop-blur-xl border-b border-yellow-500/20 sticky top-0 z-50 transition-all duration-300">
+      <div class="max-w-7xl mx-auto px-6 lg:px-10">
+        <div class="flex items-center justify-between h-20">
+          <div class="flex items-center gap-3">
+            <div
+              class="w-14 h-14 rounded-xl border border-yellow-500 flex items-center justify-center bg-gradient-to-br from-yellow-400 to-yellow-700 shadow-lg shadow-yellow-500/20">
+              <span class="font-cinzel text-2xl font-bold text-black">NX</span>
+            </div>
+            <div>
+              <p class="font-cinzel text-white text-xl font-semibold tracking-wide">Nice-Xclusive</p>
+              <p class="text-yellow-500 text-xs tracking-[4px] uppercase">Events Platform</p>
+            </div>
+          </div>
+          <ul class="hidden lg:flex items-center gap-10 text-white font-medium text-sm">
+            <li><a href="index.html" class="font-cinzel hover:text-yellow-400 transition">Home</a></li>
+            <li><a href="Aboutus.html" class="font-cinzel hover:text-yellow-400 transition">About Us</a></li>
+            <li><a href="/tailwind/src/index.html#events" class="font-cinzel hover:text-yellow-400 transition">Events</a></li>
+            <li><a href="Services.html" class="font-cinzel hover:text-yellow-400 transition">Services</a></li>
+            
+            <li><a href="Contact-us.html" class="font-cinzel hover:text-yellow-400 transition">Contact</a></li>
+          </ul>
+          <div class="hidden lg:flex items-center gap-4">
+            <a href="sign-in.html"
+              class="font-cinzel px-5 py-2.5 border border-yellow-500 text-yellow-400 rounded-xl hover:bg-yellow-500 hover:text-black transition text-sm">Sign
+              In</a>
+            <a href="sign-up.html"
+              class="font-cinzel px-5 py-2.5 bg-yellow-500 text-black font-semibold rounded-xl hover:bg-yellow-400 transition shadow-lg shadow-yellow-500/30 text-sm">Create
+              Account</a>
+          </div>
+          <button id="hamburger"
+            class="lg:hidden text-yellow-500 text-3xl focus:outline-none cursor-pointer hover:text-yellow-300 transition duration-300"
+            aria-label="Toggle menu">
+            <i id="ham-icon" class="ri-menu-line"></i>
+          </button>
+        </div>
+      </div>
+      <div id="mobile-menu" class="lg:hidden bg-[#0b1023] border-t border-yellow-500/20">
+        <ul class="flex flex-col p-6 gap-5 text-white font-medium">
+          <li><a href="index.html" class="font-cinzel hover:text-yellow-400 text-sm">Home</a></li>
+          <li><a href="Aboutus.html" class="font-cinzel hover:text-yellow-400 text-sm">About Us</a></li>
+          <li><a href="/tailwind/src/index.html#events" class="font-cinzel hover:text-yellow-400 text-sm">Events</a></li>
+          <li><a href="Services.html" class="font-cinzel hover:text-yellow-400 text-sm">Services</a></li>
+         
+          <li><a href="Contact-us.html" class="font-cinzel hover:text-yellow-400 text-sm">Contact</a></li>
+          <li class="flex flex-col gap-3 pt-2">
+            <a href="sign-in.html"
+              class="font-cinzel w-full py-3 border border-yellow-500 text-yellow-400 rounded-xl text-center text-sm">Sign
+              In</a>
+            <a href="sign-up.html"
+              class="font-cinzel w-full py-3 bg-yellow-500 text-black font-semibold rounded-xl text-center text-sm">Create
+              Account</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+  </header>
+
+  <main class="relative z-10 max-w-7xl mx-auto px-6 lg:px-10 py-16">
+
+    <!-- Page Header -->
+    <div class="text-center mb-14 reveal">
+      <div class="inline-flex items-center gap-3 mb-4">
+        <span class="w-9 h-px bg-yellow-500 block"></span>
+        <span class="font-cinzel text-yellow-500 text-[10px] font-semibold tracking-[0.4em] uppercase">For
+          Organizers</span>
+        <span class="w-9 h-px bg-yellow-500 block"></span>
+      </div>
+      <h1 class="gold-text text-4xl lg:text-5xl font-bold mb-3">Create a New Event</h1>
+      <p class="font-cormorant text-white/70 text-lg">Set up your event and reach thousands of attendees on
+        Nice-Xclusive instantly.</p>
+    </div>
+
+    <!-- Draft restored banner -->
+    <div id="draft-banner"
+      class="hidden mb-6 py-3 px-5 bg-yellow-500/10 border border-yellow-500/30 rounded-xl text-yellow-400 text-sm text-center font-cinzel">
+      📝 Draft restored from your last session —
+      <button id="clear-draft" class="underline hover:text-yellow-300 ml-1">Clear draft</button>
+    </div>
+
+    <!-- ORGANIZER TOOLS -->
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-5 mb-10">
+      <div
+        class="reveal reveal-delay-1 relative bg-yellow-500/[0.06] border border-yellow-500/25 rounded-2xl p-6 overflow-hidden before:absolute before:top-0 before:left-0 before:right-0 before:h-0.5 before:bg-gradient-to-r before:from-transparent before:via-yellow-500 before:to-transparent">
+        <div
+          class="w-10 h-10 rounded-xl bg-yellow-500/10 border border-yellow-500/20 flex items-center justify-center text-lg mb-4">
+          📋</div>
+        <h3 class="font-cinzel text-sm font-semibold text-white mb-1">Clean Booking Form</h3>
+        <p class="text-white/60 text-xs leading-relaxed">Professional form that converts visitors to buyers instantly.
+        </p>
+      </div>
+      <div
+        class="reveal reveal-delay-2 relative bg-yellow-500/[0.06] border border-yellow-500/25 rounded-2xl p-6 overflow-hidden before:absolute before:top-0 before:left-0 before:right-0 before:h-0.5 before:bg-gradient-to-r before:from-transparent before:via-yellow-500 before:to-transparent">
+        <div
+          class="w-10 h-10 rounded-xl bg-yellow-500/10 border border-yellow-500/20 flex items-center justify-center text-lg mb-4">
+          📊</div>
+        <h3 class="font-cinzel text-sm font-semibold text-white mb-1">Real-Time Analytics</h3>
+        <p class="text-white/60 text-xs leading-relaxed">Track ticket sales and attendees live from your dashboard.</p>
+      </div>
+      <div
+        class="reveal reveal-delay-3 relative bg-yellow-500/[0.06] border border-yellow-500/25 rounded-2xl p-6 overflow-hidden before:absolute before:top-0 before:left-0 before:right-0 before:h-0.5 before:bg-gradient-to-r before:from-transparent before:via-yellow-500 before:to-transparent">
+        <div
+          class="w-10 h-10 rounded-xl bg-yellow-500/10 border border-yellow-500/20 flex items-center justify-center text-lg mb-4">
+          💳</div>
+        <h3 class="font-cinzel text-sm font-semibold text-white mb-1">Secure Payouts</h3>
+        <p class="text-white/60 text-xs leading-relaxed">Get paid via Paystack or bank transfer within 3–5 days.</p>
+      </div>
+      <div class="reveal reveal-delay-4 relative bg-white/[0.03] border border-yellow-500/20 rounded-2xl p-6">
+        <div
+          class="w-10 h-10 rounded-xl bg-yellow-500/10 border border-yellow-500/20 flex items-center justify-center text-lg mb-4">
+          🖼️</div>
+        <h3 class="font-cinzel text-sm font-semibold text-white mb-1">Easy Image Upload</h3>
+        <p class="text-white/60 text-xs leading-relaxed">Upload your banner and it appears on your event page instantly.
+        </p>
+      </div>
+      <div class="reveal reveal-delay-5 relative bg-white/[0.03] border border-yellow-500/20 rounded-2xl p-6">
+        <div
+          class="w-10 h-10 rounded-xl bg-yellow-500/10 border border-yellow-500/20 flex items-center justify-center text-lg mb-4">
+          🎟️</div>
+        <h3 class="font-cinzel text-sm font-semibold text-white mb-1">Multiple Ticket Tiers</h3>
+        <p class="text-white/60 text-xs leading-relaxed">Set Regular, VIP, and Early Bird pricing for your event.</p>
+      </div>
+      <div class="reveal reveal-delay-6 relative bg-white/[0.03] border border-yellow-500/20 rounded-2xl p-6">
+        <div
+          class="w-10 h-10 rounded-xl bg-yellow-500/10 border border-yellow-500/20 flex items-center justify-center text-lg mb-4">
+          👁️</div>
+        <h3 class="font-cinzel text-sm font-semibold text-white mb-1">Event Preview Card</h3>
+        <p class="text-white/60 text-xs leading-relaxed">See exactly how your event looks to attendees before
+          publishing.</p>
+      </div>
+    </div>
+
+    <!-- Pro Tips only (removed Your Plan / Dashboard cards as requested) -->
+    <div class="reveal mb-10 bg-white/[0.03] border border-yellow-500/20 rounded-2xl p-6">
+      <p class="font-cinzel text-yellow-500 text-[10px] tracking-widest uppercase mb-4">Pro Tips</p>
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div class="flex items-start gap-3"><span class="text-yellow-500 text-base">💡</span>
+          <p class="text-white/60 text-xs leading-relaxed">Events with high-quality banners get <span
+              class="text-yellow-400">3× more views</span>.</p>
+        </div>
+        <div class="flex items-start gap-3"><span class="text-yellow-500 text-base">💡</span>
+          <p class="text-white/60 text-xs leading-relaxed">Adding an Early Bird tier <span
+              class="text-yellow-400">boosts early sales</span> and creates urgency.</p>
+        </div>
+        <div class="flex items-start gap-3"><span class="text-yellow-500 text-base">💡</span>
+          <p class="text-white/60 text-xs leading-relaxed">Detailed descriptions <span class="text-yellow-400">increase
+              conversions by 40%</span>.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- MAIN GRID: Form + Live Preview -->
+    <div class="grid grid-cols-1 xl:grid-cols-[1.4fr_0.6fr] gap-8 items-start">
+
+      <!-- CREATE EVENT FORM -->
+      <section
+        class="reveal relative bg-white/[0.03] border border-yellow-500/20 rounded-3xl p-8 lg:p-10 overflow-visible before:absolute before:top-0 before:left-0 before:right-0 before:h-0.5 before:bg-gradient-to-r before:from-transparent before:via-yellow-500 before:to-transparent">
+        <div class="flex items-center gap-3 mb-8">
+          <div
+            class="w-10 h-10 rounded-xl bg-yellow-500/10 border border-yellow-500/20 flex items-center justify-center">
+            <i class="ri-calendar-event-line text-yellow-400"></i>
+          </div>
+          <div>
+            <h2 class="font-cinzel text-2xl font-bold text-white">Event Details</h2>
+            <p class="font-cormorant text-white/60 text-sm">Fill in the details below to publish your event</p>
+          </div>
+        </div>
+
+        <form id="event-form" novalidate>
+          <div class="space-y-6">
+
+            <!-- Step progress -->
+            <div class="flex items-center gap-2 mb-2">
+              <div id="ev-step-dots" class="flex gap-1.5 flex-1"></div>
+              <span id="ev-step-label" class="text-white/40 text-[10px] font-cinzel tracking-widest uppercase"></span>
+            </div>
+
+            <!-- STEP 1: Basics -->
+            <div class="ev-form-step space-y-6" data-step="1">
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-5 items-start overflow-visible">
+                <div class="flex flex-col gap-2">
+                  <label class="font-cinzel text-yellow-500 text-[10px] font-semibold tracking-widest uppercase">Event
+                    Title</label>
+                  <input id="ev-title" required type="text" placeholder="Annual Developer Conference"
+                    class="w-full px-4 py-3.5 bg-white/[0.04] border border-yellow-500/20 rounded-xl text-white text-sm placeholder-white/30 focus:outline-none focus:border-yellow-500 transition" />
+                </div>
+                <div class="relative isolate">
+
+                  <label class="block mb-3 text-xs uppercase tracking-[0.25em] text-yellow-500 font-cinzel">
+                    Category
+                  </label>
+
+                  <input id="category-input" type="text" autocomplete="off" placeholder="Search or create category..."
+                    class="w-full bg-[#171021] border border-yellow-500/30 rounded-2xl px-5 py-4 text-white outline-none focus:border-yellow-500">
+
+                  <div id="category-dropdown" class="hidden absolute left-0 top-full mt-2
+             w-full bg-[#12091F]
+             border border-yellow-500/20
+             rounded-xl
+             shadow-2xl
+             max-h-64
+             overflow-y-auto
+             z-[9999]">
+
+                  </div>
+
+                </div>
+              </div>
+
+              <div class="flex flex-col gap-2">
+                <div class="flex items-center justify-between">
+                  <label class="font-cinzel text-yellow-500 text-[10px] font-semibold tracking-widest uppercase">Event
+                    Description</label>
+                  <button type="button" id="ai-suggest-btn"
+                    class="font-cinzel flex items-center gap-1.5 text-[10px] tracking-widest uppercase text-yellow-400 border border-yellow-500/30 px-3 py-1.5 rounded-lg hover:bg-yellow-500/10 transition">
+                    <i class="ri-sparkling-line"></i> AI Suggest
+                  </button>
+                </div>
+                <textarea id="ev-desc" required rows="4" placeholder="Describe your event..."
+                  class="w-full px-4 py-3.5 bg-white/[0.04] border border-yellow-500/20 rounded-xl text-white text-sm placeholder-white/30 focus:outline-none focus:border-yellow-500 transition resize-y"></textarea>
+                <div id="ai-status" class="hidden text-yellow-400/80 text-xs font-cinzel typing">Generating suggestion
+                </div>
+              </div>
+            </div>
+
+            <!-- STEP 2: Schedule -->
+            <div class="ev-form-step space-y-6 hidden" data-step="2">
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                <div class="flex flex-col gap-2">
+                  <label class="font-cinzel text-yellow-500 text-[10px] font-semibold tracking-widest uppercase">Start
+                    Date</label>
+                  <input id="ev-start-date" required type="date"
+                    class="w-full px-4 py-3.5 bg-white/[0.04] border border-yellow-500/20 rounded-xl text-white text-sm focus:outline-none focus:border-yellow-500 transition"
+                    style="color-scheme:dark" />
+                </div>
+                <div class="flex flex-col gap-2">
+                  <label class="font-cinzel text-yellow-500 text-[10px] font-semibold tracking-widest uppercase">Start
+                    Time</label>
+                  <input id="ev-start-time" required type="time"
+                    class="w-full px-4 py-3.5 bg-white/[0.04] border border-yellow-500/20 rounded-xl text-white text-sm focus:outline-none focus:border-yellow-500 transition"
+                    style="color-scheme:dark" />
+                </div>
+              </div>
+
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                <div class="flex flex-col gap-2">
+                  <label class="font-cinzel text-yellow-500 text-[10px] font-semibold tracking-widest uppercase">End
+                    Date</label>
+                  <input id="ev-end-date" type="date"
+                    class="w-full px-4 py-3.5 bg-white/[0.04] border border-yellow-500/20 rounded-xl text-white text-sm focus:outline-none focus:border-yellow-500 transition"
+                    style="color-scheme:dark" />
+                </div>
+                <div class="flex flex-col gap-2">
+                  <label class="font-cinzel text-yellow-500 text-[10px] font-semibold tracking-widest uppercase">End
+                    Time</label>
+                  <input id="ev-end-time" type="time"
+                    class="w-full px-4 py-3.5 bg-white/[0.04] border border-yellow-500/20 rounded-xl text-white text-sm focus:outline-none focus:border-yellow-500 transition"
+                    style="color-scheme:dark" />
+                </div>
+              </div>
+            </div>
+
+            <!-- STEP 3: Location -->
+            <div class="ev-form-step space-y-6 hidden" data-step="3">
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                <div class="flex flex-col gap-2">
+                  <label class="font-cinzel text-yellow-500 text-[10px] font-semibold tracking-widest uppercase">Venue /
+                    Hall Name</label>
+                  <input id="ev-venue" required type="text" placeholder="Conference Hall 3"
+                    class="w-full px-4 py-3.5 bg-white/[0.04] border border-yellow-500/20 rounded-xl text-white text-sm placeholder-white/30 focus:outline-none focus:border-yellow-500 transition" />
+                </div>
+                <div class="flex flex-col gap-2">
+                  <label class="font-cinzel text-yellow-500 text-[10px] font-semibold tracking-widest uppercase">City /
+                    State</label>
+                  <input id="ev-city" required type="text" placeholder="Awka, Anambra State"
+                    class="w-full px-4 py-3.5 bg-white/[0.04] border border-yellow-500/20 rounded-xl text-white text-sm placeholder-white/30 focus:outline-none focus:border-yellow-500 transition" />
+                </div>
+              </div>
+
+              <div class="flex flex-col gap-2">
+                <label class="font-cinzel text-yellow-500 text-[10px] font-semibold tracking-widest uppercase">Full
+                  Address</label>
+                <input id="ev-address" type="text" placeholder="Plot 5, Iyiagu Housing Estate, Awka"
+                  class="w-full px-4 py-3.5 bg-white/[0.04] border border-yellow-500/20 rounded-xl text-white text-sm placeholder-white/30 focus:outline-none focus:border-yellow-500 transition" />
+              </div>
+            </div>
+
+            <!-- STEP 4: Tickets & Pricing -->
+            <div class="ev-form-step space-y-6 hidden" data-step="4">
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                <div class="flex flex-col gap-2">
+                  <label class="font-cinzel text-yellow-500 text-[10px] font-semibold tracking-widest uppercase">Ticket
+                    Price (₦)</label>
+                  <input id="ev-price" type="number" placeholder="e.g. 5000"
+                    class="w-full px-4 py-3.5 bg-white/[0.04] border border-yellow-500/20 rounded-xl text-white text-sm placeholder-white/30 focus:outline-none focus:border-yellow-500 transition" />
+                </div>
+                <div class="flex flex-col gap-2">
+                  <label class="font-cinzel text-yellow-500 text-[10px] font-semibold tracking-widest uppercase">Available
+                    Seats</label>
+                  <input id="ev-seats" required type="number" placeholder="e.g. 250"
+                    class="w-full px-4 py-3.5 bg-white/[0.04] border border-yellow-500/20 rounded-xl text-white text-sm placeholder-white/30 focus:outline-none focus:border-yellow-500 transition" />
+                </div>
+              </div>
+
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+                <div class="flex flex-col gap-2">
+                  <label class="font-cinzel text-yellow-500 text-[10px] font-semibold tracking-widest uppercase">Regular
+                    (₦)</label>
+                  <input id="ev-regular" type="number" placeholder="5,000"
+                    class="w-full px-4 py-3.5 bg-white/[0.04] border border-yellow-500/20 rounded-xl text-white text-sm placeholder-white/30 focus:outline-none focus:border-yellow-500 transition" />
+                </div>
+                <div class="flex flex-col gap-2">
+                  <label class="font-cinzel text-yellow-500 text-[10px] font-semibold tracking-widest uppercase">VIP
+                    (₦)</label>
+                  <input id="ev-vip" type="number" placeholder="15,000"
+                    class="w-full px-4 py-3.5 bg-white/[0.04] border border-yellow-500/20 rounded-xl text-white text-sm placeholder-white/30 focus:outline-none focus:border-yellow-500 transition" />
+                </div>
+                <div class="flex flex-col gap-2">
+                  <label class="font-cinzel text-yellow-500 text-[10px] font-semibold tracking-widest uppercase">Early
+                    Bird (₦)</label>
+                  <input id="ev-earlybird" type="number" placeholder="3,000"
+                    class="w-full px-4 py-3.5 bg-white/[0.04] border border-yellow-500/20 rounded-xl text-white text-sm placeholder-white/30 focus:outline-none focus:border-yellow-500 transition" />
+                </div>
+              </div>
+            </div>
+
+            <!-- STEP 5: Event Highlights -->
+            <div class="ev-form-step space-y-6 hidden" data-step="5">
+              <div class="flex flex-col gap-2">
+                <label class="font-cinzel text-yellow-500 text-[10px] font-semibold tracking-widest uppercase">Event
+                  Duration</label>
+                <input id="ev-duration" type="text" placeholder="e.g. 4 Hours"
+                  class="w-full px-4 py-3.5 bg-white/[0.04] border border-yellow-500/20 rounded-xl text-white text-sm placeholder-white/30 focus:outline-none focus:border-yellow-500 transition" />
+              </div>
+
+              <div class="flex flex-col gap-2">
+                <label class="font-cinzel text-yellow-500 text-[10px] font-semibold tracking-widest uppercase">What's
+                  Included</label>
+                <textarea id="ev-included" rows="4" placeholder="One item per line, e.g.&#10;Full day access&#10;Live DJ performances&#10;QR code e-ticket via email"
+                  class="w-full px-4 py-3.5 bg-white/[0.04] border border-yellow-500/20 rounded-xl text-white text-sm placeholder-white/30 focus:outline-none focus:border-yellow-500 transition resize-y"></textarea>
+                <p class="text-white/30 text-[10px]">One item per line — shown as a checklist on your event page</p>
+              </div>
+
+              <div class="flex flex-col gap-2">
+                <label class="font-cinzel text-yellow-500 text-[10px] font-semibold tracking-widest uppercase">Who
+                  Should Attend</label>
+                <textarea id="ev-who-attend" rows="3" placeholder="e.g. Developers, designers, and anyone curious about tech"
+                  class="w-full px-4 py-3.5 bg-white/[0.04] border border-yellow-500/20 rounded-xl text-white text-sm placeholder-white/30 focus:outline-none focus:border-yellow-500 transition resize-y"></textarea>
+              </div>
+            </div>
+
+            <!-- STEP 6: Organizer & Banner -->
+            <div class="ev-form-step space-y-6 hidden" data-step="6">
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                <div class="flex flex-col gap-2">
+                  <label class="font-cinzel text-yellow-500 text-[10px] font-semibold tracking-widest uppercase">Organizer
+                    Name</label>
+                  <input id="ev-org-name" readonly required type="text" placeholder="Your name or organization"
+                    class="w-full px-4 py-3.5 bg-white/[0.04] border border-yellow-500/20 rounded-xl text-white text-sm placeholder-white/30 focus:outline-none focus:border-yellow-500 transition" />
+                </div>
+                <div class="flex flex-col gap-2">
+                  <label class="font-cinzel text-yellow-500 text-[10px] font-semibold tracking-widest uppercase">Organizer
+                    Email</label>
+                  <input id="ev-org-email" readonly required type="email" placeholder="organizer@example.com"
+                    class="w-full px-4 py-3.5 bg-white/[0.04] border border-yellow-500/20 rounded-xl text-white text-sm placeholder-white/30 focus:outline-none focus:border-yellow-500 transition" />
+                </div>
+              </div>
+
+              <div class="flex flex-col gap-2">
+                <label class="font-cinzel text-yellow-500 text-[10px] font-semibold tracking-widest uppercase">Event
+                  Banner Image</label>
+                <label id="banner-drop" for="banner-input"
+                  class="w-full px-4 py-8 bg-white/[0.04] border border-dashed border-yellow-500/30 rounded-xl flex flex-col items-center justify-center gap-2 cursor-pointer hover:border-yellow-500/60 hover:bg-yellow-500/[0.03] transition duration-300">
+                  <i id="banner-icon" class="ri-image-add-line text-yellow-500/50 text-3xl"></i>
+                  <img id="banner-preview-img" src="" class="hidden max-h-32 rounded-lg banner-pop" />
+                  <p id="banner-text" class="font-cinzel text-white/50 text-xs tracking-wider">Click to upload or drag and
+                    drop</p>
+                  <p class="text-white/30 text-[10px]">PNG, JPG up to 5MB — recommended 1200×630px</p>
+                  <input id="banner-input" type="file" accept="image/*" class="hidden" />
+                </label>
+              </div>
+            </div>
+
+            <!-- STEP 7: Review & Publish -->
+            <div class="ev-form-step space-y-6 hidden" data-step="7">
+              <label class="flex items-start gap-3 cursor-pointer">
+                <input id="ev-terms" required type="checkbox" class="mt-0.5 w-4 h-4 accent-yellow-500 cursor-pointer" />
+                <span class="text-white/60 text-xs leading-relaxed">
+                  I confirm this event complies with Nigerian law and the
+                  <a href="terms.html"
+                    class="text-yellow-400 hover:text-yellow-300 transition underline underline-offset-2">Nice-Xclusive
+                    Terms of Service</a>.
+                </span>
+              </label>
+            </div>
+
+            <!-- Error / Success (visible on every step) -->
+            <div id="form-error"
+              class="hidden py-3 px-5 bg-red-500/10 border border-red-500/30 rounded-xl text-red-400 text-sm font-cormorant">
+            </div>
+            <div id="form-success"
+              class="hidden py-4 px-6 bg-yellow-500/10 border border-yellow-500/30 rounded-xl text-yellow-400 text-base text-center font-cormorant">
+              ✨ Event published successfully! Redirecting to your dashboard...
+            </div>
+
+            <!-- Step navigation -->
+            <div class="flex flex-col sm:flex-row gap-4 pt-2">
+              <button type="button" id="ev-step-back-btn"
+                class="hidden font-cinzel flex-1 py-4 bg-white/[0.04] border border-yellow-500/20 text-white/70 font-bold text-sm tracking-widest uppercase rounded-xl transition hover:border-yellow-500/40 hover:text-white">
+                ← Back
+              </button>
+              <button type="button" id="ev-step-next-btn"
+                class="font-cinzel flex-1 py-4 bg-yellow-500 hover:bg-yellow-400 text-black font-bold text-sm tracking-widest uppercase rounded-xl transition shadow-lg shadow-yellow-500/20 hover:-translate-y-0.5">
+                Continue →
+              </button>
+              <button type="submit" id="publish-btn"
+                class="hidden font-cinzel flex-1 py-4 bg-yellow-500 hover:bg-yellow-400 text-black font-bold text-sm tracking-widest uppercase rounded-xl transition shadow-lg shadow-yellow-500/20 hover:-translate-y-0.5">
+                ✦ Publish Event
+              </button>
+              <button type="button" id="reset-btn"
+                class="font-cinzel flex-1 py-4 bg-white/[0.04] border border-yellow-500/20 text-white/60 hover:border-yellow-500/50 hover:text-yellow-400 text-sm tracking-widest uppercase rounded-xl transition">
+                Reset Form
+              </button>
+            </div>
+
+          </div>
+        </form>
+      </section>
+
+      <!-- LIVE PREVIEW -->
+      <div class="reveal reveal-delay-2">
+        <div class="xl:sticky xl:top-28 self-start">
+          <p class="font-cinzel text-yellow-500 text-[10px] tracking-widest uppercase mb-4 text-center">Live Preview</p>
+          <div id="live-preview"
+            class="relative bg-white/[0.03] border border-yellow-500/20 rounded-3xl overflow-hidden">
+            <!-- Banner: no emoji, just a dark gradient placeholder -->
+            <div id="preview-banner" class="w-full h-44"
+              style="background: linear-gradient(135deg, rgba(80,20,120,0.5) 0%, rgba(6,3,15,0.9) 100%);"></div>
+            <div class="p-6 space-y-3">
+              <span id="preview-category"
+                class="inline-block bg-yellow-500/10 border border-yellow-500/20 text-yellow-400 text-[10px] font-cinzel tracking-widest uppercase px-3 py-1 rounded-full">Category</span>
+              <h3 id="preview-title" class="font-cinzel text-white font-bold text-lg leading-snug">Your Event Title</h3>
+              <p id="preview-desc" class="font-cormorant text-white/60 text-sm leading-relaxed line-clamp-3">Your event
+                description will appear here as you type...</p>
+              <div class="pt-3 border-t border-yellow-500/10 space-y-2">
+                <div class="flex items-center gap-2 text-xs text-white/60">
+                  <i class="ri-map-pin-line text-yellow-500/60 text-xs"></i>
+                  <span id="preview-venue">Venue, City</span>
+                </div>
+                <div class="flex items-center gap-2 text-xs text-white/60">
+                  <i class="ri-calendar-line text-yellow-500/60 text-xs"></i>
+                  <span id="preview-date">Date & Time</span>
+                </div>
+                <div class="flex items-center gap-2 text-xs text-white/60">
+                  <i class="ri-ticket-line text-yellow-500/60 text-xs"></i>
+                  <span id="preview-price">Ticket Price</span>
+                </div>
+                <div class="flex items-center gap-2 text-xs text-white/60">
+                  <i class="ri-user-line text-yellow-500/60 text-xs"></i>
+                  <span id="preview-organizer">Organizer Name</span>
+                </div>
+              </div>
+              <div class="pt-3 grid grid-cols-3 gap-2" id="preview-tiers"></div>
+            </div>
+          </div>
+          <p class="font-cinzel text-white/30 text-[10px] text-center mt-3 tracking-wider">Updates live as you type</p>
+        </div>
+      </div>
+
+
+    </div>
+
+   
+
+    <div class="text-center mt-16 text-yellow-500/20 text-lg tracking-[8px]">— ✦ —</div>
+  </main>
+
+  <!-- FOOTER (unchanged from your original) -->
+  <footer class="relative z-10 border-t border-yellow-500/20 py-12 mt-10">
+    <div class="max-w-7xl mx-auto px-6 lg:px-10">
+      <div class="grid gap-8 md:grid-cols-4 mb-8">
+        <div>
+          <h4 class="font-cinzel text-xl font-bold mb-4 text-white">Nice-Xclusive</h4>
+          <p class="font-cormorant text-white/70 text-sm">A premium platform for discovering and booking events you
+            love.</p>
+        </div>
+        <div>
+          <h4 class="font-cinzel text-xl font-bold mb-4 text-white">Quick Links</h4>
+          <ul class="space-y-2">
+            <li><a href="Aboutus.html" class="font-cinzel text-white/70 hover:text-yellow-400 transition text-xs">About
+                Us</a></li>
+            <li><a href="Services.html"
+                class="font-cinzel text-white/70 hover:text-yellow-400 transition text-xs">Services</a></li>
+            <li><a href="Contact-us.html"
+                class="font-cinzel text-white/70 hover:text-yellow-400 transition text-xs">Contact</a></li>
+            <li><a href="terms.html" class="font-cinzel text-white/70 hover:text-yellow-400 transition text-xs">Terms &
+                Policy</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="font-cinzel text-xl font-bold mb-4 text-white">Categories</h4>
+          <ul class="space-y-2">
+            <li><a href="#" class="font-cinzel text-white/70 hover:text-yellow-400 transition text-xs">Tech Events</a>
+            </li>
+            <li><a href="#" class="font-cinzel text-white/70 hover:text-yellow-400 transition text-xs">Music & Arts</a>
+            </li>
+            <li><a href="#" class="font-cinzel text-white/70 hover:text-yellow-400 transition text-xs">Workshops</a>
+            </li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="font-cinzel text-xl font-bold mb-4 text-white">Follow Us</h4>
+          <div class="flex gap-4">
+            <a href="#"
+              class="w-9 h-9 rounded-lg border border-yellow-500/20 bg-white/[0.04] flex items-center justify-center text-white/70 hover:border-yellow-500 hover:text-yellow-400 transition font-bold text-sm">f</a>
+            <a href="#"
+              class="w-9 h-9 rounded-lg border border-yellow-500/20 bg-white/[0.04] flex items-center justify-center text-white/70 hover:border-yellow-500 hover:text-yellow-400 transition font-bold text-sm">X</a>
+            <a href="#"
+              class="w-9 h-9 rounded-lg border border-yellow-500/20 bg-white/[0.04] flex items-center justify-center text-white/70 hover:border-yellow-500 hover:text-yellow-400 transition text-base">📷</a>
+            <a href="#"
+              class="w-9 h-9 rounded-lg border border-yellow-500/20 bg-white/[0.04] flex items-center justify-center text-white/70 hover:border-yellow-500 hover:text-yellow-400 transition font-bold text-sm">in</a>
+          </div>
+        </div>
+      </div>
+      <div class="border-t border-yellow-500/10 pt-6 text-center font-cinzel text-white/40 text-xs">
+        © 2026 Nice-Exclusive Event Booking Platform. All rights reserved.
+      </div>
+    </div>
+  </footer>
+
+  <!-- ═══════ JAVASCRIPT ═══════ -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+
+      const user =
+        JSON.parse(localStorage.getItem("loggedInUser")) ||
+        JSON.parse(localStorage.getItem("currentUser"));
+
+
+
+      if (!user) {
+        window.location.href = "sign-in.html";
+        return;
+      }
+
+      document.getElementById("ev-org-name").value = user.fullName;
+      document.getElementById("ev-org-email").value = user.email;
+
+      document.getElementById("ev-org-name").readOnly = true;
+      document.getElementById("ev-org-email").readOnly = true;
+
+      /* 1. HAMBURGER */
+      const hamburger = document.getElementById('hamburger');
+      const mobileMenu = document.getElementById('mobile-menu');
+      const hamIcon = document.getElementById('ham-icon');
+
+      hamburger.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const open = mobileMenu.classList.toggle('open');
+        hamIcon.className = open ? 'ri-close-line' : 'ri-menu-line';
+      });
+
+      // Close when clicking any link inside menu
+      mobileMenu.querySelectorAll('a').forEach(a => {
+        a.addEventListener('click', () => {
+          mobileMenu.classList.remove('open');
+          hamIcon.className = 'ri-menu-line';
+        });
+      });
+
+      // Close when clicking anywhere else on the page
+      document.addEventListener('click', (e) => {
+        if (!mobileMenu.contains(e.target) && !hamburger.contains(e.target)) {
+          mobileMenu.classList.remove('open');
+          hamIcon.className = 'ri-menu-line';
+        }
+      });
+
+      /* 2. NAVBAR SHADOW */
+      const nav = document.getElementById('main-nav');
+      window.addEventListener('scroll', () => {
+        nav.classList.toggle('shadow-lg', window.scrollY > 40);
+        nav.classList.toggle('shadow-black/40', window.scrollY > 40);
+      });
+
+      /* 3. SCROLL REVEAL */
+      const revealObserver = new IntersectionObserver((entries) => {
+        entries.forEach(e => {
+          if (e.isIntersecting) { e.target.classList.add('in-view'); revealObserver.unobserve(e.target); }
+        });
+      }, { threshold: 0.12 });
+      document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+      /* 4. LOCAL STORAGE DRAFT */
+      const DRAFT_KEY = 'nx_organizer_draft';
+      const draftFields = ['ev-title', 'category-input', 'ev-desc', 'ev-start-date', 'ev-start-time',
+        'ev-end-date', 'ev-end-time', 'ev-venue', 'ev-city', 'ev-address',
+        'ev-price', 'ev-seats', 'ev-regular', 'ev-vip', 'ev-earlybird', 'ev-org-name', 'ev-org-email',
+        'ev-duration', 'ev-included', 'ev-who-attend'];
+
+      function saveDraft() {
+        const draft = {};
+        draftFields.forEach(id => { const el = document.getElementById(id); if (el) draft[id] = el.value; });
+        localStorage.setItem(DRAFT_KEY, JSON.stringify(draft));
+      }
+
+      function restoreDraft() {
+        const raw = localStorage.getItem(DRAFT_KEY);
+        if (!raw) return;
+        const draft = JSON.parse(raw);
+        let hasData = false;
+        draftFields.forEach(id => {
+          const el = document.getElementById(id);
+          if (el && draft[id]) { el.value = draft[id]; hasData = true; }
+        });
+        if (hasData) { document.getElementById('draft-banner').classList.remove('hidden'); updatePreview(); }
+      }
+
+      let saveTimer;
+      draftFields.forEach(id => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        el.addEventListener('input', () => { clearTimeout(saveTimer); saveTimer = setTimeout(saveDraft, 600); updatePreview(); });
+        el.addEventListener('change', () => { saveDraft(); updatePreview(); });
+      });
+
+      document.getElementById('clear-draft')?.addEventListener('click', () => {
+        localStorage.removeItem(DRAFT_KEY);
+        document.getElementById('draft-banner').classList.add('hidden');
+      });
+
+      const form = document.getElementById('event-form');
+      const errorBox = document.getElementById('form-error');
+      const successBox = document.getElementById('form-success');
+      const publishBtn = document.getElementById('publish-btn');
+
+      /* STEP WIZARD */
+      const evSteps = Array.from(document.querySelectorAll('.ev-form-step'));
+      const evStepDots = document.getElementById('ev-step-dots');
+      const evStepLabel = document.getElementById('ev-step-label');
+      const evBackBtn = document.getElementById('ev-step-back-btn');
+      const evNextBtn = document.getElementById('ev-step-next-btn');
+      let evCurrentIndex = 0;
+
+      const evRequiredByStep = {
+        '1': [{ id: 'ev-title', label: 'Event Title' }, { id: 'category-input', label: 'Category' }, { id: 'ev-desc', label: 'Event Description' }],
+        '2': [{ id: 'ev-start-date', label: 'Start Date' }, { id: 'ev-start-time', label: 'Start Time' }],
+        '3': [{ id: 'ev-venue', label: 'Venue' }, { id: 'ev-city', label: 'City / State' }],
+        '4': [{ id: 'ev-seats', label: 'Available Seats' }],
+        '5': [],
+        '6': [{ id: 'ev-org-name', label: 'Organizer Name' }, { id: 'ev-org-email', label: 'Organizer Email' }],
+        '7': [],
+      };
+
+      function evClearError() {
+        errorBox.classList.add('hidden');
+      }
+
+      function evShowError(msg) {
+        errorBox.textContent = msg;
+        errorBox.classList.remove('hidden');
+        errorBox.classList.add('shake');
+        setTimeout(() => errorBox.classList.remove('shake'), 400);
+      }
+
+      function evRenderStep() {
+        evSteps.forEach(s => s.classList.add('hidden'));
+        evSteps[evCurrentIndex].classList.remove('hidden');
+
+        evStepDots.innerHTML = '';
+        evSteps.forEach((_, i) => {
+          const dot = document.createElement('span');
+          dot.className = 'h-1 flex-1 rounded-full transition ' +
+            (i <= evCurrentIndex ? 'bg-yellow-500' : 'bg-white/10');
+          evStepDots.appendChild(dot);
+        });
+        evStepLabel.textContent = `Step ${evCurrentIndex + 1} of ${evSteps.length}`;
+
+        evBackBtn.classList.toggle('hidden', evCurrentIndex === 0);
+        const isLast = evCurrentIndex === evSteps.length - 1;
+        evNextBtn.classList.toggle('hidden', isLast);
+        publishBtn.classList.toggle('hidden', !isLast);
+      }
+
+      function evValidateStep(stepEl) {
+        const stepNum = stepEl.dataset.step;
+        const fields = evRequiredByStep[stepNum] || [];
+        for (const f of fields) {
+          const el = document.getElementById(f.id);
+          if (!el.value.trim()) { evShowError(`Please fill in: ${f.label}`); el.focus(); return false; }
+        }
+        if (stepNum === '1') {
+          // Category is filled via category-input, no extra check needed beyond required list above
+        }
+        return true;
+      }
+
+      evNextBtn.addEventListener('click', () => {
+        if (!evValidateStep(evSteps[evCurrentIndex])) return;
+        evClearError();
+        evCurrentIndex++;
+        evRenderStep();
+        window.scrollTo({ top: form.getBoundingClientRect().top + window.scrollY - 100, behavior: 'smooth' });
+      });
+
+      evBackBtn.addEventListener('click', () => {
+        evClearError();
+        evCurrentIndex--;
+        evRenderStep();
+      });
+
+      evRenderStep();
+
+
+      const bannerInput = document.getElementById('banner-input');
+      const bannerPreviewImg = document.getElementById('banner-preview-img');
+      const bannerIcon = document.getElementById('banner-icon');
+      const bannerText = document.getElementById('banner-text');
+      const bannerDrop = document.getElementById('banner-drop');
+      const previewBanner = document.getElementById('preview-banner');
+
+
+      const categories = [
+        "Technology",
+        "Music",
+        "Workshop",
+        "Conference",
+        "Fashion",
+        "Corporate",
+        "Sports",
+        "Arts & Culture",
+        "Education",
+        "Business",
+        "Networking",
+        "Festival",
+        "Charity",
+        "Comedy",
+        "Religious",
+        "Exhibition",
+        "Food & Drinks",
+        "Gaming",
+        "Health & Wellness"
+      ];
+
+      const input = document.getElementById("category-input");
+      const dropdown = document.getElementById("category-dropdown");
+
+      function renderCategories(search = "") {
+
+        dropdown.innerHTML = "";
+
+        const filtered = categories.filter(cat =>
+          cat.toLowerCase().includes(search.toLowerCase())
+        );
+
+        filtered.forEach(cat => {
+
+          const item = document.createElement("div");
+
+          item.className =
+            "px-5 py-3 cursor-pointer hover:bg-yellow-500 hover:text-black transition";
+
+          item.textContent = cat;
+
+          item.onclick = () => {
+            input.value = cat;
+            dropdown.classList.add("hidden");
+            updatePreview();
+          };
+
+          dropdown.appendChild(item);
+
+        });
+
+        if (
+          search &&
+          !categories.some(cat => cat.toLowerCase() === search.toLowerCase())
+        ) {
+
+          const create = document.createElement("div");
+
+          create.className =
+            "px-5 py-3 border-t border-yellow-500/20 text-yellow-400 cursor-pointer hover:bg-yellow-500 hover:text-black";
+
+          create.textContent = `+ Create "${search}"`;
+
+          create.onclick = () => {
+
+            categories.push(search);
+
+            input.value = search;
+
+            dropdown.classList.add("hidden");
+
+            updatePreview();
+
+          };
+
+          dropdown.appendChild(create);
+
+        }
+
+      }
+
+      input.addEventListener("focus", () => {
+        dropdown.classList.remove("hidden");
+        renderCategories();
+      });
+
+      input.addEventListener("input", () => {
+        dropdown.classList.remove("hidden");
+        renderCategories(input.value);
+        updatePreview();
+      });
+
+      document.addEventListener("click", (e) => {
+
+        if (
+          !input.contains(e.target) &&
+          !dropdown.contains(e.target)
+        ) {
+          dropdown.classList.add("hidden");
+        }
+
+      });
+
+      // restoreDraft();
+      // renderCategories();
+      // updatePreview();
+
+      /* 5. LIVE PREVIEW */
+      const preview = document.getElementById('live-preview');
+
+      function updatePreview() {
+        const title = document.getElementById('ev-title').value.trim() || 'Your Event Title';
+        const category = document.getElementById("category-input").value.trim() || "Category";
+        const desc = document.getElementById('ev-desc').value.trim() || 'Your event description will appear here as you type...';
+        const venue = document.getElementById('ev-venue').value.trim();
+        const city = document.getElementById('ev-city').value.trim();
+        const date = document.getElementById('ev-start-date').value;
+        const time = document.getElementById('ev-start-time').value;
+        const price = document.getElementById('ev-price').value;
+        const orgName = document.getElementById('ev-org-name').value.trim();
+        const regular = document.getElementById('ev-regular').value;
+        const vip = document.getElementById('ev-vip').value;
+        const earlybird = document.getElementById('ev-earlybird').value;
+
+        document.getElementById('preview-title').textContent = title;
+        document.getElementById("preview-category").textContent = category;
+        document.getElementById('preview-desc').textContent = desc;
+        document.getElementById('preview-venue').textContent = [venue, city].filter(Boolean).join(', ') || 'Venue, City';
+        document.getElementById('preview-organizer').textContent = orgName || 'Organizer Name';
+
+        if (date) {
+          const d = new Date(date + 'T' + (time || '00:00'));
+          document.getElementById('preview-date').textContent =
+            d.toLocaleDateString('en-NG', { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' }) +
+            (time ? ' · ' + time : '');
+        } else {
+          document.getElementById('preview-date').textContent = 'Date & Time';
+        }
+
+        document.getElementById('preview-price').textContent = price
+          ? '₦' + Number(price).toLocaleString('en-NG') + ' per ticket'
+          : 'Ticket Price';
+
+        const tiersEl = document.getElementById('preview-tiers');
+        tiersEl.innerHTML = '';
+        [{ label: 'Regular', val: regular }, { label: 'VIP', val: vip }, { label: 'Early', val: earlybird }].forEach(t => {
+          if (!t.val) return;
+          const pill = document.createElement('div');
+          pill.className = 'bg-yellow-500/10 border border-yellow-500/20 rounded-xl p-2 text-center';
+          pill.innerHTML = `<p class="font-cinzel text-yellow-400 text-[9px] uppercase tracking-wider">${t.label}</p>
+                          <p class="text-white text-xs font-semibold mt-0.5">₦${Number(t.val).toLocaleString('en-NG')}</p>`;
+          tiersEl.appendChild(pill);
+        });
+
+
+
+        if (preview) {
+          preview.classList.remove("updated");
+          void preview.offsetWidth;
+          preview.classList.add("updated");
+        }
+      }
+
+      restoreDraft();
+      updatePreview();
+
+      const params = new URLSearchParams(window.location.search);
+      const eventId = params.get("id");
+      console.log("Event ID:", eventId);
+
+      const events = JSON.parse(localStorage.getItem("events")) || [];
+
+      const eventToEdit = events.find(e => e.id === eventId);
+      console.log("Events:", events);
+      console.log("Found event:", eventToEdit);
+
+      if (eventToEdit) {
+
+        document.getElementById("ev-title").value = eventToEdit.name;
+        document.getElementById("category-input").value = eventToEdit.category;
+        document.getElementById("ev-desc").value = eventToEdit.description;
+        document.getElementById("ev-venue").value = eventToEdit.venue;
+        document.getElementById("ev-city").value = eventToEdit.city;
+        document.getElementById("ev-address").value = eventToEdit.address;
+        document.getElementById("ev-start-date").value = eventToEdit.date;
+        document.getElementById("ev-start-time").value = eventToEdit.time;
+        document.getElementById("ev-regular").value =
+          eventToEdit.regularPrice;
+
+        document.getElementById("ev-vip").value =
+          eventToEdit.vipPrice;
+
+        document.getElementById("ev-earlybird").value =
+          eventToEdit.earlyBirdPrice;
+        document.getElementById("ev-price").value = eventToEdit.ticketPrice;
+        document.getElementById("ev-seats").value = eventToEdit.totalTickets;
+
+        document.getElementById("ev-duration").value = eventToEdit.duration || "";
+        document.getElementById("ev-included").value =
+          Array.isArray(eventToEdit.whatsIncluded) ? eventToEdit.whatsIncluded.join("\n") : "";
+        document.getElementById("ev-who-attend").value = eventToEdit.whoShouldAttend || "";
+
+        if (eventToEdit.banner) {
+
+          bannerPreviewImg.src = eventToEdit.banner;
+          bannerPreviewImg.classList.remove("hidden");
+
+          bannerIcon.classList.add("hidden");
+
+          previewBanner.style.backgroundImage =
+            `url('${eventToEdit.banner}')`;
+
+          previewBanner.style.backgroundSize = "cover";
+          previewBanner.style.backgroundPosition = "center";
+
+          bannerText.textContent = "Current event banner";
+          bannerDrop.classList.add("border-yellow-500/60");
+        }
+
+        publishBtn.textContent = "Update Event";
+
+        saveDraft();
+        updatePreview();
+
+      }
+
+      /* 6. BANNER PREVIEW */
+
+
+      bannerInput.addEventListener('change', () => {
+        const file = bannerInput.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          bannerPreviewImg.src = e.target.result;
+          bannerPreviewImg.classList.remove('hidden');
+          bannerIcon.classList.add('hidden');
+          bannerText.textContent = file.name + ' — click to change';
+          bannerDrop.classList.add('border-yellow-500/60');
+          previewBanner.style.backgroundImage = `url('${e.target.result}')`;
+
+          previewBanner.style.backgroundSize = 'cover';
+          previewBanner.style.backgroundPosition = 'center';
+        };
+        reader.readAsDataURL(file);
+      });
+
+      /* 7. AI DESCRIPTION (Anthropic API) */
+      document.getElementById('ai-suggest-btn').addEventListener('click', async () => {
+        const title = document.getElementById('ev-title').value.trim();
+        const category = document.getElementById('category-input').value;
+        const venue = document.getElementById('ev-venue').value.trim();
+        const city = document.getElementById('ev-city').value.trim();
+        if (!title) { showError('Please enter an Event Title first so AI can write a relevant description.'); return; }
+
+        const aiStatus = document.getElementById('ai-status');
+        const descField = document.getElementById('ev-desc');
+        const btn = document.getElementById('ai-suggest-btn');
+        aiStatus.classList.remove('hidden');
+        btn.disabled = true;
+        btn.innerHTML = '<i class="ri-loader-4-line"></i> Generating...';
+
+        try {
+
+          const suggestions = [
+            "Join us for an unforgettable experience featuring inspiring speakers, networking opportunities and engaging activities.",
+            "Experience an exciting event packed with entertainment, learning and valuable connections.",
+            "Don't miss this premium event designed to bring together passionate people for an amazing experience."
+          ];
+
+          descField.value =
+            suggestions[Math.floor(Math.random() * suggestions.length)];
+
+          saveDraft();
+          updatePreview();
+
+        }
+        catch {
+          showError("Could not generate a description.");
+        }
+
+        finally {
+          aiStatus.classList.add("hidden");
+          btn.disabled = false;
+          btn.innerHTML = '<i class="ri-sparkling-line"></i> AI Suggest';
+        }
+
+      });
+
+      /* 8. FORM VALIDATION + PUBLISH */
+
+
+
+      form.addEventListener("submit", (e) => {
+        e.preventDefault();
+
+        console.log("Submit button clicked");
+        errorBox.classList.add('hidden');
+        successBox.classList.add('hidden');
+
+        console.log("Validation passed");
+
+        const required = [
+          { id: 'ev-title', label: 'Event Title' },
+          { id: 'category-input', label: 'Category' },
+          { id: 'ev-desc', label: 'Event Description' },
+          { id: 'ev-start-date', label: 'Start Date' },
+          { id: 'ev-start-time', label: 'Start Time' },
+          { id: 'ev-venue', label: 'Venue' },
+          { id: 'ev-city', label: 'City / State' },
+          { id: 'ev-seats', label: 'Available Seats' },
+          { id: 'ev-org-name', label: 'Organizer Name' },
+          { id: 'ev-org-email', label: 'Organizer Email' },
+        ];
+        for (const f of required) {
+          const el = document.getElementById(f.id);
+          if (!el.value.trim()) { showError(`Please fill in: ${f.label}`); el.focus(); return; }
+        }
+        const emailEl = document.getElementById('ev-org-email');
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailEl.value.trim())) {
+          showError('Please enter a valid organizer email address.'); emailEl.focus(); return;
+        }
+        if (!document.getElementById('ev-terms').checked) {
+          showError('Please agree to the Terms of Service before publishing.'); return;
+        }
+
+        const price =
+          Number(document.getElementById("ev-price").value);
+
+        const seats =
+          Number(document.getElementById("ev-seats").value);
+
+        if (price < 0) {
+          showError("Ticket price cannot be negative.");
+          return;
+        }
+
+        if (seats <= 0) {
+          showError("Available seats must be greater than zero.");
+          return;
+        }
+
+        const events =
+          JSON.parse(localStorage.getItem("events")) || [];
+
+        const oldEvent = events.find(e => e.id === eventId);
+
+        const banner =
+          bannerPreviewImg.src ||
+          oldEvent?.banner ||
+          "";
+
+        const eventDate = new Date(document.getElementById("ev-start-date").value);
+        eventDate.setHours(23, 59, 59, 999);
+
+
+        const event = {
+          id: eventId || Date.now().toString(),
+          banner: banner,
+          regularPrice:
+            Number(document.getElementById("ev-regular").value) || 0,
+
+          vipPrice:
+            Number(document.getElementById("ev-vip").value) || 0,
+
+          earlyBirdPrice:
+            Number(document.getElementById("ev-earlybird").value) || 0,
+
+          name: document.getElementById("ev-title").value,
+
+          category: document.getElementById("category-input").value,
+
+          description: document.getElementById("ev-desc").value,
+
+          venue: document.getElementById("ev-venue").value,
+
+          city: document.getElementById("ev-city").value,
+
+          address: document.getElementById("ev-address").value,
+
+          date: document.getElementById("ev-start-date").value,
+
+          time: document.getElementById("ev-start-time").value,
+
+          organizer: user.fullName,
+
+          organizerEmail: user.email,
+
+          ticketPrice:
+            Number(document.getElementById("ev-price").value) || 0,
+
+          totalTickets:
+            Number(document.getElementById("ev-seats").value) || 0,
+
+          duration: document.getElementById("ev-duration").value.trim(),
+
+          whatsIncluded: document.getElementById("ev-included").value
+            .split("\n").map(s => s.trim()).filter(Boolean),
+
+          whoShouldAttend: document.getElementById("ev-who-attend").value.trim(),
+
+          sold: oldEvent?.sold || 0,
+          revenue: oldEvent?.revenue || 0,
+
+          status: eventDate < new Date()
+            ? "Completed"
+            : "Upcoming",
+        };
+
+        const exists = events.some(e =>
+          e.id !== event.id &&
+          e.name.toLowerCase() === event.name.toLowerCase() &&
+          e.date === event.date
+        );
+
+        if (exists) {
+          showError("An event with this title and date already exists.");
+          publishBtn.disabled = false;
+          publishBtn.style.pointerEvents = "auto";
+          return;
+        }
+
+        console.log(event);
+        console.log(events);
+
+
+        if (eventId) {
+
+          const index = events.findIndex(e => e.id === eventId);
+
+          if (index !== -1) {
+            events[index] = event;
+          }
+
+        } else {
+
+          events.push(event);
+
+        }
+
+        localStorage.setItem("events", JSON.stringify(events));
+
+// --- notify attendees if date/time/venue changed on an existing event ---
+// (written directly to storage — the bell component isn't loaded on this
+// page, so window.NXNotify doesn't exist here, same as ticket.js)
+if (eventId && oldEvent) {
+  const dateChanged = oldEvent.date !== event.date;
+  const timeChanged = oldEvent.time !== event.time;
+  const venueChanged = oldEvent.venue !== event.venue;
+
+  if (dateChanged || timeChanged || venueChanged) {
+    const bookings = JSON.parse(localStorage.getItem('bookings')) || [];
+    const affectedBookings = bookings.filter(b => b.eventId === eventId);
+
+    // avoid spamming the same attendee twice if they booked more than once
+    const notifiedEmails = new Set();
+    const notifications = JSON.parse(localStorage.getItem('nx_notifications')) || [];
+
+    // build a message that only mentions what actually changed
+    let changeParts = [];
+    if (dateChanged || timeChanged) {
+      changeParts.push(`is now on ${event.date} at ${event.time}`);
+    }
+    if (venueChanged) {
+      changeParts.push(`will be held at ${event.venue}`);
+    }
+    const message = `${event.name} has been updated — it ${changeParts.join(" and ")}.`;
+
+    affectedBookings.forEach(b => {
+      if (notifiedEmails.has(b.attendeeEmail)) return;
+      notifiedEmails.add(b.attendeeEmail);
+
+      notifications.push({
+        id: "n_" + Date.now() + "_" + Math.random().toString(36).slice(2, 7),
+        forRole: 'attendee',
+        forEmail: b.attendeeEmail,
+        type: 'event_update',
+        eventId: event.id,
+        eventName: event.name,
+        message: message,
+        timestamp: Date.now(),
+        read: false
+      });
+    });
+
+    localStorage.setItem('nx_notifications', JSON.stringify(notifications));
+  }
+}
+
+        console.log("Saved!");
+        console.log(localStorage.getItem("events"));
+
+        publishBtn.disabled = true;
+        publishBtn.style.pointerEvents = "none";
+        publishBtn.textContent = 'Publishing...';
+        setTimeout(() => {
+          localStorage.removeItem(DRAFT_KEY);
+          successBox.classList.remove('hidden');
+          successBox.classList.add('success-pop');
+          setTimeout(() => { window.location.href = 'dashboard.html'; }, 1400);
+        }, 900);
+      });
+
+
+
+
+
+
+
+      // localStorage.removeItem(DRAFT_KEY);
+
+      // successBox.classList.remove("hidden");
+
+      // setTimeout(() => {
+      //     window.location.href = "dashboard.html";
+      // }, 1200);
+
+      /* 9. RESET */
+      document.getElementById('reset-btn').addEventListener('click', () => {
+        form.reset();
+        errorBox.classList.add('hidden');
+        successBox.classList.add('hidden');
+        bannerPreviewImg.classList.add('hidden');
+        bannerIcon.classList.remove('hidden');
+        bannerText.textContent = 'Click to upload or drag and drop';
+        bannerDrop.classList.remove('border-yellow-500/60');
+        previewBanner.style.backgroundImage = '';
+        previewBanner.style.background = 'linear-gradient(135deg, rgba(80,20,120,0.5) 0%, rgba(6,3,15,0.9) 100%)';
+        localStorage.removeItem(DRAFT_KEY);
+        document.getElementById('draft-banner').classList.add('hidden');
+        evCurrentIndex = 0;
+        evRenderStep();
+        publishBtn.disabled = false;
+        publishBtn.style.pointerEvents = "auto";
+        publishBtn.textContent =
+          eventId ? "Update Event" : "✦ Publish Event";
+        updatePreview();
+        document.getElementById("ev-org-name").value = user.fullName;
+        document.getElementById("ev-org-email").value = user.email;
+      });
+
+      function showError(msg) {
+        errorBox.textContent = msg;
+        errorBox.classList.remove('hidden');
+        errorBox.classList.add('shake');
+        setTimeout(() => errorBox.classList.remove('shake'), 400);
+      }
+
+    });
+  </script>
+
+</body>
+
+</html>

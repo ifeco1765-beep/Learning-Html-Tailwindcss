@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Services | Nice-Xclusive Events Platform</title>
+  <link rel="stylesheet" href="/tailwind/src/output.css">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@4.9.0/fonts/remixicon.css" rel="stylesheet">
+
+  <style>
+    .font-cinzel    { font-family: 'Cinzel', serif; }
+    .font-cormorant { font-family: 'Cormorant Garamond', serif; }
+    body            { font-family: 'Montserrat', sans-serif; }
+
+    .gold-text {
+      font-family: 'Cinzel', serif;
+      background: linear-gradient(135deg, #F0C040 0%, #C9A84C 50%, #8B6914 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .reveal { opacity:0; transform:translateY(28px); transition: opacity .7s ease, transform .7s ease; }
+    .reveal.in-view { opacity:1; transform:translateY(0); }
+    .reveal-delay-1.in-view { transition-delay:.1s; }
+    .reveal-delay-2.in-view { transition-delay:.2s; }
+    .reveal-delay-3.in-view { transition-delay:.3s; }
+    .reveal-delay-4.in-view { transition-delay:.4s; }
+    .reveal-delay-5.in-view { transition-delay:.5s; }
+    .reveal-delay-6.in-view { transition-delay:.6s; }
+
+    #mobile-menu { max-height:0; overflow:hidden; transition:max-height 0.35s ease; }
+    #mobile-menu.open { max-height:600px; }
+
+    /* stat counter */
+    @keyframes countUp { 0%{opacity:0;transform:scale(0.8);}100%{opacity:1;transform:scale(1);} }
+    .stat-num { opacity:0; }
+
+    /* pricing card hover */
+    .pricing-card { transition: transform 0.3s ease, box-shadow 0.3s ease; }
+    .pricing-card:hover { transform: translateY(-4px); }
+  </style>
+</head>
+
+<body class="relative min-h-screen bg-[#06030F] text-white overflow-x-hidden">
+
+  <div class="fixed inset-0 pointer-events-none z-0" style="background:radial-gradient(ellipse 70% 60% at 20% 40%,rgba(80,20,120,0.4) 0%,transparent 65%),radial-gradient(ellipse 50% 50% at 80% 70%,rgba(60,10,100,0.25) 0%,transparent 60%);"></div>
+
+  <!-- NAVBAR -->
+  <header class="relative z-50">
+    <nav id="main-nav" class="w-full bg-[#050816]/90 backdrop-blur-xl border-b border-yellow-500/20 sticky top-0 left-0 z-50 transition-all duration-300">
+      <div class="max-w-7xl mx-auto px-6 lg:px-10">
+        <div class="flex items-center justify-between h-20">
+          <div class="flex items-center gap-3">
+            <div class="w-14 h-14 rounded-xl border border-yellow-500 flex items-center justify-center bg-gradient-to-br from-yellow-400 to-yellow-700 shadow-lg shadow-yellow-500/20">
+              <span class="font-cinzel text-2xl font-bold text-black">NX</span>
+            </div>
+            <div>
+              <p class="font-cinzel text-white text-xl font-semibold tracking-wide">Nice-Xclusive</p>
+              <p class="text-yellow-500 text-xs tracking-[4px] uppercase">Events Platform</p>
+            </div>
+          </div>
+          <ul class="hidden lg:flex items-center gap-10 text-white font-medium text-sm">
+            <li><a href="index.html"        class="font-cinzel hover:text-yellow-400 transition">Home</a></li>
+            <li><a href="Aboutus.html"       class="font-cinzel hover:text-yellow-400 transition">About Us</a></li>
+            <li><a href="/tailwind/src/index.html#events" class="font-cinzel hover:text-yellow-400 transition">Events</a></li>
+            <li><a href="Services.html"      class="font-cinzel text-yellow-400 border-b border-yellow-400 pb-0.5">Services</a></li>
+            
+            <li><a href="Contact-us.html"    class="font-cinzel hover:text-yellow-400 transition">Contact</a></li>
+          </ul>
+          <div class="hidden lg:flex items-center gap-4">
+            <a href="sign-in.html" class="font-cinzel px-5 py-2.5 border border-yellow-500 text-yellow-400 rounded-xl hover:bg-yellow-500 hover:text-black transition text-sm">Sign In</a>
+            <a href="sign-up.html" class="font-cinzel px-5 py-2.5 bg-yellow-500 text-black font-semibold rounded-xl hover:bg-yellow-400 transition shadow-lg shadow-yellow-500/30 text-sm">Create Account</a>
+          </div>
+          <button id="hamburger" class="lg:hidden text-yellow-500 text-3xl focus:outline-none cursor-pointer hover:text-yellow-300 transition" aria-label="Toggle menu">
+            <i id="ham-icon" class="ri-menu-line"></i>
+          </button>
+        </div>
+      </div>
+      <div id="mobile-menu" class="lg:hidden bg-[#0b1023] border-t border-yellow-500/20">
+        <ul class="flex flex-col p-6 gap-5 text-white font-medium">
+          <li><a href="index.html"        class="font-cinzel hover:text-yellow-400 text-sm">Home</a></li>
+          <li><a href="Aboutus.html"       class="font-cinzel hover:text-yellow-400 text-sm">About Us</a></li>
+          <li><a href="/tailwind/src/index.html#events" class="font-cinzel hover:text-yellow-400 text-sm">Events</a></li>
+          <li><a href="Services.html"      class="font-cinzel text-yellow-400 text-sm">Services</a></li>
+          
+          <li><a href="Contact-us.html"    class="font-cinzel hover:text-yellow-400 text-sm">Contact</a></li>
+          <li class="flex flex-col gap-3 pt-2">
+            <a href="sign-in.html" class="font-cinzel w-full py-3 border border-yellow-500 text-yellow-400 rounded-xl text-center text-sm">Sign In</a>
+            <a href="sign-up.html" class="font-cinzel w-full py-3 bg-yellow-500 text-black font-semibold rounded-xl text-center text-sm">Create Account</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+  </header>
+
+  <main class="relative z-10 max-w-7xl mx-auto px-6 lg:px-10 py-20">
+
+    <!-- Page Header -->
+    <div class="text-center mb-20 reveal">
+      <div class="inline-flex items-center gap-3 mb-5">
+        <span class="w-9 h-px bg-yellow-500 block"></span>
+        <span class="font-cinzel text-yellow-500 text-[10px] font-semibold tracking-[0.4em] uppercase">What We Offer</span>
+        <span class="w-9 h-px bg-yellow-500 block"></span>
+      </div>
+      <h1 class="font-cinzel text-5xl lg:text-6xl font-bold text-white mb-6">Our Services</h1>
+      <p class="font-cormorant text-white/70 text-lg max-w-2xl mx-auto leading-relaxed">
+        From intimate gatherings to large-scale events, Nice-Xclusive provides everything you need to plan, book, and experience unforgettable moments.
+      </p>
+    </div>
+
+    <!-- 6 Service Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-20">
+
+      <div class="reveal reveal-delay-1 relative bg-white/[0.03] border border-yellow-500/20 rounded-2xl p-8 hover:border-yellow-500/50 hover:-translate-y-1 transition duration-300 overflow-hidden before:absolute before:top-0 before:left-0 before:right-0 before:h-0.5 before:bg-gradient-to-r before:from-transparent before:via-yellow-500 before:to-transparent">
+        <div class="w-14 h-14 rounded-2xl bg-yellow-500/10 border border-yellow-500/20 flex items-center justify-center text-2xl mb-6">🎟️</div>
+        <h3 class="font-cinzel text-lg font-semibold text-white mb-3">Event Ticketing</h3>
+        <p class="font-cormorant text-white/65 text-base leading-relaxed mb-5">Browse and book tickets for concerts, conferences, workshops, and more with our seamless and secure ticketing system.</p>
+        <ul class="space-y-2">
+          <li class="flex items-center gap-2 text-white/65 text-sm"><span class="text-yellow-500 text-xs">✦</span> Instant booking confirmation</li>
+          <li class="flex items-center gap-2 text-white/65 text-sm"><span class="text-yellow-500 text-xs">✦</span> QR code e-tickets</li>
+          <li class="flex items-center gap-2 text-white/65 text-sm"><span class="text-yellow-500 text-xs">✦</span> Easy refund policy</li>
+        </ul>
+      </div>
+
+      <div class="reveal reveal-delay-2 relative bg-white/[0.03] border border-yellow-500/20 rounded-2xl p-8 hover:border-yellow-500/50 hover:-translate-y-1 transition duration-300 overflow-hidden before:absolute before:top-0 before:left-0 before:right-0 before:h-0.5 before:bg-gradient-to-r before:from-transparent before:via-yellow-500 before:to-transparent">
+        <div class="w-14 h-14 rounded-2xl bg-yellow-500/10 border border-yellow-500/20 flex items-center justify-center text-2xl mb-6">📋</div>
+        <h3 class="font-cinzel text-lg font-semibold text-white mb-3">Event Listing</h3>
+        <p class="font-cormorant text-white/65 text-base leading-relaxed mb-5">Are you an organizer? List your event on our platform and reach thousands of potential attendees instantly.</p>
+        <ul class="space-y-2">
+          <li class="flex items-center gap-2 text-white/65 text-sm"><span class="text-yellow-500 text-xs">✦</span> Easy event creation tools</li>
+          <li class="flex items-center gap-2 text-white/65 text-sm"><span class="text-yellow-500 text-xs">✦</span> Custom pricing & tiers</li>
+          <li class="flex items-center gap-2 text-white/65 text-sm"><span class="text-yellow-500 text-xs">✦</span> Real-time analytics</li>
+        </ul>
+      </div>
+
+      <div class="reveal reveal-delay-3 relative bg-white/[0.03] border border-yellow-500/20 rounded-2xl p-8 hover:border-yellow-500/50 hover:-translate-y-1 transition duration-300 overflow-hidden before:absolute before:top-0 before:left-0 before:right-0 before:h-0.5 before:bg-gradient-to-r before:from-transparent before:via-yellow-500 before:to-transparent">
+        <div class="w-14 h-14 rounded-2xl bg-yellow-500/10 border border-yellow-500/20 flex items-center justify-center text-2xl mb-6">🏛️</div>
+        <h3 class="font-cinzel text-lg font-semibold text-white mb-3">Venue Discovery</h3>
+        <p class="font-cormorant text-white/65 text-base leading-relaxed mb-5">Find and book the perfect venue for your event. From intimate halls to grand ballrooms across Nigeria.</p>
+        <ul class="space-y-2">
+          <li class="flex items-center gap-2 text-white/65 text-sm"><span class="text-yellow-500 text-xs">✦</span> Verified venue listings</li>
+          <li class="flex items-center gap-2 text-white/65 text-sm"><span class="text-yellow-500 text-xs">✦</span> 360° virtual tours</li>
+          <li class="flex items-center gap-2 text-white/65 text-sm"><span class="text-yellow-500 text-xs">✦</span> Capacity & pricing filters</li>
+        </ul>
+      </div>
+
+      <div class="reveal reveal-delay-4 relative bg-white/[0.03] border border-yellow-500/20 rounded-2xl p-8 hover:border-yellow-500/50 hover:-translate-y-1 transition duration-300 overflow-hidden before:absolute before:top-0 before:left-0 before:right-0 before:h-0.5 before:bg-gradient-to-r before:from-transparent before:via-yellow-500 before:to-transparent">
+        <div class="w-14 h-14 rounded-2xl bg-yellow-500/10 border border-yellow-500/20 flex items-center justify-center text-2xl mb-6">🤝</div>
+        <h3 class="font-cinzel text-lg font-semibold text-white mb-3">Vendor Connect</h3>
+        <p class="font-cormorant text-white/65 text-base leading-relaxed mb-5">Connect with trusted caterers, photographers, decorators, and other vendors to make your event truly memorable.</p>
+        <ul class="space-y-2">
+          <li class="flex items-center gap-2 text-white/65 text-sm"><span class="text-yellow-500 text-xs">✦</span> Verified vendor profiles</li>
+          <li class="flex items-center gap-2 text-white/65 text-sm"><span class="text-yellow-500 text-xs">✦</span> Reviews & ratings</li>
+          <li class="flex items-center gap-2 text-white/65 text-sm"><span class="text-yellow-500 text-xs">✦</span> Direct messaging</li>
+        </ul>
+      </div>
+
+      <div class="reveal reveal-delay-5 relative bg-white/[0.03] border border-yellow-500/20 rounded-2xl p-8 hover:border-yellow-500/50 hover:-translate-y-1 transition duration-300 overflow-hidden before:absolute before:top-0 before:left-0 before:right-0 before:h-0.5 before:bg-gradient-to-r before:from-transparent before:via-yellow-500 before:to-transparent">
+        <div class="w-14 h-14 rounded-2xl bg-yellow-500/10 border border-yellow-500/20 flex items-center justify-center text-2xl mb-6">📊</div>
+        <h3 class="font-cinzel text-lg font-semibold text-white mb-3">Organizer Dashboard</h3>
+        <p class="font-cormorant text-white/65 text-base leading-relaxed mb-5">Manage your events, track ticket sales, monitor revenue, and engage with attendees all from one powerful dashboard.</p>
+        <ul class="space-y-2">
+          <li class="flex items-center gap-2 text-white/65 text-sm"><span class="text-yellow-500 text-xs">✦</span> Sales & revenue tracking</li>
+          <li class="flex items-center gap-2 text-white/65 text-sm"><span class="text-yellow-500 text-xs">✦</span> Attendee management</li>
+          <li class="flex items-center gap-2 text-white/65 text-sm"><span class="text-yellow-500 text-xs">✦</span> Payout & withdrawals</li>
+        </ul>
+      </div>
+
+      <div class="reveal reveal-delay-6 relative bg-white/[0.03] border border-yellow-500/20 rounded-2xl p-8 hover:border-yellow-500/50 hover:-translate-y-1 transition duration-300 overflow-hidden before:absolute before:top-0 before:left-0 before:right-0 before:h-0.5 before:bg-gradient-to-r before:from-transparent before:via-yellow-500 before:to-transparent">
+        <div class="w-14 h-14 rounded-2xl bg-yellow-500/10 border border-yellow-500/20 flex items-center justify-center text-2xl mb-6">🔒</div>
+        <h3 class="font-cinzel text-lg font-semibold text-white mb-3">Secure Payments</h3>
+        <p class="font-cormorant text-white/65 text-base leading-relaxed mb-5">All transactions on Nice-Xclusive are encrypted and secured. Pay with confidence using multiple payment options.</p>
+        <ul class="space-y-2">
+          <li class="flex items-center gap-2 text-white/65 text-sm"><span class="text-yellow-500 text-xs">✦</span> Bank transfer & card</li>
+          <li class="flex items-center gap-2 text-white/65 text-sm"><span class="text-yellow-500 text-xs">✦</span> Paystack & Flutterwave</li>
+          <li class="flex items-center gap-2 text-white/65 text-sm"><span class="text-yellow-500 text-xs">✦</span> Fraud protection</li>
+        </ul>
+      </div>
+
+    </div>
+
+    <!-- Stats Banner -->
+    <section class="reveal relative bg-yellow-500/10 border border-yellow-500/25 rounded-3xl p-12 mb-20 overflow-hidden before:absolute before:top-0 before:left-0 before:right-0 before:h-px before:bg-gradient-to-r before:from-transparent before:via-yellow-500 before:to-transparent after:absolute after:bottom-0 after:left-0 after:right-0 after:h-px after:bg-gradient-to-r after:from-transparent after:via-yellow-500/40 after:to-transparent">
+      <div class="text-center mb-10">
+        <div class="inline-flex items-center gap-3 mb-3">
+          <span class="w-8 h-px bg-yellow-500 block"></span>
+          <span class="font-cinzel text-yellow-500 text-[10px] font-semibold tracking-[0.4em] uppercase">Why Us</span>
+          <span class="w-8 h-px bg-yellow-500 block"></span>
+        </div>
+        <h2 class="font-cinzel text-3xl font-bold text-white">Why Choose Nice-Xclusive?</h2>
+      </div>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+        <div class="text-center">
+          <p class="font-cinzel text-5xl font-bold gold-text mb-2 stat-num" data-target="1000" data-suffix="+">0</p>
+          <p class="text-white/60 text-xs tracking-wider uppercase font-cinzel">Happy Customers</p>
+        </div>
+        <div class="text-center">
+          <p class="font-cinzel text-5xl font-bold gold-text mb-2 stat-num" data-target="500" data-suffix="+">0</p>
+          <p class="text-white/60 text-xs tracking-wider uppercase font-cinzel">Events Hosted</p>
+        </div>
+        <div class="text-center">
+          <p class="font-cinzel text-5xl font-bold gold-text mb-2 stat-num" data-target="200" data-suffix="+">0</p>
+          <p class="text-white/60 text-xs tracking-wider uppercase font-cinzel">Verified Vendors</p>
+        </div>
+        <div class="text-center">
+          <p class="font-cinzel text-5xl font-bold gold-text mb-2 stat-num" data-target="4.9" data-suffix="★">0</p>
+          <p class="text-white/60 text-xs tracking-wider uppercase font-cinzel">Average Rating</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Pricing Plans -->
+    <div class="text-center mb-14 reveal">
+      <div class="inline-flex items-center gap-3 mb-5">
+        <span class="w-9 h-px bg-yellow-500 block"></span>
+        <span class="font-cinzel text-yellow-500 text-[10px] font-semibold tracking-[0.4em] uppercase">Pricing Plans</span>
+        <span class="w-9 h-px bg-yellow-500 block"></span>
+      </div>
+      <h2 class="font-cinzel text-4xl font-bold text-white mb-3">Simple, Transparent Pricing</h2>
+      <p class="font-cormorant text-white/60 text-lg">Choose the plan that works best for you.</p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-20">
+
+      <!-- Starter -->
+      <div class="pricing-card reveal reveal-delay-1 relative bg-white/[0.03] border border-yellow-500/20 rounded-3xl p-8 overflow-hidden">
+        <h3 class="font-cinzel text-xl font-bold text-white mb-1">Starter</h3>
+        <p class="font-cormorant text-white/50 text-sm mb-6">For individuals & attendees</p>
+        <p class="font-cinzel text-5xl font-bold text-white mb-8">Free</p>
+        <ul class="space-y-3 mb-8">
+          <li class="flex items-center gap-2 text-white/70 text-sm"><span class="text-yellow-500 text-xs">✦</span> Browse all events</li>
+          <li class="flex items-center gap-2 text-white/70 text-sm"><span class="text-yellow-500 text-xs">✦</span> Buy up to 5 tickets/month</li>
+          <li class="flex items-center gap-2 text-white/70 text-sm"><span class="text-yellow-500 text-xs">✦</span> Basic support</li>
+          <li class="flex items-center gap-2 text-white/30 text-sm"><span class="text-white/20 text-xs">✦</span> <span class="line-through">List events</span></li>
+          <li class="flex items-center gap-2 text-white/30 text-sm"><span class="text-white/20 text-xs">✦</span> <span class="line-through">Analytics dashboard</span></li>
+        </ul>
+        <a href="sign-up.html" class="font-cinzel block w-full py-3.5 border border-yellow-500/40 text-yellow-400 hover:bg-yellow-500/10 text-sm tracking-widest uppercase rounded-xl text-center transition">Get Started</a>
+      </div>
+
+      <!-- Pro (Popular) -->
+      <div class="pricing-card reveal reveal-delay-2 relative bg-yellow-500/[0.08] border-2 border-yellow-500 rounded-3xl p-8 overflow-hidden shadow-xl shadow-yellow-500/10 before:absolute before:top-0 before:left-0 before:right-0 before:h-0.5 before:bg-gradient-to-r before:from-transparent before:via-yellow-500 before:to-transparent">
+        <div class="absolute top-4 right-4">
+          <span class="font-cinzel text-[10px] tracking-widest uppercase bg-yellow-500 text-black px-3 py-1.5 rounded-full font-bold">Popular</span>
+        </div>
+        <h3 class="font-cinzel text-xl font-bold text-white mb-1">Pro</h3>
+        <p class="font-cormorant text-white/50 text-sm mb-6">For event organizers</p>
+        <div class="flex items-end gap-1 mb-8">
+          <p class="font-cinzel text-5xl font-bold text-white">₦15K</p>
+          <p class="text-white/50 text-sm mb-2">/month</p>
+        </div>
+        <ul class="space-y-3 mb-8">
+          <li class="flex items-center gap-2 text-white/80 text-sm"><span class="text-yellow-500 text-xs">✦</span> Everything in Starter</li>
+          <li class="flex items-center gap-2 text-white/80 text-sm"><span class="text-yellow-500 text-xs">✦</span> List unlimited events</li>
+          <li class="flex items-center gap-2 text-white/80 text-sm"><span class="text-yellow-500 text-xs">✦</span> Full analytics dashboard</li>
+          <li class="flex items-center gap-2 text-white/80 text-sm"><span class="text-yellow-500 text-xs">✦</span> Priority support</li>
+          <li class="flex items-center gap-2 text-white/80 text-sm"><span class="text-yellow-500 text-xs">✦</span> Vendor connect access</li>
+        </ul>
+        <a href="sign-up.html" id="get-pro-btn" class="font-cinzel block w-full py-3.5 bg-yellow-500 hover:bg-yellow-400 text-black font-bold text-sm tracking-widest uppercase rounded-xl text-center transition shadow-lg shadow-yellow-500/30">Get Pro</a>
+      </div>
+
+      <!-- Enterprise -->
+      <div class="pricing-card reveal reveal-delay-3 relative bg-white/[0.03] border border-yellow-500/20 rounded-3xl p-8 overflow-hidden">
+        <h3 class="font-cinzel text-xl font-bold text-white mb-1">Enterprise</h3>
+        <p class="font-cormorant text-white/50 text-sm mb-6">For large organizations</p>
+        <p class="font-cinzel text-5xl font-bold text-white mb-8">Custom</p>
+        <ul class="space-y-3 mb-8">
+          <li class="flex items-center gap-2 text-white/70 text-sm"><span class="text-yellow-500 text-xs">✦</span> Everything in Pro</li>
+          <li class="flex items-center gap-2 text-white/70 text-sm"><span class="text-yellow-500 text-xs">✦</span> Dedicated account manager</li>
+          <li class="flex items-center gap-2 text-white/70 text-sm"><span class="text-yellow-500 text-xs">✦</span> Custom integrations</li>
+          <li class="flex items-center gap-2 text-white/70 text-sm"><span class="text-yellow-500 text-xs">✦</span> White-label options</li>
+          <li class="flex items-center gap-2 text-white/70 text-sm"><span class="text-yellow-500 text-xs">✦</span> 24/7 premium support</li>
+        </ul>
+        <a href="Contact-us.html" class="font-cinzel block w-full py-3.5 border border-yellow-500/40 text-yellow-400 hover:bg-yellow-500/10 text-sm tracking-widest uppercase rounded-xl text-center transition">Contact Sales</a>
+      </div>
+
+    </div>
+
+    <!-- Plan selection feedback -->
+    <div id="plan-toast" class="hidden fixed bottom-8 left-1/2 -translate-x-1/2 z-50 bg-yellow-500 text-black font-cinzel text-sm font-bold px-6 py-3 rounded-xl shadow-lg shadow-yellow-500/30 tracking-wider"></div>
+
+    <div class="text-center text-yellow-500/20 text-lg tracking-[8px]">— ✦ —</div>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="relative z-10 border-t border-yellow-500/20 py-10 mt-10">
+    <div class="max-w-7xl mx-auto px-6 lg:px-10 flex flex-wrap items-center justify-between gap-4">
+      <span class="font-cinzel text-yellow-500 text-sm tracking-wider">Nice-Xclusive Events Platform</span>
+      <span class="text-white/40 text-xs">© 2026 Nice-Xclusive. All rights reserved.</span>
+      <div class="flex gap-6">
+        <a href="terms.html#privacy" class="font-cinzel text-white/50 hover:text-yellow-400 text-xs transition">Privacy Policy</a>
+        <a href="terms.html"         class="font-cinzel text-white/50 hover:text-yellow-400 text-xs transition">Terms of Service</a>
+        <a href="Contact-us.html"    class="font-cinzel text-white/50 hover:text-yellow-400 text-xs transition">FAQ</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+  document.addEventListener('DOMContentLoaded', function () {
+
+    /* 1. HAMBURGER */
+    const hamburger  = document.getElementById('hamburger');
+    const mobileMenu = document.getElementById('mobile-menu');
+    const hamIcon    = document.getElementById('ham-icon');
+    hamburger.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const open = mobileMenu.classList.toggle('open');
+      hamIcon.className = open ? 'ri-close-line' : 'ri-menu-line';
+    });
+    mobileMenu.querySelectorAll('a').forEach(a => {
+      a.addEventListener('click', () => { mobileMenu.classList.remove('open'); hamIcon.className = 'ri-menu-line'; });
+    });
+    document.addEventListener('click', (e) => {
+      if (!mobileMenu.contains(e.target) && !hamburger.contains(e.target)) {
+        mobileMenu.classList.remove('open'); hamIcon.className = 'ri-menu-line';
+      }
+    });
+
+    /* 2. NAVBAR SHADOW */
+    const nav = document.getElementById('main-nav');
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('shadow-lg',       window.scrollY > 40);
+      nav.classList.toggle('shadow-black/40', window.scrollY > 40);
+    });
+
+    /* 3. SCROLL REVEAL */
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) { e.target.classList.add('in-view'); revealObserver.unobserve(e.target); }
+      });
+    }, { threshold: 0.12 });
+    document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+    /* 4. ANIMATED STAT COUNTERS */
+    const statNums = document.querySelectorAll('.stat-num');
+    const statsObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const el = entry.target;
+          const target = parseFloat(el.dataset.target);
+          const suffix = el.dataset.suffix || '';
+          const isDecimal = target % 1 !== 0;
+          const duration = 1400;
+          const steps = 60;
+          const increment = target / steps;
+          let current = 0;
+          el.style.opacity = 1;
+          const timer = setInterval(() => {
+            current += increment;
+            if (current >= target) { current = target; clearInterval(timer); }
+            el.textContent = isDecimal ? current.toFixed(1) + suffix : Math.floor(current) + suffix;
+          }, duration / steps);
+          statsObserver.unobserve(el);
+        }
+      });
+    }, { threshold: 0.5 });
+    statNums.forEach(el => statsObserver.observe(el));
+
+    /* 5. PLAN SELECTION — localStorage + toast */
+    const PLAN_KEY = 'nx_selected_plan';
+
+    // Restore saved plan highlight
+    const savedPlan = localStorage.getItem(PLAN_KEY);
+    if (savedPlan) {
+      const btn = document.querySelector(`[data-plan="${savedPlan}"]`);
+      if (btn) btn.classList.add('ring-2', 'ring-yellow-400');
+    }
+
+    document.getElementById('get-pro-btn').addEventListener('click', (e) => {
+      e.preventDefault();
+      localStorage.setItem(PLAN_KEY, 'pro');
+      showToast('Pro plan selected! Redirecting to sign up...');
+      setTimeout(() => { window.location.href = 'sign-up.html'; }, 1200);
+    });
+
+    function showToast(msg) {
+      const toast = document.getElementById('plan-toast');
+      toast.textContent = msg;
+      toast.classList.remove('hidden');
+      setTimeout(() => toast.classList.add('hidden'), 3000);
+    }
+
+  });
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Analytics | Nice-Xclusive Events Platform</title>
+  <link rel="stylesheet" href="/tailwind/src/output.css">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=Montserrat:wght@300;400;500;600&display=swap"
+    rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@4.9.0/fonts/remixicon.css" rel="stylesheet">
+
+  <style>
+    .font-cinzel {
+      font-family: 'Cinzel', serif;
+    }
+
+    .font-cormorant {
+      font-family: 'Cormorant Garamond', serif;
+    }
+
+    body {
+      font-family: 'Montserrat', sans-serif;
+    }
+
+    .gold-text {
+      font-family: 'Cinzel', serif;
+      background: linear-gradient(135deg, #F0C040 0%, #C9A84C 50%, #8B6914 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* Sidebar JS slide */
+    #sidebar {
+      transform: translateX(-100%);
+      transition: transform 0.3s ease;
+    }
+
+    #sidebar.open {
+      transform: translateX(0);
+    }
+
+    @media (min-width: 1024px) {
+      #sidebar {
+        transform: translateX(0) !important;
+        position: sticky;
+        top: 0;
+        height: 100vh;
+      }
+    }
+
+    /* Custom scrollbar for sidebar nav */
+    #sidebar nav {
+      scrollbar-width: thin;
+      scrollbar-color: rgba(234, 179, 8, 0.35) transparent;
+    }
+
+    #sidebar nav::-webkit-scrollbar {
+      width: 5px;
+    }
+
+    #sidebar nav::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    #sidebar nav::-webkit-scrollbar-thumb {
+      background-color: rgba(234, 179, 8, 0.35);
+      border-radius: 9999px;
+    }
+
+    #sidebar nav::-webkit-scrollbar-thumb:hover {
+      background-color: rgba(234, 179, 8, 0.6);
+    }
+
+    /* Overlay */
+    #sidebar-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 30;
+      background: rgba(0, 0, 0, 0.5);
+    }
+
+    #sidebar-overlay.show {
+      display: block;
+    }
+
+    /* Scroll reveal */
+    .reveal {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity .6s ease, transform .6s ease;
+    }
+
+    .reveal.in-view {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .reveal-delay-1.in-view {
+      transition-delay: .1s;
+    }
+
+    .reveal-delay-2.in-view {
+      transition-delay: .2s;
+    }
+
+    .reveal-delay-3.in-view {
+      transition-delay: .3s;
+    }
+
+    .reveal-delay-4.in-view {
+      transition-delay: .4s;
+    }
+
+    /* Logout modal */
+    #logout-modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      background: rgba(0, 0, 0, 0.7);
+      align-items: center;
+      justify-content: center;
+    }
+
+    #logout-modal.show {
+      display: flex;
+    }
+
+    /* Badge pulse */
+    @keyframes pulse {
+
+      0%,
+      100% {
+        opacity: 1;
+      }
+
+      50% {
+        opacity: 0.5;
+      }
+    }
+
+    .badge-pulse {
+      animation: pulse 2s infinite;
+    }
+
+    /* Page-specific: animated bar chart fill */
+    .bar-fill {
+      width: 0;
+      transition: width 1s ease;
+    }
+  </style>
+</head>
+
+<body class="relative min-h-screen bg-[#06030F] text-white overflow-x-hidden" data-dashboard="organizer">
+
+  <!-- Background glow -->
+  <div class="fixed inset-0 pointer-events-none z-0"
+    style="background:radial-gradient(ellipse 70% 60% at 15% 30%,rgba(80,20,120,0.35) 0%,transparent 65%),radial-gradient(ellipse 50% 50% at 85% 70%,rgba(60,10,100,0.2) 0%,transparent 60%);">
+  </div>
+
+  <!-- Sidebar overlay -->
+  <div id="sidebar-overlay"></div>
+
+  <!-- Logout confirm modal -->
+  <div id="logout-modal">
+    <div class="bg-[#0d0a1a] border border-yellow-500/30 rounded-2xl p-8 max-w-sm w-full mx-4 text-center">
+      <p class="text-3xl mb-4"><i class="ri-door-open-line"></i></p>
+      <h3 class="font-cinzel text-white text-lg font-bold mb-2">Logging Out</h3>
+      <p class="font-cormorant text-white/60 text-base mb-6">Are you sure you want to log out of Nice-Xclusive?</p>
+      <div class="flex gap-3">
+        <button id="logout-cancel"
+          class="font-cinzel flex-1 py-3 border border-yellow-500/30 text-yellow-400 rounded-xl text-sm hover:bg-yellow-500/10 transition">Cancel</button>
+        <button id="logout-confirm"
+          class="font-cinzel flex-1 py-3 bg-red-500 hover:bg-red-400 text-white rounded-xl text-sm font-bold transition">Yes,
+          Logout</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="relative z-10 lg:grid lg:grid-cols-[256px_1fr] min-h-screen">
+    <!-- ── SIDEBAR ── -->
+    <aside id="sidebar"
+      class="w-64 min-h-screen bg-[#050816] border-r border-yellow-500/20 flex flex-col fixed top-0 left-0 h-full z-40 lg:sticky lg:top-0 lg:h-screen">
+
+      <div class="px-6 py-6 border-b border-yellow-500/20">
+        <a href="/tailwind/src/index.html" class="flex items-center gap-3">
+          <div
+            class="w-10 h-10 rounded-xl border border-yellow-500 flex items-center justify-center bg-gradient-to-br from-yellow-400 to-yellow-700 shadow-md shadow-yellow-500/20">
+            <span class="font-cinzel text-base font-bold text-black">NX</span>
+          </div>
+          <div>
+            <h1 class="font-cinzel text-white text-sm font-semibold tracking-wide">Nice-Xclusive</h1>
+            <p class="text-yellow-500 text-[8px] tracking-[3px] uppercase">Events Platform</p>
+          </div>
+        </a>
+      </div>
+
+      <nav class="flex-1 px-3 py-6 space-y-1 overflow-y-auto">
+
+        <p class="font-cinzel text-yellow-500/50 text-[9px] tracking-[0.3em] uppercase px-3 mb-3">Main</p>
+
+        <a href="organizer-dashboard.html"
+          class="flex items-center gap-3 px-3 py-3 rounded-xl text-sm font-medium text-white/60 hover:bg-yellow-500/10 hover:text-yellow-400 transition">
+          <span class="text-lg"><i class="ri-home-5-line"></i></span> <span class="font-cinzel text-xs">Dashboard</span>
+        </a>
+        <a href="my-events.html"
+          class="flex items-center gap-3 px-3 py-3 rounded-xl text-sm font-medium text-white/60 hover:bg-yellow-500/10 hover:text-yellow-400 transition">
+          <span class="text-lg"><i class="ri-search-2-line"></i></span> <span class="font-cinzel text-xs">My Events</span>
+        </a>
+        <a href="attendee.html"
+          class="flex items-center gap-3 px-3 py-3 rounded-xl text-sm font-medium text-white/60 hover:bg-yellow-500/10 hover:text-yellow-400 transition">
+          <span class="text-lg"><i class="ri-team-line"></i></span> <span class="font-cinzel text-xs">Attendees</span>
+        </a>
+        <a href="/tailwind/src/vendors.html"
+          class="flex items-center gap-3 px-3 py-3 rounded-xl text-sm font-medium text-white/60 hover:bg-yellow-500/10 hover:text-yellow-400 transition">
+          <span class="text-lg"><i class="ri-shake-hands-line"></i></span> <span class="font-cinzel text-xs">Vendors</span>
+        </a>
+
+        <p class="font-cinzel text-yellow-500/50 text-[9px] tracking-[0.3em] uppercase px-3 mt-6 mb-3">Finance</p>
+
+        <a href="revenue.html"
+          class="flex items-center gap-3 px-3 py-3 rounded-xl text-sm font-medium text-white/60 hover:bg-yellow-500/10 hover:text-yellow-400 transition">
+          <span class="text-lg"><i class="ri-money-dollar-circle-line"></i></span> <span class="font-cinzel text-xs">Revenue</span>
+        </a>
+        <a href="/tailwind/src/payouts.html"
+          class="flex items-center gap-3 px-3 py-3 rounded-xl text-sm font-medium text-white/60 hover:bg-yellow-500/10 hover:text-yellow-400 transition">
+          <span class="text-lg"><i class="ri-bank-card-line"></i></span> <span class="font-cinzel text-xs">Payouts</span>
+        </a>
+        <a href="/tailwind/src/analytics.html"
+          class="flex items-center gap-3 px-3 py-3 rounded-xl text-sm font-medium bg-yellow-500/10 border-l-[3px] border-yellow-500 text-yellow-400 transition">
+          <span class="text-lg"><i class="ri-bar-chart-line"></i></span> <span class="font-cinzel text-xs">Analytics</span>
+        </a>
+
+        <p class="font-cinzel text-yellow-500/50 text-[9px] tracking-[0.3em] uppercase px-3 mt-6 mb-3">Account</p>
+
+        <a href="/tailwind/src/settings.html"
+          class="flex items-center gap-3 px-3 py-3 rounded-xl text-sm font-medium text-white/60 hover:bg-yellow-500/10 hover:text-yellow-400 transition">
+          <span class="text-lg"><i class="ri-settings-2-line"></i></span> <span class="font-cinzel text-xs">Settings</span>
+        </a>
+
+        <button id="logout-btn"
+          class="flex items-center gap-3 w-full px-3 py-3 rounded-xl text-sm font-medium text-white/60 hover:bg-red-500/10 hover:text-red-400 transition cursor-pointer">
+          <span class="text-lg"><i class="ri-door-open-line"></i></span> <span class="font-cinzel text-xs">Logout</span>
+        </button>
+      </nav>
+
+      <!-- User card -->
+      <div class="px-4 py-4 border-t border-yellow-500/20">
+        <div class="flex items-center gap-3 bg-white/[0.03] rounded-xl p-3">
+          <div id="user-initials"
+            class="w-9 h-9 rounded-full bg-gradient-to-br from-yellow-400 to-yellow-700 flex items-center justify-center font-cinzel text-black text-sm font-bold">
+          </div>
+          <div class="flex-1 min-w-0">
+            <p id="user-name" class="text-white text-xs font-semibold truncate">
+            <p id="organization-name" class="text-yellow-400 text-sm"></p>
+            </p>
+            <p class="text-white/40 text-[10px] truncate">Pro Organizer</p>
+          </div>
+          <span class="text-yellow-500 text-xs">✦</span>
+        </div>
+      </div>
+    </aside>
+
+    <!-- ── MAIN CONTENT ── -->
+    <div class="flex-1 flex flex-col min-w-0 w-full">
+
+      <!-- Top bar -->
+      <header
+        class="sticky top-0 z-30 bg-[#06030F]/90 backdrop-blur-xl border-b border-yellow-500/20 px-6 py-4 flex items-center justify-between">
+        <div class="flex items-center gap-4">
+          <button id="sidebar-toggle"
+            class="lg:hidden cursor-pointer text-yellow-500 text-2xl hover:text-yellow-300 transition focus:outline-none">
+            <i id="sidebar-ham-icon" class="ri-menu-line"></i>
+          </button>
+          <div>
+            <h2 class="font-cinzel text-lg font-semibold text-white">Analytics</h2>
+            <p class="text-white/40 text-xs">How your events are performing, at a glance</p>
+          </div>
+        </div>
+        <div class="flex items-center gap-3">
+
+          <div class="relative" id="nx-notif-wrapper">
+
+            <!-- BELL BUTTON -->
+            <button id="nx-notif-bell" type="button"
+              class="relative w-10 h-10 rounded-xl bg-white/[0.04] border border-yellow-500/20 flex items-center justify-center hover:border-yellow-500/50 transition">
+              <i class="ri-notification-3-line text-yellow-400 text-lg"></i>
+              <span id="nx-notif-badge"
+                class="hidden absolute -top-1.5 -right-1.5 min-w-[18px] h-[18px] px-1 rounded-full bg-yellow-500 text-black text-[10px] font-bold font-cinzel flex items-center justify-center">
+                0
+              </span>
+            </button>
+
+            <!-- DROPDOWN PANEL -->
+            <div id="nx-notif-panel"
+              class="hidden absolute right-0 top-full mt-3 w-80 max-h-96 overflow-y-auto bg-[#12091F] border border-yellow-500/20 rounded-xl shadow-2xl z-[9999]">
+
+              <div class="flex items-center justify-between px-4 py-3 border-b border-yellow-500/10">
+                <p class="font-cinzel text-white text-sm font-semibold">Notifications</p>
+                <button id="nx-notif-mark-all" type="button"
+                  class="font-cinzel text-[10px] tracking-widest uppercase text-yellow-400 hover:text-yellow-300 transition">
+                  Mark all read
+                </button>
+              </div>
+
+              <div id="nx-notif-list" class="divide-y divide-yellow-500/10">
+                <!-- items injected by JS -->
+              </div>
+
+              <div id="nx-notif-empty" class="hidden px-4 py-8 text-center">
+                <i class="ri-notification-off-line text-white/20 text-2xl mb-2 block"></i>
+                <p class="font-cormorant text-white/40 text-sm">No notifications yet</p>
+              </div>
+
+            </div>
+          </div>
+
+          <a href="/tailwind/src/events.html"
+            class="font-cinzel hidden sm:flex items-center gap-2 px-4 py-2 bg-yellow-500 hover:bg-yellow-400 text-black font-bold text-xs tracking-wider uppercase rounded-xl transition shadow-md shadow-yellow-500/20">
+            + New Event
+          </a>
+        </div>
+      </header>
+
+      <!-- Page body -->
+      <main class="flex-1 px-6 py-8 overflow-y-auto">
+
+        <div id="an-empty" class="hidden text-center py-24">
+          <p class="font-cinzel text-lg text-yellow-400 mb-2">Nothing to analyze yet</p>
+          <p class="font-cormorant text-white/50 text-base mb-6">Create an event and sell some tickets to see performance data here.</p>
+          <a href="events.html" class="font-cinzel inline-block text-xs tracking-widest uppercase px-6 py-3 rounded-xl bg-yellow-500 hover:bg-yellow-400 text-black font-bold transition duration-300">
+            + New Event
+          </a>
+        </div>
+
+        <div id="an-content">
+
+          <!-- Summary stats -->
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+            <div class="relative bg-white/[0.03] border border-yellow-500/20 rounded-2xl overflow-hidden before:absolute before:top-0 before:left-0 before:right-0 before:h-0.5 before:bg-gradient-to-r before:from-transparent before:via-yellow-500 before:to-transparent p-5">
+              <p class="font-cinzel text-yellow-500/70 text-[9px] tracking-widest uppercase mb-1">Total Events</p>
+              <p id="an-total-events" class="font-cinzel text-2xl font-bold text-white">0</p>
+            </div>
+            <div class="relative bg-white/[0.03] border border-yellow-500/20 rounded-2xl overflow-hidden before:absolute before:top-0 before:left-0 before:right-0 before:h-0.5 before:bg-gradient-to-r before:from-transparent before:via-yellow-500 before:to-transparent p-5">
+              <p class="font-cinzel text-yellow-500/70 text-[9px] tracking-widest uppercase mb-1">Tickets Sold</p>
+              <p id="an-total-tickets" class="font-cinzel text-2xl font-bold text-white">0</p>
+            </div>
+            <div class="relative bg-white/[0.03] border border-yellow-500/20 rounded-2xl overflow-hidden before:absolute before:top-0 before:left-0 before:right-0 before:h-0.5 before:bg-gradient-to-r before:from-transparent before:via-yellow-500 before:to-transparent p-5">
+              <p class="font-cinzel text-yellow-500/70 text-[9px] tracking-widest uppercase mb-1">Total Revenue</p>
+              <p id="an-total-revenue" class="font-cinzel text-2xl font-bold gold-text">₦0</p>
+            </div>
+            <div class="relative bg-white/[0.03] border border-yellow-500/20 rounded-2xl overflow-hidden before:absolute before:top-0 before:left-0 before:right-0 before:h-0.5 before:bg-gradient-to-r before:from-transparent before:via-yellow-500 before:to-transparent p-5">
+              <p class="font-cinzel text-yellow-500/70 text-[9px] tracking-widest uppercase mb-1">Avg. Sell-Through</p>
+              <p id="an-sellthrough" class="font-cinzel text-2xl font-bold text-white">0%</p>
+            </div>
+          </div>
+
+          <!-- Top performer highlight -->
+          <div id="an-top-performer" class="hidden relative bg-gradient-to-br from-yellow-500/15 to-yellow-500/5 border border-yellow-500/30 rounded-2xl overflow-hidden before:absolute before:top-0 before:left-0 before:right-0 before:h-0.5 before:bg-gradient-to-r before:from-transparent before:via-yellow-500 before:to-transparent p-6 mb-8 flex items-center gap-4">
+            <div class="w-12 h-12 rounded-xl bg-yellow-500/20 border border-yellow-500/30 flex items-center justify-center shrink-0">
+              <i class="ri-trophy-line text-yellow-400 text-xl"></i>
+            </div>
+            <div>
+              <p class="font-cinzel text-yellow-500/70 text-[9px] tracking-widest uppercase mb-1">Top Performing Event</p>
+              <p id="an-top-name" class="font-cinzel text-white font-bold text-lg"></p>
+              <p id="an-top-detail" class="font-cormorant text-white/60 text-sm"></p>
+            </div>
+          </div>
+
+          <!-- Revenue by event -->
+          <div class="mb-8">
+            <p class="font-cinzel text-yellow-500/70 text-[10px] tracking-[0.3em] uppercase mb-4">Revenue by Event</p>
+            <div id="an-revenue-chart" class="relative bg-white/[0.03] border border-yellow-500/20 rounded-2xl overflow-hidden before:absolute before:top-0 before:left-0 before:right-0 before:h-0.5 before:bg-gradient-to-r before:from-transparent before:via-yellow-500 before:to-transparent p-6 space-y-4"></div>
+          </div>
+
+          <!-- Tickets sold by event -->
+          <div class="mb-8">
+            <p class="font-cinzel text-yellow-500/70 text-[10px] tracking-[0.3em] uppercase mb-4">Tickets Sold by Event</p>
+            <div id="an-tickets-chart" class="relative bg-white/[0.03] border border-yellow-500/20 rounded-2xl overflow-hidden before:absolute before:top-0 before:left-0 before:right-0 before:h-0.5 before:bg-gradient-to-r before:from-transparent before:via-yellow-500 before:to-transparent p-6 space-y-4"></div>
+          </div>
+
+          <!-- Category breakdown -->
+          <div>
+            <p class="font-cinzel text-yellow-500/70 text-[10px] tracking-[0.3em] uppercase mb-4">Events by Category</p>
+            <div id="an-category-chart" class="relative bg-white/[0.03] border border-yellow-500/20 rounded-2xl overflow-hidden before:absolute before:top-0 before:left-0 before:right-0 before:h-0.5 before:bg-gradient-to-r before:from-transparent before:via-yellow-500 before:to-transparent p-6 space-y-4"></div>
+          </div>
+
+        </div>
+
+      </main>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+
+      const user =
+        JSON.parse(localStorage.getItem("loggedInUser")) ||
+        JSON.parse(localStorage.getItem("currentUser"));
+
+      if (!user) {
+        window.location.href = "sign-in.html";
+        return;
+      }
+
+      /* ─── SHELL: user card ─── */
+      const fullName = user.fullName || (user.firstName ? user.firstName + ' ' + user.lastName : 'Organizer');
+      const firstName = user.firstName || fullName.split(' ')[0];
+      const initials = firstName.charAt(0).toUpperCase() +
+        (user.lastName ? user.lastName.charAt(0).toUpperCase() : fullName.split(' ')[1]?.charAt(0).toUpperCase() || '');
+
+      const welcomeEl = document.getElementById('welcome-message');
+      if (welcomeEl) welcomeEl.textContent = `Welcome back, ${firstName} 👋`;
+      document.getElementById('user-name').textContent = fullName;
+      const org = document.getElementById("organization-name");
+      if (org) {
+        org.textContent = user.organization || "Independent Organizer";
+      }
+      document.getElementById('user-initials').textContent = initials;
+
+      /* ─── SHELL: sidebar toggle ─── */
+      const sidebar = document.getElementById('sidebar');
+      const sidebarToggle = document.getElementById('sidebar-toggle');
+      const sidebarOverlay = document.getElementById('sidebar-overlay');
+      const hamIcon = document.getElementById('sidebar-ham-icon');
+
+      function openSidebar() { sidebar.classList.add('open'); sidebarOverlay.classList.add('show'); hamIcon.className = 'ri-close-line'; }
+      function closeSidebar() { sidebar.classList.remove('open'); sidebarOverlay.classList.remove('show'); hamIcon.className = 'ri-menu-line'; }
+
+      sidebarToggle.addEventListener('click', (e) => {
+        e.stopPropagation();
+        sidebar.classList.contains('open') ? closeSidebar() : openSidebar();
+      });
+      sidebarOverlay.addEventListener('click', closeSidebar);
+      sidebar.querySelectorAll('a').forEach(a => {
+        a.addEventListener('click', () => { if (window.innerWidth < 1024) closeSidebar(); });
+      });
+
+      /* ─── SHELL: notification dropdown ─── */
+      (function () {
+        const STORAGE_KEY = "nx_notifications";
+
+        const dashboardType = document.body.dataset.dashboard; // "organizer" | "attendee"
+        let currentUser = null;
+        try {
+          currentUser = JSON.parse(localStorage.getItem("loggedInUser") || localStorage.getItem("currentUser") || "null");
+        } catch (e) {
+          currentUser = null;
+        }
+        const currentEmail = currentUser && currentUser.email ? currentUser.email : null;
+
+        function readAll() {
+          try {
+            return JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+          } catch (e) {
+            return [];
+          }
+        }
+
+        function writeAll(list) {
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(list));
+        }
+
+        function getMine() {
+          return readAll().filter(function (n) {
+            return n.forRole === dashboardType && (!currentEmail || n.forEmail === currentEmail);
+          }).sort(function (a, b) { return b.timestamp - a.timestamp; });
+        }
+
+        window.NXNotify = {
+          push: function (partial) {
+            const list = readAll();
+            list.push({
+              id: "n_" + Date.now() + "_" + Math.random().toString(36).slice(2, 7),
+              forRole: partial.forRole,
+              forEmail: partial.forEmail,
+              type: partial.type || "event_update",
+              eventId: partial.eventId || null,
+              eventName: partial.eventName || "",
+              message: partial.message || "",
+              timestamp: Date.now(),
+              read: false
+            });
+            writeAll(list);
+            render();
+          }
+        };
+
+        function iconFor(type) {
+          switch (type) {
+            case "signup": return "ri-user-add-line";
+            case "sale": return "ri-ticket-2-line";
+            case "event_update": return "ri-refresh-line";
+            case "reminder": return "ri-alarm-line";
+            default: return "ri-information-line";
+          }
+        }
+
+        function timeAgo(ts) {
+          const diff = Math.floor((Date.now() - ts) / 1000);
+          if (diff < 60) return "just now";
+          if (diff < 3600) return Math.floor(diff / 60) + "m ago";
+          if (diff < 86400) return Math.floor(diff / 3600) + "h ago";
+          return Math.floor(diff / 86400) + "d ago";
+        }
+
+        const listEl = document.getElementById("nx-notif-list");
+        const emptyEl = document.getElementById("nx-notif-empty");
+        const badgeEl = document.getElementById("nx-notif-badge");
+
+        function render() {
+          const mine = getMine();
+          const unreadCount = mine.filter(function (n) { return !n.read; }).length;
+
+          if (unreadCount > 0) {
+            badgeEl.textContent = unreadCount > 9 ? "9+" : String(unreadCount);
+            badgeEl.classList.remove("hidden");
+          } else {
+            badgeEl.classList.add("hidden");
+          }
+
+          if (mine.length === 0) {
+            listEl.innerHTML = "";
+            emptyEl.classList.remove("hidden");
+            return;
+          }
+          emptyEl.classList.add("hidden");
+
+          listEl.innerHTML = mine.map(function (n) {
+            return (
+              '<div class="flex gap-3 px-4 py-3 hover:bg-white/[0.03] transition cursor-pointer nx-notif-item" data-id="' + n.id + '">' +
+              '<div class="w-8 h-8 shrink-0 rounded-lg bg-yellow-500/10 border border-yellow-500/20 flex items-center justify-center">' +
+              '<i class="' + iconFor(n.type) + ' text-yellow-400 text-sm"></i>' +
+              '</div>' +
+              '<div class="flex-1 min-w-0">' +
+              '<p class="font-cormorant text-sm ' + (n.read ? "text-white/50" : "text-white") + ' leading-snug">' + n.message + '</p>' +
+              (n.eventName ? '<p class="text-white/30 text-[11px] mt-0.5">' + n.eventName + '</p>' : "") +
+              '<p class="text-yellow-500/50 text-[10px] mt-1 font-cinzel tracking-wide">' + timeAgo(n.timestamp) + '</p>' +
+              '</div>' +
+              (n.read ? "" : '<span class="w-2 h-2 rounded-full bg-yellow-500 mt-1.5 shrink-0"></span>') +
+              '</div>'
+            );
+          }).join("");
+        }
+
+        const bell = document.getElementById("nx-notif-bell");
+        const panel = document.getElementById("nx-notif-panel");
+
+        bell.addEventListener("click", function (e) {
+          e.stopPropagation();
+          panel.classList.toggle("hidden");
+        });
+
+        document.addEventListener("click", function (e) {
+          if (!panel.contains(e.target) && !bell.contains(e.target)) {
+            panel.classList.add("hidden");
+          }
+        });
+
+        document.getElementById("nx-notif-mark-all").addEventListener("click", function (e) {
+          e.stopPropagation();
+          const list = readAll().map(function (n) {
+            if (n.forRole === dashboardType && (!currentEmail || n.forEmail === currentEmail)) {
+              n.read = true;
+            }
+            return n;
+          });
+          writeAll(list);
+          render();
+        });
+
+        listEl.addEventListener("click", function (e) {
+          const item = e.target.closest(".nx-notif-item");
+          if (!item) return;
+          const id = item.dataset.id;
+          const list = readAll().map(function (n) {
+            if (n.id === id) n.read = true;
+            return n;
+          });
+          writeAll(list);
+          render();
+        });
+
+        window.addEventListener("storage", function (e) {
+          if (e.key === STORAGE_KEY) render();
+        });
+
+        render();
+      })();
+
+      /* ─── SHELL: logout modal ─── */
+      const logoutModal = document.getElementById('logout-modal');
+      document.getElementById('logout-btn').addEventListener('click', () => logoutModal.classList.add('show'));
+      document.getElementById('logout-cancel').addEventListener('click', () => logoutModal.classList.remove('show'));
+      document.getElementById("logout-confirm").addEventListener("click", () => {
+        localStorage.removeItem("loggedInUser");
+        localStorage.removeItem("currentUser");
+        localStorage.removeItem("nx_last_login");
+        window.location.replace("sign-in.html");
+      });
+
+      const SERVICE_FEE = 5000;
+
+      const allEvents = JSON.parse(localStorage.getItem("events")) || [];
+      const allBookings = JSON.parse(localStorage.getItem("bookings")) || [];
+      const myEvents = allEvents.filter(ev => ev.organizerEmail === user.email);
+
+      function revenueForEvent(event) {
+        const eventBookings = allBookings.filter(b => b.eventId === event.id);
+        if (eventBookings.length > 0) {
+          return eventBookings.reduce(
+            (sum, b) => sum + Math.max((Number(b.totalPaid) || 0) - SERVICE_FEE, 0),
+            0
+          );
+        }
+        return (Number(event.sold) || 0) * (Number(event.ticketPrice) || 0);
+      }
+
+      function formatNaira(n) {
+        return "₦" + Math.round(n).toLocaleString("en-NG");
+      }
+
+      // A horizontal bar row: label left, value right, filled bar underneath.
+      // barColorClass lets category chart use varied gold tones.
+      function barRow(label, value, max, displayValue, barColorClass) {
+        const pct = max > 0 ? Math.round((value / max) * 100) : 0;
+        return `
+          <div>
+            <div class="flex items-center justify-between mb-1.5">
+              <p class="font-cinzel text-white text-xs font-medium truncate pr-2">${label}</p>
+              <p class="font-cinzel text-yellow-400 text-xs font-semibold shrink-0">${displayValue}</p>
+            </div>
+            <div class="w-full h-2.5 bg-white/[0.06] rounded-full overflow-hidden">
+              <div class="bar-fill h-full rounded-full ${barColorClass || 'bg-gradient-to-r from-yellow-600 to-yellow-400'}" style="width:${pct}%"></div>
+            </div>
+          </div>
+        `;
+      }
+
+      function render() {
+        if (myEvents.length === 0) {
+          document.getElementById("an-empty").classList.remove("hidden");
+          document.getElementById("an-content").classList.add("hidden");
+          return;
+        }
+
+        const totalEvents = myEvents.length;
+        const totalTickets = myEvents.reduce((sum, ev) => sum + (Number(ev.sold) || 0), 0);
+        const totalCapacity = myEvents.reduce((sum, ev) => sum + (Number(ev.totalTickets) || 0), 0);
+        const totalRevenue = myEvents.reduce((sum, ev) => sum + revenueForEvent(ev), 0);
+        const sellThrough = totalCapacity > 0 ? Math.round((totalTickets / totalCapacity) * 100) : 0;
+
+        document.getElementById("an-total-events").textContent = totalEvents;
+        document.getElementById("an-total-tickets").textContent = totalTickets.toLocaleString();
+        document.getElementById("an-total-revenue").textContent = formatNaira(totalRevenue);
+        document.getElementById("an-sellthrough").textContent = sellThrough + "%";
+
+        // top performer by revenue
+        const withRevenue = myEvents.map(ev => ({ ev, rev: revenueForEvent(ev) }));
+        const top = withRevenue.reduce((best, cur) => (cur.rev > (best?.rev || -1) ? cur : best), null);
+        if (top && top.rev > 0) {
+          document.getElementById("an-top-performer").classList.remove("hidden");
+          document.getElementById("an-top-name").textContent = top.ev.name;
+          document.getElementById("an-top-detail").textContent =
+            `${formatNaira(top.rev)} · ${top.ev.sold || 0} tickets sold`;
+        }
+
+        // revenue by event chart
+        const maxRevenue = Math.max(...withRevenue.map(x => x.rev), 1);
+        document.getElementById("an-revenue-chart").innerHTML = withRevenue
+          .sort((a, b) => b.rev - a.rev)
+          .map(x => barRow(x.ev.name, x.rev, maxRevenue, formatNaira(x.rev)))
+          .join("");
+
+        // tickets sold by event chart
+        const maxSold = Math.max(...myEvents.map(ev => Number(ev.sold) || 0), 1);
+        document.getElementById("an-tickets-chart").innerHTML = [...myEvents]
+          .sort((a, b) => (Number(b.sold) || 0) - (Number(a.sold) || 0))
+          .map(ev => barRow(ev.name, Number(ev.sold) || 0, maxSold, `${ev.sold || 0} sold`))
+          .join("");
+
+        // category breakdown
+        const categoryCounts = {};
+        myEvents.forEach(ev => {
+          const cat = ev.category || "Uncategorized";
+          categoryCounts[cat] = (categoryCounts[cat] || 0) + 1;
+        });
+        const maxCategoryCount = Math.max(...Object.values(categoryCounts), 1);
+        const colorClasses = [
+          "bg-gradient-to-r from-yellow-600 to-yellow-400",
+          "bg-gradient-to-r from-purple-600 to-purple-400",
+          "bg-gradient-to-r from-blue-600 to-blue-400",
+          "bg-gradient-to-r from-green-600 to-green-400",
+          "bg-gradient-to-r from-pink-600 to-pink-400",
+        ];
+        document.getElementById("an-category-chart").innerHTML = Object.entries(categoryCounts)
+          .sort((a, b) => b[1] - a[1])
+          .map(([cat, count], i) =>
+            barRow(cat, count, maxCategoryCount, `${count} event${count > 1 ? "s" : ""}`, colorClasses[i % colorClasses.length])
+          )
+          .join("");
+
+        // animate bars in after paint
+        requestAnimationFrame(() => {
+          document.querySelectorAll(".bar-fill").forEach(el => {
+            const w = el.style.width;
+            el.style.width = "0";
+            requestAnimationFrame(() => { el.style.width = w; });
+          });
+        });
+      }
+
+      render();
+    });
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Settings | Nice-Xclusive Events Platform</title>
+  <link rel="stylesheet" href="/tailwind/src/output.css">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=Montserrat:wght@300;400;500;600&display=swap"
+    rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@4.9.0/fonts/remixicon.css" rel="stylesheet">
+
+  <style>
+    .font-cinzel { font-family: 'Cinzel', serif; }
+    .font-cormorant { font-family: 'Cormorant Garamond', serif; }
+    body { font-family: 'Montserrat', sans-serif; }
+    .gold-text {
+      font-family: 'Cinzel', serif;
+      background: linear-gradient(135deg, #F0C040 0%, #C9A84C 50%, #8B6914 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    #sidebar { transform: translateX(-100%); transition: transform 0.3s ease; }
+    #sidebar.open { transform: translateX(0); }
+    @media (min-width: 1024px) {
+      #sidebar { transform: translateX(0) !important; position: sticky !important; top: 0 !important; height: 100vh !important; }
+    }
+    #sidebar nav {
+      scrollbar-width: thin;
+      scrollbar-color: rgba(234, 179, 8, 0.35) transparent;
+    }
+    #sidebar nav::-webkit-scrollbar { width: 5px; }
+    #sidebar nav::-webkit-scrollbar-track { background: transparent; }
+    #sidebar nav::-webkit-scrollbar-thumb {
+      background-color: rgba(234, 179, 8, 0.35);
+      border-radius: 9999px;
+    }
+    #sidebar nav::-webkit-scrollbar-thumb:hover {
+      background-color: rgba(234, 179, 8, 0.6);
+    }
+    #sidebar-overlay { display: none; position: fixed; inset: 0; z-index: 30; background: rgba(0,0,0,0.5); }
+    #sidebar-overlay.show { display: block; }
+    .badge-pulse { animation: pulse 2s infinite; }
+    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+  </style>
+</head>
+
+<body class="relative min-h-screen bg-[#06030F] text-white overflow-x-hidden">
+
+  <!-- Background glow -->
+  <div class="fixed inset-0 pointer-events-none z-0"
+    style="background:radial-gradient(ellipse 70% 60% at 15% 30%,rgba(80,20,120,0.35) 0%,transparent 65%),radial-gradient(ellipse 50% 50% at 85% 70%,rgba(60,10,100,0.2) 0%,transparent 60%);">
+  </div>
+
+  <div id="sidebar-overlay"></div>
+
+  <div class="relative z-10 lg:grid lg:grid-cols-[256px_1fr] min-h-screen">
+
+    <!-- ── SIDEBAR (filled in by JS based on role) ── -->
+    <aside id="sidebar"
+      class="w-64 min-h-screen bg-[#050816] border-r border-yellow-500/20 flex flex-col fixed top-0 left-0 h-full z-40 lg:static lg:h-auto">
+
+      <div class="px-6 py-6 border-b border-yellow-500/20">
+        <a href="/tailwind/src/index.html" class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl border border-yellow-500 flex items-center justify-center bg-gradient-to-br from-yellow-400 to-yellow-700 shadow-md shadow-yellow-500/20">
+            <span class="font-cinzel text-base font-bold text-black">NX</span>
+          </div>
+          <div>
+            <h1 class="font-cinzel text-white text-sm font-semibold tracking-wide">Nice-Xclusive</h1>
+            <p class="text-yellow-500 text-[8px] tracking-[3px] uppercase">Events Platform</p>
+          </div>
+        </a>
+      </div>
+
+      <nav id="sidebar-nav" class="flex-1 px-3 py-6 space-y-1 overflow-y-auto">
+        <!-- injected by JS -->
+      </nav>
+
+      <div class="px-4 py-4 border-t border-yellow-500/20">
+        <div class="flex items-center gap-3 bg-white/[0.03] rounded-xl p-3">
+          <div id="user-initials"
+            class="w-9 h-9 rounded-full bg-gradient-to-br from-yellow-400 to-yellow-700 flex items-center justify-center font-cinzel text-black text-sm font-bold">
+          </div>
+          <div class="flex-1 min-w-0">
+            <p id="user-name" class="text-white text-xs font-semibold truncate"></p>
+          </div>
+          <span class="text-yellow-500 text-xs">✦</span>
+        </div>
+      </div>
+    </aside>
+
+    <!-- ── MAIN CONTENT ── -->
+    <div class="flex-1 flex flex-col min-w-0 w-full overflow-hidden">
+
+      <header class="sticky top-0 z-30 bg-[#06030F]/90 backdrop-blur-xl border-b border-yellow-500/20 px-6 py-4 flex items-center justify-between">
+        <div class="flex items-center gap-4">
+          <button id="sidebar-toggle"
+            class="lg:hidden cursor-pointer text-yellow-500 text-2xl hover:text-yellow-300 transition focus:outline-none">
+            <i id="sidebar-ham-icon" class="ri-menu-line"></i>
+          </button>
+          <div>
+            <h2 class="font-cinzel text-lg font-semibold text-white">Settings</h2>
+            <p class="text-white/40 text-xs">Manage your profile and account details</p>
+          </div>
+        </div>
+      </header>
+
+      <main class="px-6 py-8 max-w-2xl">
+
+        <div class="relative bg-white/[0.03] border border-yellow-500/20 rounded-3xl overflow-hidden before:absolute before:top-0 before:left-0 before:right-0 before:h-0.5 before:bg-gradient-to-r before:from-transparent before:via-yellow-500 before:to-transparent p-8 mb-6">
+          <h3 class="font-cinzel text-white font-bold text-lg mb-1">Profile Information</h3>
+          <p class="font-cormorant text-white/50 text-sm mb-6">Update your personal details below.</p>
+
+          <form id="profile-form" class="space-y-5">
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+              <div class="flex flex-col gap-2">
+                <label class="font-cinzel text-yellow-500 text-[10px] font-semibold tracking-widest uppercase">First Name</label>
+                <input id="set-first-name" type="text"
+                  class="w-full px-4 py-3.5 bg-white/[0.04] border border-yellow-500/20 rounded-xl text-white text-sm focus:outline-none focus:border-yellow-500 transition" />
+              </div>
+              <div class="flex flex-col gap-2">
+                <label class="font-cinzel text-yellow-500 text-[10px] font-semibold tracking-widest uppercase">Last Name</label>
+                <input id="set-last-name" type="text"
+                  class="w-full px-4 py-3.5 bg-white/[0.04] border border-yellow-500/20 rounded-xl text-white text-sm focus:outline-none focus:border-yellow-500 transition" />
+              </div>
+            </div>
+
+            <div id="set-org-wrap" class="hidden flex-col gap-2">
+              <label class="font-cinzel text-yellow-500 text-[10px] font-semibold tracking-widest uppercase">Organization Name</label>
+              <input id="set-org-name" type="text"
+                class="w-full px-4 py-3.5 bg-white/[0.04] border border-yellow-500/20 rounded-xl text-white text-sm focus:outline-none focus:border-yellow-500 transition" />
+            </div>
+
+            <div class="flex flex-col gap-2">
+              <label class="font-cinzel text-yellow-500 text-[10px] font-semibold tracking-widest uppercase">Email Address</label>
+              <input id="set-email" type="email"
+                class="w-full px-4 py-3.5 bg-white/[0.04] border border-yellow-500/20 rounded-xl text-white text-sm focus:outline-none focus:border-yellow-500 transition" />
+            </div>
+
+            <div id="profile-msg" class="hidden text-xs px-4 py-3 rounded-xl"></div>
+
+            <button type="submit"
+              class="font-cinzel px-6 py-3.5 bg-yellow-500 hover:bg-yellow-400 text-black font-bold text-xs tracking-widest uppercase rounded-xl transition shadow-lg shadow-yellow-500/20 hover:-translate-y-0.5">
+              Save Changes
+            </button>
+          </form>
+        </div>
+
+        <div class="relative bg-white/[0.03] border border-yellow-500/20 rounded-3xl overflow-hidden before:absolute before:top-0 before:left-0 before:right-0 before:h-0.5 before:bg-gradient-to-r before:from-transparent before:via-yellow-500 before:to-transparent p-8">
+          <h3 class="font-cinzel text-white font-bold text-lg mb-1">Change Password</h3>
+          <p class="font-cormorant text-white/50 text-sm mb-6">Choose a strong password you don't use elsewhere.</p>
+
+          <form id="password-form" class="space-y-5">
+            <div class="flex flex-col gap-2">
+              <label class="font-cinzel text-yellow-500 text-[10px] font-semibold tracking-widest uppercase">Current Password</label>
+              <input id="set-current-password" type="password"
+                class="w-full px-4 py-3.5 bg-white/[0.04] border border-yellow-500/20 rounded-xl text-white text-sm focus:outline-none focus:border-yellow-500 transition" />
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+              <div class="flex flex-col gap-2">
+                <label class="font-cinzel text-yellow-500 text-[10px] font-semibold tracking-widest uppercase">New Password</label>
+                <input id="set-new-password" type="password"
+                  class="w-full px-4 py-3.5 bg-white/[0.04] border border-yellow-500/20 rounded-xl text-white text-sm focus:outline-none focus:border-yellow-500 transition" />
+              </div>
+              <div class="flex flex-col gap-2">
+                <label class="font-cinzel text-yellow-500 text-[10px] font-semibold tracking-widest uppercase">Confirm New Password</label>
+                <input id="set-confirm-password" type="password"
+                  class="w-full px-4 py-3.5 bg-white/[0.04] border border-yellow-500/20 rounded-xl text-white text-sm focus:outline-none focus:border-yellow-500 transition" />
+              </div>
+            </div>
+
+            <div id="password-msg" class="hidden text-xs px-4 py-3 rounded-xl"></div>
+
+            <button type="submit"
+              class="font-cinzel px-6 py-3.5 bg-white/[0.06] border border-yellow-500/30 hover:border-yellow-500/60 text-yellow-400 font-bold text-xs tracking-widest uppercase rounded-xl transition">
+              Update Password
+            </button>
+          </form>
+        </div>
+
+      </main>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+
+      const user =
+        JSON.parse(localStorage.getItem("loggedInUser")) ||
+        JSON.parse(localStorage.getItem("currentUser"));
+
+      if (!user) {
+        window.location.href = "sign-in.html";
+        return;
+      }
+
+      const isOrganizer = user.role === "organizer";
+      document.body.dataset.dashboard = isOrganizer ? "organizer" : "attendee";
+
+      // ---- sidebar nav per role ----
+      const attendeeNav = `
+        <p class="font-cinzel text-yellow-500/50 text-[9px] tracking-[0.3em] uppercase px-3 mb-3">Main</p>
+        <a href="/tailwind/src/dashboard.html" class="flex items-center gap-3 px-3 py-3 rounded-xl text-sm font-medium text-white/60 hover:bg-yellow-500/10 hover:text-yellow-400 transition duration-200"><span class="text-lg"><i class="ri-home-5-line"></i></span> <span class="font-cinzel text-xs">Dashboard</span></a>
+        <a href="/tailwind/src/index.html#events" class="flex items-center gap-3 px-3 py-3 rounded-xl text-sm font-medium text-white/60 hover:bg-yellow-500/10 hover:text-yellow-400 transition duration-200"><span class="text-lg"><i class="ri-search-2-line"></i></span> <span class="font-cinzel text-xs">Browse Events</span></a>
+        <a href="/tailwind/src/my-tickets.html" class="flex items-center gap-3 px-3 py-3 rounded-xl text-sm font-medium text-white/60 hover:bg-yellow-500/10 hover:text-yellow-400 transition duration-200"><span class="text-lg"><i class="ri-coupon-3-line"></i></span> <span class="font-cinzel text-xs">My Tickets</span><span class="ml-auto bg-yellow-500 text-black text-[10px] font-bold rounded-full w-5 h-5 flex items-center justify-center badge-pulse" id="ticket-badge">0</span></a>
+        <a href="/tailwind/src/saved-events.html" class="flex items-center gap-3 px-3 py-3 rounded-xl text-sm font-medium text-white/60 hover:bg-yellow-500/10 hover:text-yellow-400 transition duration-200"><span class="text-lg"><i class="ri-poker-hearts-line"></i></span> <span class="font-cinzel text-xs">Saved Events</span></a>
+        <a href="/tailwind/src/my-schedule.html" class="flex items-center gap-3 px-3 py-3 rounded-xl text-sm font-medium text-white/60 hover:bg-yellow-500/10 hover:text-yellow-400 transition duration-200"><span class="text-lg"><i class="ri-calendar-2-fill"></i></span> <span class="font-cinzel text-xs">My Schedule</span></a>
+        <p class="font-cinzel text-yellow-500/50 text-[9px] tracking-[0.3em] uppercase px-3 mt-6 mb-3">Activity</p>
+        <a href="/tailwind/src/order-history.html" class="flex items-center gap-3 px-3 py-3 rounded-xl text-sm font-medium text-white/60 hover:bg-yellow-500/10 hover:text-yellow-400 transition duration-200"><span class="text-lg"><i class="ri-file-history-line"></i></span> <span class="font-cinzel text-xs">Order History</span></a>
+        <a href="/tailwind/src/my-reviews.html" class="flex items-center gap-3 px-3 py-3 rounded-xl text-sm font-medium text-white/60 hover:bg-yellow-500/10 hover:text-yellow-400 transition duration-200"><span class="text-lg"><i class="ri-star-line"></i></span> <span class="font-cinzel text-xs">My Reviews</span></a>
+        
+        <p class="font-cinzel text-yellow-500/50 text-[9px] tracking-[0.3em] uppercase px-3 mt-6 mb-3">Account</p>
+        <a href="/tailwind/src/settings.html" class="flex items-center gap-3 px-3 py-3 rounded-xl text-sm font-medium bg-yellow-500/10 border-l-[3px] border-yellow-500 text-yellow-400 transition duration-200"><span class="text-lg"><i class="ri-settings-2-line"></i></span> <span class="font-cinzel text-xs">Settings</span></a>
+        <button id="logout-btn" class="flex items-center gap-3 w-full px-3 py-3 rounded-xl text-sm font-medium text-white/60 hover:bg-red-500/10 hover:text-red-400 transition duration-200 cursor-pointer"><span class="text-lg"><i class="ri-door-open-line"></i></span> <span class="font-cinzel text-xs">Logout</span></button>
+      `;
+
+      const organizerNav = `
+        <p class="font-cinzel text-yellow-500/50 text-[9px] tracking-[0.3em] uppercase px-3 mb-3">Main</p>
+        <a href="organizer-dashboard.html" class="flex items-center gap-3 px-3 py-3 rounded-xl text-sm font-medium text-white/60 hover:bg-yellow-500/10 hover:text-yellow-400 transition"><span class="text-lg"><i class="ri-home-5-line"></i></span> <span class="font-cinzel text-xs">Dashboard</span></a>
+        <a href="my-events.html" class="flex items-center gap-3 px-3 py-3 rounded-xl text-sm font-medium text-white/60 hover:bg-yellow-500/10 hover:text-yellow-400 transition"><span class="text-lg"><i class="ri-search-2-line"></i></span> <span class="font-cinzel text-xs">My Events</span></a>
+        <a href="attendee.html" class="flex items-center gap-3 px-3 py-3 rounded-xl text-sm font-medium text-white/60 hover:bg-yellow-500/10 hover:text-yellow-400 transition"><span class="text-lg"><i class="ri-team-line"></i></span> <span class="font-cinzel text-xs">Attendees</span></a>
+        <a href="/tailwind/src/vendors.html" class="flex items-center gap-3 px-3 py-3 rounded-xl text-sm font-medium text-white/60 hover:bg-yellow-500/10 hover:text-yellow-400 transition"><span class="text-lg"><i class="ri-shake-hands-line"></i></span> <span class="font-cinzel text-xs">Vendors</span></a>
+        <p class="font-cinzel text-yellow-500/50 text-[9px] tracking-[0.3em] uppercase px-3 mt-6 mb-3">Finance</p>
+        <a href="revenue.html" class="flex items-center gap-3 px-3 py-3 rounded-xl text-sm font-medium text-white/60 hover:bg-yellow-500/10 hover:text-yellow-400 transition"><span class="text-lg"><i class="ri-money-dollar-circle-line"></i></span> <span class="font-cinzel text-xs">Revenue</span></a>
+        <a href="/tailwind/src/payouts.html" class="flex items-center gap-3 px-3 py-3 rounded-xl text-sm font-medium text-white/60 hover:bg-yellow-500/10 hover:text-yellow-400 transition"><span class="text-lg"><i class="ri-bank-card-line"></i></span> <span class="font-cinzel text-xs">Payouts</span></a>
+        <a href="/tailwind/src/analytics.html" class="flex items-center gap-3 px-3 py-3 rounded-xl text-sm font-medium text-white/60 hover:bg-yellow-500/10 hover:text-yellow-400 transition"><span class="text-lg"><i class="ri-bar-chart-line"></i></span> <span class="font-cinzel text-xs">Analytics</span></a>
+        <p class="font-cinzel text-yellow-500/50 text-[9px] tracking-[0.3em] uppercase px-3 mt-6 mb-3">Account</p>
+        <a href="/tailwind/src/settings.html" class="flex items-center gap-3 px-3 py-3 rounded-xl text-sm font-medium bg-yellow-500/10 border-l-[3px] border-yellow-500 text-yellow-400 transition"><span class="text-lg"><i class="ri-settings-2-line"></i></span> <span class="font-cinzel text-xs">Settings</span></a>
+        <button id="logout-btn" class="flex items-center gap-3 w-full px-3 py-3 rounded-xl text-sm font-medium text-white/60 hover:bg-red-500/10 hover:text-red-400 transition cursor-pointer"><span class="text-lg"><i class="ri-door-open-line"></i></span> <span class="font-cinzel text-xs">Logout</span></button>
+      `;
+
+      document.getElementById("sidebar-nav").innerHTML = isOrganizer ? organizerNav : attendeeNav;
+
+      if (isOrganizer) {
+        document.getElementById("set-org-wrap").classList.remove("hidden");
+        document.getElementById("set-org-wrap").classList.add("flex");
+      }
+
+      // ---- populate user card + form ----
+      const initials = ((user.firstName || "").charAt(0) + (user.lastName || "").charAt(0)).toUpperCase() || "NX";
+      document.getElementById("user-initials").textContent = initials;
+      document.getElementById("user-name").textContent = user.fullName || `${user.firstName || ""} ${user.lastName || ""}`.trim();
+
+      document.getElementById("set-first-name").value = user.firstName || "";
+      document.getElementById("set-last-name").value = user.lastName || "";
+      document.getElementById("set-email").value = user.email || "";
+      if (isOrganizer) {
+        document.getElementById("set-org-name").value = user.organizationName || "";
+      }
+
+      // ---- sidebar toggle (mobile) ----
+      const sidebar = document.getElementById("sidebar");
+      const overlay = document.getElementById("sidebar-overlay");
+      const toggleBtn = document.getElementById("sidebar-toggle");
+      const hamIcon = document.getElementById("sidebar-ham-icon");
+      if (toggleBtn) {
+        toggleBtn.addEventListener("click", () => {
+          const open = sidebar.classList.toggle("open");
+          overlay.classList.toggle("show", open);
+          hamIcon.className = open ? "ri-close-line" : "ri-menu-line";
+        });
+        overlay.addEventListener("click", () => {
+          sidebar.classList.remove("open");
+          overlay.classList.remove("show");
+          hamIcon.className = "ri-menu-line";
+        });
+      }
+
+      // ---- logout ----
+      document.getElementById("logout-btn").addEventListener("click", () => {
+        if (confirm("Are you sure you want to log out of Nice-Xclusive?")) {
+          localStorage.removeItem("loggedInUser");
+          localStorage.removeItem("currentUser");
+          window.location.href = "sign-in.html";
+        }
+      });
+
+      // Original email + role at page load, used to find this user's
+      // record in the "users" array even if they change their email
+      // in the profile form below.
+      let originalEmail = user.email;
+      const originalRole = user.role;
+
+      // ---- helper to save user object back everywhere it's stored ----
+      function persistUser(updated) {
+        if (localStorage.getItem("loggedInUser")) {
+          localStorage.setItem("loggedInUser", JSON.stringify(updated));
+        }
+        if (localStorage.getItem("currentUser")) {
+          localStorage.setItem("currentUser", JSON.stringify(updated));
+        }
+
+        // keep the master "users" list in sync too, so sign-in still
+        // works with the new email/password after this edit
+        const allUsers = JSON.parse(localStorage.getItem("users")) || [];
+        const idx = allUsers.findIndex(u =>
+          u.email.toLowerCase() === originalEmail.toLowerCase() &&
+          u.role === originalRole
+        );
+        if (idx !== -1) {
+          allUsers[idx] = updated;
+          localStorage.setItem("users", JSON.stringify(allUsers));
+        }
+      }
+
+      function showMsg(el, text, isError) {
+        el.textContent = text;
+        el.classList.remove("hidden");
+        el.classList.toggle("bg-red-500/10", isError);
+        el.classList.toggle("border", true);
+        el.classList.toggle("border-red-500/30", isError);
+        el.classList.toggle("text-red-400", isError);
+        el.classList.toggle("bg-green-500/10", !isError);
+        el.classList.toggle("border-green-500/30", !isError);
+        el.classList.toggle("text-green-400", !isError);
+      }
+
+      // ---- profile form ----
+      document.getElementById("profile-form").addEventListener("submit", (e) => {
+        e.preventDefault();
+        const msg = document.getElementById("profile-msg");
+
+        const firstName = document.getElementById("set-first-name").value.trim();
+        const lastName = document.getElementById("set-last-name").value.trim();
+        const email = document.getElementById("set-email").value.trim();
+        const orgName = isOrganizer ? document.getElementById("set-org-name").value.trim() : undefined;
+
+        if (!firstName || !lastName || !email) {
+          showMsg(msg, "Please fill in all required fields.", true);
+          return;
+        }
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+          showMsg(msg, "Please enter a valid email address.", true);
+          return;
+        }
+
+        const updated = {
+          ...user,
+          firstName,
+          lastName,
+          fullName: `${firstName} ${lastName}`,
+          email,
+        };
+        if (isOrganizer) updated.organizationName = orgName;
+
+        persistUser(updated);
+        Object.assign(user, updated);
+        originalEmail = updated.email; // keep lookup in sync for later saves this session
+        document.getElementById("user-name").textContent = updated.fullName;
+        showMsg(msg, "Profile updated successfully.", false);
+      });
+
+      // ---- password form ----
+      document.getElementById("password-form").addEventListener("submit", (e) => {
+        e.preventDefault();
+        const msg = document.getElementById("password-msg");
+
+        const current = document.getElementById("set-current-password").value;
+        const next = document.getElementById("set-new-password").value;
+        const confirm = document.getElementById("set-confirm-password").value;
+
+        if (!current || !next || !confirm) {
+          showMsg(msg, "Please fill in all password fields.", true);
+          return;
+        }
+        if (current !== user.password) {
+          showMsg(msg, "Current password is incorrect.", true);
+          return;
+        }
+        if (next.length < 6) {
+          showMsg(msg, "New password must be at least 6 characters.", true);
+          return;
+        }
+        if (next !== confirm) {
+          showMsg(msg, "New password and confirmation do not match.", true);
+          return;
+        }
+
+        const updated = { ...user, password: next };
+        persistUser(updated);
+        Object.assign(user, updated);
+        document.getElementById("password-form").reset();
+        showMsg(msg, "Password updated successfully.", false);
+      });
+
+    });
+  </script>
+
+</body>
+</html>

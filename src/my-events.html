@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Events</title>
+    <link rel="stylesheet" href="/tailwind/src/output.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=Montserrat:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.9.0/fonts/remixicon.css" rel="stylesheet">
+</head>
+
+<body class="min-h-screen bg-[#06030F] text-white overflow-x-hidden">
+
+    <div
+        class="fixed inset-0 -z-10
+bg-[radial-gradient(circle_at_top_left,#6b21a8_0%,transparent_35%),radial-gradient(circle_at_bottom_right,#7c3aed_0%,transparent_35%),#06030F]">
+    </div>
+
+    <main class="relative max-w-7xl mx-auto px-6 py-14">
+
+        <div class="mb-14">
+
+    <div class="inline-flex items-center gap-3 mb-4">
+
+        <span class="w-8 h-px bg-yellow-500"></span>
+
+        <span class="font-cinzel text-yellow-500 tracking-[0.35em] text-xs uppercase">
+            Organizer Center
+        </span>
+
+    </div>
+
+    <h1 class="font-cinzel text-5xl md:text-6xl font-bold text-white">
+        My Events
+    </h1>
+
+    <p class="font-cormorant text-2xl text-white/60 mt-3">
+        Manage, edit and monitor every event you've created.
+    </p>
+
+</div>
+
+
+
+        <div id="my-events" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
+
+        </div>
+
+    </main>
+
+    <script>
+
+        const user = JSON.parse(localStorage.getItem("currentUser"));
+
+        if (!user) {
+            window.location.href = "sign-in.html";
+        }
+
+        const allEvents =
+            JSON.parse(localStorage.getItem("events")) || [];
+
+        const myEvents = allEvents.filter(
+            event => event.organizerEmail === user.email
+        );
+
+        const container = document.getElementById("my-events");
+
+        if (myEvents.length === 0) {
+
+            container.innerHTML = `
+
+    <div class="col-span-full">
+
+        <div class="border border-yellow-500/20 rounded-3xl p-16 text-center bg-white/5">
+
+            <h2 class="font-cinzel text-3xl mb-4">
+                No Events Yet
+            </h2>
+
+            <p class="text-white/60 mb-8">
+                You haven't created any events.
+            </p>
+
+            <a
+                href="events.html"
+                class="inline-block bg-yellow-500 text-black font-semibold px-8 py-3 rounded-xl">
+
+                + Create Event
+
+            </a>
+
+        </div>
+
+    </div>
+
+    `;
+
+        } else {
+
+            container.innerHTML = `
+
+
+${myEvents.map(event => `
+<div class="group relative bg-white/[0.03]
+border border-yellow-500/20
+rounded-3xl
+overflow-hidden
+transition-all
+duration-300
+hover:border-yellow-400
+hover:-translate-y-2
+hover:shadow-2xl
+hover:shadow-yellow-500/10">
+
+<div class="overflow-hidden h-60">
+    <img
+        src="${event.banner}"
+        class="w-full h-full object-cover transition duration-500 group-hover:scale-105">
+</div>
+
+<div class="p-6">
+
+    <span class="inline-flex items-center px-4 py-1 rounded-full
+    border border-yellow-500/30
+    bg-yellow-500/10
+    text-yellow-400
+    text-[11px]
+    uppercase
+    tracking-widest">
+
+        ${event.category}
+
+    </span>
+
+    <h2 class="font-cinzel text-2xl mt-5 mb-3 text-white">
+
+        ${event.name}
+
+    </h2>
+
+    <p class="text-white/60 line-clamp-3 mb-6">
+
+        ${event.description}
+
+    </p>
+
+    <div class="space-y-3 text-sm">
+
+        <div class="flex items-center gap-2">
+            <i class="ri-calendar-line text-yellow-500"></i>
+            <span>${event.date}</span>
+        </div>
+
+        <div class="flex items-center gap-2">
+            <i class="ri-time-line text-yellow-500"></i>
+            <span>${event.time}</span>
+        </div>
+
+        <div class="flex items-center gap-2">
+            <i class="ri-map-pin-line text-yellow-500"></i>
+            <span>${event.venue}, ${event.city}</span>
+        </div>
+
+        <div class="flex items-center gap-2">
+            <i class="ri-money-dollar-circle-line text-yellow-500"></i>
+            <span>₦${Number(event.ticketPrice).toLocaleString()}</span>
+        </div>
+
+    </div>
+
+    <div class="flex flex-wrap gap-3 mt-8">
+
+        <a href="event-details.html?id=${event.id}"
+        class="flex-1 text-center bg-yellow-500 hover:bg-yellow-400 text-black font-semibold py-3 rounded-xl">
+
+            View Details
+
+        </a>
+
+        <a href="events.html?id=${event.id}"
+        class="px-5 py-3 rounded-xl border border-yellow-500 text-yellow-400 hover:bg-yellow-500 hover:text-black">
+
+            Edit
+
+        </a>
+
+        <button
+        data-id="${event.id}"
+        class="delete-btn px-5 py-3 rounded-xl border border-red-500/40 text-red-400 hover:bg-red-500 hover:text-white">
+
+            Delete
+
+        </button>
+
+    </div>
+
+</div>
+
+</div>
+`).join("")}
+
+            `;
+
+            document.querySelectorAll(".delete-btn").forEach(button => {
+
+                button.addEventListener("click", () => {
+
+                    if (!confirm("Delete this event?")) return;
+
+                    const id = button.dataset.id;
+
+                    let events =
+                        JSON.parse(localStorage.getItem("events")) || [];
+
+                    events = events.filter(e => e.id !== id);
+
+                    localStorage.setItem(
+                        "events",
+                        JSON.stringify(events)
+                    );
+
+                    location.reload();
+
+                });
+
+            });
+
+        
+        }
+    </script>
+
+
+</body>
+
+</html>

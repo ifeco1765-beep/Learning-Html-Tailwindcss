@@ -1,0 +1,108 @@
+/* ── FONTS ── */
+.font-cinzel    { font-family: 'Cinzel', serif; }
+.font-cormorant { font-family: 'Cormorant Garamond', serif; }
+body            { font-family: 'Montserrat', sans-serif; }
+
+.gold-text {
+  font-family: 'Cinzel', serif;
+  background: linear-gradient(135deg, #F0C040 0%, #C9A84C 50%, #8B6914 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp {
+  0%   { opacity: 0; transform: translateY(28px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+@keyframes popIn {
+  0%   { opacity: 0; transform: scale(0.85); }
+  100% { opacity: 1; transform: scale(1); }
+}
+@keyframes pulseGlow {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(234,179,8,0.45); }
+  50%      { box-shadow: 0 0 0 8px rgba(234,179,8,0); }
+}
+@keyframes shakeX {
+  0%,100% { transform: translateX(0); }
+  20%,60% { transform: translateX(-6px); }
+  40%,80% { transform: translateX(6px); }
+}
+
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.reveal.in-view { opacity: 1; transform: translateY(0); }
+.reveal-delay-1.in-view { transition-delay: 0.1s; }
+.reveal-delay-2.in-view { transition-delay: 0.2s; }
+.reveal-delay-3.in-view { transition-delay: 0.3s; }
+
+.seat {
+  transition: transform 0.15s ease, background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.seat:not(.taken):hover { transform: translateY(-2px) scale(1.05); }
+.seat.selected { animation: popIn 0.25s ease; }
+.seat.taken { cursor: not-allowed; }
+.seat.suggested {
+  box-shadow: 0 0 0 2px rgba(234,179,8,0.6);
+  animation: pulseGlow 1.5s infinite;
+}
+
+.price-pulse { animation: popIn 0.3s ease; }
+.btn-ready { animation: pulseGlow 1.8s infinite; }
+.shake { animation: shakeX 0.4s ease; }
+
+/* ── HAMBURGER MENU ── */
+#mobile-menu {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.35s ease;
+}
+#mobile-menu.open { max-height: 600px; }
+
+/* ── LIGHTBOX ── */
+#lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: rgba(0,0,0,0.92);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+#lightbox.active { opacity: 1; pointer-events: all; }
+#lightbox img {
+  max-width: 90vw;
+  max-height: 85vh;
+  border-radius: 16px;
+  box-shadow: 0 0 60px rgba(234,179,8,0.2);
+  transform: scale(0.9);
+  transition: transform 0.3s ease;
+  object-fit: contain;
+}
+#lightbox.active img { transform: scale(1); }
+#lightbox-close {
+  position: absolute;
+  top: 20px;
+  right: 24px;
+  color: rgba(255,255,255,0.7);
+  font-size: 2rem;
+  cursor: pointer;
+  transition: color 0.2s;
+  background: none;
+  border: none;
+}
+#lightbox-close:hover { color: #eab308; }
+
+.zoom-img { cursor: zoom-in; transition: transform 0.3s ease; }
+.zoom-img:hover { transform: scale(1.03); }
+
+/* ── AI RECOMMEND BUTTON STATUS ── */
+.typing::after { content: '|'; animation: blink 0.7s infinite; }
+@keyframes blink { 0%,100% { opacity:1; } 50% { opacity:0; } }

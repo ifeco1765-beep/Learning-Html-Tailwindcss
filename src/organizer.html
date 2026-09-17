@@ -1,0 +1,1064 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Organizer Dashboard | Nice-Xclusive Events Platform</title>
+  <link rel="stylesheet" href="/tailwind/src/output.css">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=Montserrat:wght@300;400;500;600&display=swap"
+    rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@4.9.0/fonts/remixicon.css" rel="stylesheet">
+
+  <style>
+    .font-cinzel {
+      font-family: 'Cinzel', serif;
+    }
+
+    .font-cormorant {
+      font-family: 'Cormorant Garamond', serif;
+    }
+
+    body {
+      font-family: 'Montserrat', sans-serif;
+    }
+
+    .gold-text {
+      font-family: 'Cinzel', serif;
+      background: linear-gradient(135deg, #F0C040 0%, #C9A84C 50%, #8B6914 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* Sidebar JS slide */
+    #sidebar {
+      transform: translateX(-100%);
+      transition: transform 0.3s ease;
+    }
+
+    #sidebar.open {
+      transform: translateX(0);
+    }
+
+    @media (min-width: 1024px) {
+      #sidebar {
+        transform: translateX(0) !important;
+        position: sticky;
+        top: 0;
+        height: 100vh;
+      }
+    }
+
+    /* Custom scrollbar for sidebar nav */
+    #sidebar nav {
+      scrollbar-width: thin;
+      scrollbar-color: rgba(234, 179, 8, 0.35) transparent;
+    }
+
+    #sidebar nav::-webkit-scrollbar {
+      width: 5px;
+    }
+
+    #sidebar nav::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    #sidebar nav::-webkit-scrollbar-thumb {
+      background-color: rgba(234, 179, 8, 0.35);
+      border-radius: 9999px;
+    }
+
+    #sidebar nav::-webkit-scrollbar-thumb:hover {
+      background-color: rgba(234, 179, 8, 0.6);
+    }
+
+    /* Overlay */
+    #sidebar-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 30;
+      background: rgba(0, 0, 0, 0.5);
+    }
+
+    #sidebar-overlay.show {
+      display: block;
+    }
+
+    /* Scroll reveal */
+    .reveal {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity .6s ease, transform .6s ease;
+    }
+
+    .reveal.in-view {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .reveal-delay-1.in-view {
+      transition-delay: .1s;
+    }
+
+    .reveal-delay-2.in-view {
+      transition-delay: .2s;
+    }
+
+    .reveal-delay-3.in-view {
+      transition-delay: .3s;
+    }
+
+    .reveal-delay-4.in-view {
+      transition-delay: .4s;
+    }
+
+    /* Stat counters */
+    .stat-num {
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .stat-num.counted {
+      opacity: 1;
+    }
+
+    /* Progress bars start at 0 and animate */
+    .progress-bar {
+      width: 0;
+      transition: width 1.2s ease;
+    }
+
+    /* Logout modal */
+    #logout-modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      background: rgba(0, 0, 0, 0.7);
+      align-items: center;
+      justify-content: center;
+    }
+
+    #logout-modal.show {
+      display: flex;
+    }
+
+    /* Badge pulse */
+    @keyframes pulse {
+
+      0%,
+      100% {
+        opacity: 1;
+      }
+
+      50% {
+        opacity: 0.5;
+      }
+    }
+
+    .badge-pulse {
+      animation: pulse 2s infinite;
+    }
+  </style>
+</head>
+
+<body class="relative min-h-screen bg-[#06030F] text-white overflow-x-hidden" data-dashboard="organizer">
+
+  <!-- Background glow -->
+  <div class="fixed inset-0 pointer-events-none z-0"
+    style="background:radial-gradient(ellipse 70% 60% at 15% 30%,rgba(80,20,120,0.35) 0%,transparent 65%),radial-gradient(ellipse 50% 50% at 85% 70%,rgba(60,10,100,0.2) 0%,transparent 60%);">
+  </div>
+
+  <!-- Sidebar overlay -->
+  <div id="sidebar-overlay"></div>
+
+  <!-- Logout confirm modal -->
+  <div id="logout-modal">
+    <div class="bg-[#0d0a1a] border border-yellow-500/30 rounded-2xl p-8 max-w-sm w-full mx-4 text-center">
+      <p class="text-3xl mb-4"><i class="ri-door-open-line"></i></p>
+      <h3 class="font-cinzel text-white text-lg font-bold mb-2">Logging Out</h3>
+      <p class="font-cormorant text-white/60 text-base mb-6">Are you sure you want to log out of Nice-Xclusive?</p>
+      <div class="flex gap-3">
+        <button id="logout-cancel"
+          class="font-cinzel flex-1 py-3 border border-yellow-500/30 text-yellow-400 rounded-xl text-sm hover:bg-yellow-500/10 transition">Cancel</button>
+        <button id="logout-confirm"
+          class="font-cinzel flex-1 py-3 bg-red-500 hover:bg-red-400 text-white rounded-xl text-sm font-bold transition">Yes,
+          Logout</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="relative z-10 lg:grid lg:grid-cols-[256px_1fr] min-h-screen">
+
+    <!-- ── SIDEBAR ── -->
+    <aside id="sidebar"
+      class="w-64 min-h-screen bg-[#050816] border-r border-yellow-500/20 flex flex-col fixed top-0 left-0 h-full z-40 lg:sticky lg:top-0 lg:h-screen">
+
+      <div class="px-6 py-6 border-b border-yellow-500/20">
+        <a href="/tailwind/src/index.html" class="flex items-center gap-3">
+          <div
+            class="w-10 h-10 rounded-xl border border-yellow-500 flex items-center justify-center bg-gradient-to-br from-yellow-400 to-yellow-700 shadow-md shadow-yellow-500/20">
+            <span class="font-cinzel text-base font-bold text-black">NX</span>
+          </div>
+          <div>
+            <h1 class="font-cinzel text-white text-sm font-semibold tracking-wide">Nice-Xclusive</h1>
+            <p class="text-yellow-500 text-[8px] tracking-[3px] uppercase">Events Platform</p>
+          </div>
+        </a>
+      </div>
+
+      <nav class="flex-1 px-3 py-6 space-y-1 overflow-y-auto">
+
+        <p class="font-cinzel text-yellow-500/50 text-[9px] tracking-[0.3em] uppercase px-3 mb-3">Main</p>
+
+        <a href="organizer-dashboard.html"
+          class="flex items-center gap-3 px-3 py-3 rounded-xl text-sm font-medium bg-yellow-500/10 border-l-[3px] border-yellow-500 text-yellow-400 transition">
+          <span class="text-lg"><i class="ri-home-5-line"></i></span> <span class="font-cinzel text-xs">Dashboard</span>
+        </a>
+        <a href="my-events.html"
+          class="flex items-center gap-3 px-3 py-3 rounded-xl text-sm font-medium text-white/60 hover:bg-yellow-500/10 hover:text-yellow-400 transition">
+          <span class="text-lg"><i class="ri-search-2-line"></i></span> <span class="font-cinzel text-xs">My
+            Events</span>
+        </a>
+
+        <a href="attendee.html"
+          class="flex items-center gap-3 px-3 py-3 rounded-xl text-sm font-medium text-white/60 hover:bg-yellow-500/10 hover:text-yellow-400 transition">
+          <span class="text-lg"><i class="ri-team-line"></i></span> <span class="font-cinzel text-xs">Attendees</span>
+        </a>
+        <a href="/tailwind/src/vendors.html"
+          class="flex items-center gap-3 px-3 py-3 rounded-xl text-sm font-medium text-white/60 hover:bg-yellow-500/10 hover:text-yellow-400 transition">
+          <span class="text-lg"><i class="ri-shake-hands-line"></i></span> <span
+            class="font-cinzel text-xs">Vendors</span>
+        </a>
+
+        <p class="font-cinzel text-yellow-500/50 text-[9px] tracking-[0.3em] uppercase px-3 mt-6 mb-3">Finance</p>
+
+        <a href="revenue.html"
+          class="flex items-center gap-3 px-3 py-3 rounded-xl text-sm font-medium text-white/60 hover:bg-yellow-500/10 hover:text-yellow-400 transition">
+          <span class="text-lg"><i class="ri-money-dollar-circle-line"></i></span> <span
+            class="font-cinzel text-xs">Revenue</span>
+        </a>
+        <a href="/tailwind/src/payouts.html"
+          class="flex items-center gap-3 px-3 py-3 rounded-xl text-sm font-medium text-white/60 hover:bg-yellow-500/10 hover:text-yellow-400 transition">
+          <span class="text-lg"><i class="ri-bank-card-line"></i></span> <span
+            class="font-cinzel text-xs">Payouts</span>
+        </a>
+        <a href="/tailwind/src/analytics.html"
+          class="flex items-center gap-3 px-3 py-3 rounded-xl text-sm font-medium text-white/60 hover:bg-yellow-500/10 hover:text-yellow-400 transition">
+          <span class="text-lg"><i class="ri-bar-chart-line"></i></span> <span
+            class="font-cinzel text-xs">Analytics</span>
+        </a>
+
+        <p class="font-cinzel text-yellow-500/50 text-[9px] tracking-[0.3em] uppercase px-3 mt-6 mb-3">Account</p>
+
+        <a href="/tailwind/src/settings.html"
+          class="flex items-center gap-3 px-3 py-3 rounded-xl text-sm font-medium text-white/60 hover:bg-yellow-500/10 hover:text-yellow-400 transition">
+          <span class="text-lg"><i class="ri-settings-2-line"></i></span> <span
+            class="font-cinzel text-xs">Settings</span>
+        </a>
+
+        <button id="logout-btn"
+          class="flex items-center gap-3 w-full px-3 py-3 rounded-xl text-sm font-medium text-white/60 hover:bg-red-500/10 hover:text-red-400 transition cursor-pointer">
+          <span class="text-lg"><i class="ri-door-open-line"></i></span> <span class="font-cinzel text-xs">Logout</span>
+        </button>
+      </nav>
+
+      <!-- User card -->
+      <div class="px-4 py-4 border-t border-yellow-500/20">
+        <div class="flex items-center gap-3 bg-white/[0.03] rounded-xl p-3">
+          <div id="user-initials"
+            class="w-9 h-9 rounded-full bg-gradient-to-br from-yellow-400 to-yellow-700 flex items-center justify-center font-cinzel text-black text-sm font-bold">
+          </div>
+          <div class="flex-1 min-w-0">
+            <p id="user-name" class="text-white text-xs font-semibold truncate">
+            <p id="organization-name" class="text-yellow-400 text-sm"></p>
+            </p>
+            <p class="text-white/40 text-[10px] truncate">Pro Organizer</p>
+          </div>
+          <span class="text-yellow-500 text-xs">✦</span>
+        </div>
+      </div>
+    </aside>
+
+    <!-- ── MAIN CONTENT ── -->
+    <div class="flex-1 flex flex-col min-w-0 w-full ">
+
+      <!-- Top bar -->
+      <header
+        class="sticky top-0 z-30 bg-[#06030F]/90 backdrop-blur-xl border-b border-yellow-500/20 px-6 py-4 flex items-center justify-between">
+        <div class="flex items-center gap-4">
+          <button id="sidebar-toggle"
+            class="lg:hidden cursor-pointer text-yellow-500 text-2xl hover:text-yellow-300 transition focus:outline-none">
+            <i id="sidebar-ham-icon" class="ri-menu-line"></i>
+          </button>
+          <div>
+            <h2 class="font-cinzel text-lg font-semibold text-white">Dashboard</h2>
+            <p id="welcome-message" class="text-white/40 text-xs"></p>
+          </div>
+        </div>
+        <div class="flex items-center gap-3">
+
+          <div class="relative" id="nx-notif-wrapper">
+
+            <!-- BELL BUTTON -->
+            <button id="nx-notif-bell" type="button"
+              class="relative w-10 h-10 rounded-xl bg-white/[0.04] border border-yellow-500/20 flex items-center justify-center hover:border-yellow-500/50 transition">
+              <i class="ri-notification-3-line text-yellow-400 text-lg"></i>
+              <span id="nx-notif-badge"
+                class="hidden absolute -top-1.5 -right-1.5 min-w-[18px] h-[18px] px-1 rounded-full bg-yellow-500 text-black text-[10px] font-bold font-cinzel flex items-center justify-center">
+                0
+              </span>
+            </button>
+
+            <!-- DROPDOWN PANEL -->
+            <div id="nx-notif-panel"
+              class="hidden absolute right-0 top-full mt-3 w-80 max-h-96 overflow-y-auto bg-[#12091F] border border-yellow-500/20 rounded-xl shadow-2xl z-[9999]">
+
+              <div class="flex items-center justify-between px-4 py-3 border-b border-yellow-500/10">
+                <p class="font-cinzel text-white text-sm font-semibold">Notifications</p>
+                <button id="nx-notif-mark-all" type="button"
+                  class="font-cinzel text-[10px] tracking-widest uppercase text-yellow-400 hover:text-yellow-300 transition">
+                  Mark all read
+                </button>
+              </div>
+
+              <div id="nx-notif-list" class="divide-y divide-yellow-500/10">
+                <!-- items injected by JS -->
+              </div>
+
+              <div id="nx-notif-empty" class="hidden px-4 py-8 text-center">
+                <i class="ri-notification-off-line text-white/20 text-2xl mb-2 block"></i>
+                <p class="font-cormorant text-white/40 text-sm">No notifications yet</p>
+              </div>
+
+            </div>
+          </div>
+
+          <a href="/tailwind/src/events.html"
+            class="font-cinzel hidden sm:flex items-center gap-2 px-4 py-2 bg-yellow-500 hover:bg-yellow-400 text-black font-bold text-xs tracking-wider uppercase rounded-xl transition shadow-md shadow-yellow-500/20">
+            + New Event
+          </a>
+        </div>
+      </header>
+
+      <!-- Page body -->
+      <main class="flex-1 px-6 py-8 overflow-y-auto">
+
+        <!-- Stats row -->
+        <div class="grid grid-cols-2 xl:grid-cols-4 gap-5 mb-8">
+
+          <div
+            class="reveal reveal-delay-1 relative bg-white/[0.03] border border-yellow-500/20 rounded-2xl p-6 overflow-hidden hover:border-yellow-500/40 transition before:absolute before:top-0 before:left-0 before:right-0 before:h-0.5 before:bg-gradient-to-r before:from-transparent before:via-yellow-500 before:to-transparent">
+            <p class="font-cinzel text-white/50 text-[10px] uppercase tracking-widest mb-3">Total Revenue</p>
+            <p id="stat-revenue" class="font-cinzel text-3xl font-bold gold-text mb-1">₦0</p>
+            <p id="stat-revenue-sub" class="text-green-400 text-xs flex items-center gap-1">▲<span
+                class="text-white/30">this
+                month</span></p>
+            <div class="absolute bottom-4 right-5 text-4xl opacity-10"><i class="ri-money-dollar-circle-line"></i></div>
+          </div>
+
+          <div
+            class="reveal reveal-delay-2 relative bg-white/[0.03] border border-yellow-500/20 rounded-2xl p-6 overflow-hidden hover:border-yellow-500/40 transition before:absolute before:top-0 before:left-0 before:right-0 before:h-0.5 before:bg-gradient-to-r before:from-transparent before:via-yellow-500 before:to-transparent">
+            <p class="font-cinzel text-white/50 text-[10px] uppercase tracking-widest mb-3">Tickets Sold</p>
+            <p id="stat-tickets" class="font-cinzel text-3xl font-bold text-white mb-1">0</p>
+            <p id="stat-tickets-sub" class="text-green-400 text-xs flex items-center gap-1">▲ <span
+                class="text-white/30">this month</span>
+            </p>
+            <div class="absolute bottom-4 right-5 text-4xl opacity-10"><i class="ri-coupon-3-line"></i></div>
+          </div>
+
+          <div
+            class="reveal reveal-delay-3 relative bg-white/[0.03] border border-yellow-500/20 rounded-2xl p-6 overflow-hidden hover:border-yellow-500/40 transition before:absolute before:top-0 before:left-0 before:right-0 before:h-0.5 before:bg-gradient-to-r before:from-transparent before:via-yellow-500 before:to-transparent">
+            <p class="font-cinzel text-white/50 text-[10px] uppercase tracking-widest mb-3">Active Events</p>
+            <p id="stat-active-events" class="font-cinzel text-3xl font-bold text-white mb-1">0</p>
+            <p id="stat-active-sub" class="text-yellow-400 text-xs flex items-center gap-1">● <span
+                class="text-white/30"></span></p>
+            <div class="absolute bottom-4 right-5 text-4xl opacity-10"><i class="ri-search-2-line"></i></div>
+          </div>
+
+          <div
+            class="reveal reveal-delay-4 relative bg-white/[0.03] border border-yellow-500/20 rounded-2xl p-6 overflow-hidden hover:border-yellow-500/40 transition before:absolute before:top-0 before:left-0 before:right-0 before:h-0.5 before:bg-gradient-to-r before:from-transparent before:via-yellow-500 before:to-transparent">
+            <p class="font-cinzel text-white/50 text-[10px] uppercase tracking-widest mb-3">Attendees</p>
+            <p id="stat-attendees" class="font-cinzel text-3xl font-bold text-white mb-1">0</p>
+            <p id="stat-attendees-sub" class="text-green-400 text-xs flex items-center gap-1">▲ <span
+                class="text-white/30">this month</span>
+            </p>
+            <div class="absolute bottom-4 right-5 text-4xl opacity-10"><i class="ri-team-line"></i></div>
+          </div>
+
+        </div>
+
+        <!-- Middle row -->
+        <div class="grid grid-cols-1 xl:grid-cols-3 gap-6 mb-8">
+
+          <!-- Events table — dynamically rendered from JSONPlaceholder -->
+          <div class="reveal xl:col-span-2 bg-white/[0.03] border border-yellow-500/20 rounded-2xl overflow-hidden">
+            <div class="flex items-center justify-between px-6 py-5 border-b border-yellow-500/20">
+              <h3 class="font-cinzel text-sm font-semibold text-white">My Events</h3>
+              <a href="my-events.html" class="font-cinzel text-yellow-400 text-xs hover:text-yellow-300 transition">View
+                all →</a>
+            </div>
+            <div class="overflow-x-auto">
+              <table class="w-full text-sm">
+                <thead>
+                  <tr class="border-b border-yellow-500/10">
+                    <th
+                      class="font-cinzel text-left px-6 py-3 text-white/40 text-xs uppercase tracking-widest font-normal">
+                      Event</th>
+                    <th
+                      class="font-cinzel text-left px-4 py-3 text-white/40 text-xs uppercase tracking-widest font-normal">
+                      Date</th>
+                    <th
+                      class="font-cinzel text-left px-4 py-3 text-white/40 text-xs uppercase tracking-widest font-normal">
+                      Tickets</th>
+                    <th
+                      class="font-cinzel text-left px-4 py-3 text-white/40 text-xs uppercase tracking-widest font-normal">
+                      Revenue</th>
+                    <th
+                      class="font-cinzel text-left px-4 py-3 text-white/40 text-xs uppercase tracking-widest font-normal">
+                      Status</th>
+                  </tr>
+                </thead>
+                <tbody id="events-table-body" class="divide-y divide-yellow-500/10">
+                  <!-- dynamically rendered -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Quick Actions + Notifications -->
+          <div class="flex flex-col gap-5">
+
+            <div class="reveal bg-white/[0.03] border border-yellow-500/20 rounded-2xl p-6">
+              <h3 class="font-cinzel text-sm font-semibold text-white mb-5">Quick Actions</h3>
+              <div class="space-y-3">
+                <a href="/tailwind/src/events.html"
+                  class="font-cinzel flex items-center gap-3 w-full px-4 py-3 bg-yellow-500 hover:bg-yellow-400 text-black font-bold text-xs tracking-wider uppercase rounded-xl transition">
+                  <span>+</span> Create New Event
+                </a>
+                <a href="/tailwind/src/export-report.html"
+                  class="font-cinzel flex items-center gap-3 w-full px-4 py-3 bg-white/[0.04] border border-yellow-500/20 text-white/70 hover:border-yellow-500/50 hover:text-yellow-400 text-xs rounded-xl transition">
+                  <span><i class="ri-file-chart-line"></i></span> Export Reports
+                </a>
+                <a href="/tailwind/src/request-payout.html"
+                  class="font-cinzel flex items-center gap-3 w-full px-4 py-3 bg-white/[0.04] border border-yellow-500/20 text-white/70 hover:border-yellow-500/50 hover:text-yellow-400 text-xs rounded-xl transition">
+                  <span><i class="ri-bank-card-line"></i></span> Request Payout
+                </a>
+                <a href="/tailwind/src/Contact-us.html"
+                  class="font-cinzel flex items-center gap-3 w-full px-4 py-3 bg-white/[0.04] border border-yellow-500/20 text-white/70 hover:border-yellow-500/50 hover:text-yellow-400 text-xs rounded-xl transition">
+                  <span><i class="ri-customer-service-fill"></i></span> Contact Support
+                </a>
+              </div>
+            </div>
+
+
+          </div>
+        </div>
+
+            <!-- Bottom row -->
+            <div class="grid grid-cols-1 xl:grid-cols-2 gap-6 mb-8">
+
+              <!-- Ticket sales progress bars -->
+              <div class="reveal bg-white/[0.03] border border-yellow-500/20 rounded-2xl p-6">
+                <div class="flex items-center justify-between mb-6">
+                  <h3 class="font-cinzel text-sm font-semibold text-white">Ticket Sales Progress</h3>
+                  <span class="text-white/40 text-xs">May 2026</span>
+                </div>
+                <div class="space-y-5" id="progress-bars">
+                  <!-- dynamically rendered -->
+                </div>
+              </div>
+
+              <!-- Recent attendees — from JSONPlaceholder -->
+              <div class="reveal bg-white/[0.03] border border-yellow-500/20 rounded-2xl p-6">
+            <div class="flex items-center justify-between mb-6">
+              <h3 class="font-cinzel text-sm font-semibold text-white">Recent Attendees</h3>
+              <a href="/tailwind/src/attendee.html"
+                class="font-cinzel text-yellow-400 text-xs hover:text-yellow-300 transition">View all →</a>
+            </div>
+            <div id="attendees-list" class="space-y-4">
+              <p class="font-cinzel text-white/30 text-xs text-center py-4">Loading attendees...</p>
+            </div>
+          </div>
+
+        </div>
+
+              <!-- Revenue summary -->
+              <div
+                class="reveal bg-yellow-500/10 border border-yellow-500/25 rounded-2xl p-8 relative overflow-hidden before:absolute before:top-0 before:left-0 before:right-0 before:h-px before:bg-gradient-to-r before:from-transparent before:via-yellow-500 before:to-transparent">
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+                  <div>
+                    <p class="font-cinzel text-yellow-500/60 text-[10px] tracking-widest uppercase mb-2">Total Revenue
+                    </p>
+                    <p id="revenue" class="font-cinzel text-2xl font-bold gold-text">₦0</p>
+                  </div>
+                  <div>
+                    <p class="font-cinzel text-yellow-500/60 text-[10px] tracking-widest uppercase mb-2">Tickets Sold
+                    </p>
+                    <p id="tickets-sold" class="font-cinzel text-2xl font-bold text-white">0</p>
+                  </div>
+                  <div>
+                    <p class="font-cinzel text-yellow-500/60 text-[10px] tracking-widest uppercase mb-2">Total Events
+                    </p>
+                    <p id="total-events" class="font-cinzel text-2xl font-bold text-white">0</p>
+                  </div>
+                  <div class="flex items-end">
+                    <a href="payouts.html"
+                      class="font-cinzel w-full py-3 bg-yellow-500 hover:bg-yellow-400 text-black font-bold text-xs tracking-widest uppercase rounded-xl text-center transition shadow-md shadow-yellow-500/20">
+                      <i class="ri-bank-card-line"></i> Request Payout
+                    </a>
+                  </div>
+                </div>
+              </div>
+
+              <div class="text-center mt-12 text-yellow-500/20 text-lg tracking-[8px]">— ✦ —</div>
+
+      </main>
+    </div>
+  </div>
+
+  <!-- ═══════ JAVASCRIPT ═══════ -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+
+      /* ─── AUTH GUARD ─── */
+
+      const user =
+        JSON.parse(localStorage.getItem("currentUser")) ||
+        JSON.parse(localStorage.getItem("loggedInUser"));
+
+      if (!user) {
+        window.location.replace("sign-in.html");
+        return;
+      }
+
+      if (user.role !== "organizer") {
+        window.location.replace("dashboard.html");
+        return;
+      }
+
+      // Prevent going back to the login page
+      history.pushState(null, "", location.href);
+
+      window.addEventListener("popstate", function () {
+        history.pushState(null, "", location.href);
+      });
+
+
+      // Derive name parts safely
+      const fullName = user.fullName || (user.firstName ? user.firstName + ' ' + user.lastName : 'Organizer');
+      const firstName = user.firstName || fullName.split(' ')[0];
+      const initials = firstName.charAt(0).toUpperCase() +
+        (user.lastName ? user.lastName.charAt(0).toUpperCase() : fullName.split(' ')[1]?.charAt(0).toUpperCase() || '');
+
+      document.getElementById('welcome-message').textContent = `Welcome back, ${firstName} 👋`;
+      document.getElementById('user-name').textContent = fullName;
+      const org = document.getElementById("organization-name");
+
+      if (org) {
+        org.textContent =
+          user.organization || "Independent Organizer";
+      }
+      document.getElementById('user-initials').textContent = initials;
+
+      /* ─── 2. SIDEBAR TOGGLE ─── */
+      const sidebar = document.getElementById('sidebar');
+      const sidebarToggle = document.getElementById('sidebar-toggle');
+      const sidebarOverlay = document.getElementById('sidebar-overlay');
+      const hamIcon = document.getElementById('sidebar-ham-icon');
+
+      function openSidebar() { sidebar.classList.add('open'); sidebarOverlay.classList.add('show'); hamIcon.className = 'ri-close-line'; }
+      function closeSidebar() { sidebar.classList.remove('open'); sidebarOverlay.classList.remove('show'); hamIcon.className = 'ri-menu-line'; }
+
+      sidebarToggle.addEventListener('click', (e) => {
+        e.stopPropagation();
+        sidebar.classList.contains('open') ? closeSidebar() : openSidebar();
+      });
+      sidebarOverlay.addEventListener('click', closeSidebar);
+      sidebar.querySelectorAll('a').forEach(a => {
+        a.addEventListener('click', () => { if (window.innerWidth < 1024) closeSidebar(); });
+      });
+
+      // Notification dropdown toggle
+      (function () {
+        const STORAGE_KEY = "nx_notifications";
+
+        // ---- who is viewing this page? ----
+        const dashboardType = document.body.dataset.dashboard; // "organizer" | "attendee"
+        let currentUser = null;
+        try {
+          currentUser = JSON.parse(localStorage.getItem("loggedInUser") || localStorage.getItem("currentUser") || "null");
+        } catch (e) {
+          currentUser = null;
+        }
+        const currentEmail = currentUser && currentUser.email ? currentUser.email : null;
+
+        // ---- storage helpers ----
+        function readAll() {
+          try {
+            return JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+          } catch (e) {
+            return [];
+          }
+        }
+
+        function writeAll(list) {
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(list));
+        }
+
+        function getMine() {
+          return readAll().filter(function (n) {
+            return n.forRole === dashboardType && (!currentEmail || n.forEmail === currentEmail);
+          }).sort(function (a, b) { return b.timestamp - a.timestamp; });
+        }
+
+        // ---- public push API (call this from ticket.js / events publish flow) ----
+        window.NXNotify = {
+          push: function (partial) {
+            const list = readAll();
+            list.push({
+              id: "n_" + Date.now() + "_" + Math.random().toString(36).slice(2, 7),
+              forRole: partial.forRole,
+              forEmail: partial.forEmail,
+              type: partial.type || "event_update",
+              eventId: partial.eventId || null,
+              eventName: partial.eventName || "",
+              message: partial.message || "",
+              timestamp: Date.now(),
+              read: false
+            });
+            writeAll(list);
+            render();
+          }
+        };
+
+        // ---- icons per type ----
+        function iconFor(type) {
+          switch (type) {
+            case "signup": return "ri-user-add-line";
+            case "sale": return "ri-ticket-2-line";
+            case "event_update": return "ri-refresh-line";
+            case "reminder": return "ri-alarm-line";
+            default: return "ri-information-line";
+          }
+        }
+
+        function timeAgo(ts) {
+          const diff = Math.floor((Date.now() - ts) / 1000);
+          if (diff < 60) return "just now";
+          if (diff < 3600) return Math.floor(diff / 60) + "m ago";
+          if (diff < 86400) return Math.floor(diff / 3600) + "h ago";
+          return Math.floor(diff / 86400) + "d ago";
+        }
+
+        // ---- render ----
+        const listEl = document.getElementById("nx-notif-list");
+        const emptyEl = document.getElementById("nx-notif-empty");
+        const badgeEl = document.getElementById("nx-notif-badge");
+
+        function render() {
+          const mine = getMine();
+          const unreadCount = mine.filter(function (n) { return !n.read; }).length;
+
+          if (unreadCount > 0) {
+            badgeEl.textContent = unreadCount > 9 ? "9+" : String(unreadCount);
+            badgeEl.classList.remove("hidden");
+          } else {
+            badgeEl.classList.add("hidden");
+          }
+
+          if (mine.length === 0) {
+            listEl.innerHTML = "";
+            emptyEl.classList.remove("hidden");
+            return;
+          }
+          emptyEl.classList.add("hidden");
+
+          listEl.innerHTML = mine.map(function (n) {
+            return (
+              '<div class="flex gap-3 px-4 py-3 hover:bg-white/[0.03] transition cursor-pointer nx-notif-item" data-id="' + n.id + '">' +
+              '<div class="w-8 h-8 shrink-0 rounded-lg bg-yellow-500/10 border border-yellow-500/20 flex items-center justify-center">' +
+              '<i class="' + iconFor(n.type) + ' text-yellow-400 text-sm"></i>' +
+              '</div>' +
+              '<div class="flex-1 min-w-0">' +
+              '<p class="font-cormorant text-sm ' + (n.read ? "text-white/50" : "text-white") + ' leading-snug">' + n.message + '</p>' +
+              (n.eventName ? '<p class="text-white/30 text-[11px] mt-0.5">' + n.eventName + '</p>' : "") +
+              '<p class="text-yellow-500/50 text-[10px] mt-1 font-cinzel tracking-wide">' + timeAgo(n.timestamp) + '</p>' +
+              '</div>' +
+              (n.read ? "" : '<span class="w-2 h-2 rounded-full bg-yellow-500 mt-1.5 shrink-0"></span>') +
+              '</div>'
+            );
+          }).join("");
+        }
+
+        // ---- interactions ----
+        const bell = document.getElementById("nx-notif-bell");
+        const panel = document.getElementById("nx-notif-panel");
+
+        bell.addEventListener("click", function (e) {
+          e.stopPropagation();
+          panel.classList.toggle("hidden");
+        });
+
+        document.addEventListener("click", function (e) {
+          if (!panel.contains(e.target) && !bell.contains(e.target)) {
+            panel.classList.add("hidden");
+          }
+        });
+
+        document.getElementById("nx-notif-mark-all").addEventListener("click", function (e) {
+          e.stopPropagation();
+          const list = readAll().map(function (n) {
+            if (n.forRole === dashboardType && (!currentEmail || n.forEmail === currentEmail)) {
+              n.read = true;
+            }
+            return n;
+          });
+          writeAll(list);
+          render();
+        });
+
+        listEl.addEventListener("click", function (e) {
+          const item = e.target.closest(".nx-notif-item");
+          if (!item) return;
+          const id = item.dataset.id;
+          const list = readAll().map(function (n) {
+            if (n.id === id) n.read = true;
+            return n;
+          });
+          writeAll(list);
+          render();
+        });
+
+        // keep in sync across tabs (e.g. attendee buys ticket in one tab,
+        // organizer dashboard open in another)
+        window.addEventListener("storage", function (e) {
+          if (e.key === STORAGE_KEY) render();
+        });
+
+        render();
+      })();
+
+
+      /* ─── 3. LOGOUT MODAL ─── */
+      const logoutModal = document.getElementById('logout-modal');
+      document.getElementById('logout-btn').addEventListener('click', () => logoutModal.classList.add('show'));
+      document.getElementById('logout-cancel').addEventListener('click', () => logoutModal.classList.remove('show'));
+      document.getElementById("logout-confirm").addEventListener("click", () => {
+
+        localStorage.removeItem("loggedInUser");
+        localStorage.removeItem("currentUser");
+        localStorage.removeItem("nx_last_login");
+
+        window.location.replace("sign-in.html");
+
+      });
+      /* ─── 4. SCROLL REVEAL ─── */
+      const revealObserver = new IntersectionObserver((entries) => {
+        entries.forEach(e => {
+          if (e.isIntersecting) { e.target.classList.add('in-view'); revealObserver.unobserve(e.target); }
+        });
+      }, { threshold: 0.1 });
+      document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+
+
+
+
+
+      /* ─── 6. EVENTS TABLE — dynamic render from localStorage or defaults ─── */
+      const allEvents =
+        JSON.parse(localStorage.getItem("events")) || [];
+
+      const savedEvents = allEvents.filter(event =>
+        event.organizerEmail === user.email
+      );
+
+      const allBookings =
+        JSON.parse(localStorage.getItem("bookings")) || [];
+
+      const SERVICE_FEE = 5000;
+
+      // Real revenue per event — pulled from actual bookings (accounts for
+      // tiered pricing), with a fallback to sold × ticketPrice only for
+      // legacy/seed events that have a sold count but no real booking records.
+      function revenueForEvent(event) {
+        const eventBookings = allBookings.filter(b => b.eventId === event.id);
+        if (eventBookings.length > 0) {
+          return eventBookings.reduce(
+            (sum, b) => sum + Math.max((Number(b.totalPaid) || 0) - SERVICE_FEE, 0),
+            0
+          );
+        }
+        return (Number(event.sold) || 0) * (Number(event.ticketPrice) || 0);
+      }
+
+      const totalEvents = savedEvents.length;
+
+      const totalTickets = savedEvents.reduce(
+        (sum, ev) => sum + (Number(ev.sold) || 0),
+        0
+      );
+
+      const totalRevenue = savedEvents.reduce(
+        (sum, ev) => sum + revenueForEvent(ev),
+        0
+      );
+
+      const tbody = document.getElementById("events-table-body");
+
+      document.getElementById("total-events").textContent =
+        totalEvents;
+
+      document.getElementById("tickets-sold").textContent =
+        totalTickets.toLocaleString();
+
+      document.getElementById("revenue").textContent =
+        "₦" + totalRevenue.toLocaleString();
+
+      if (savedEvents.length === 0) {
+        tbody.innerHTML = `
+  <tr>
+      <td colspan="6"
+          class="text-center py-10 text-white/50">
+          You haven't created any events yet.
+      </td>
+  </tr>
+`;
+      } else {
+        tbody.innerHTML = savedEvents.map(event => `
+<tr>
+
+  <td>${event.name}</td>
+
+  <td>${event.date}</td>
+
+  <td>${event.sold}</td>
+
+  <td>₦${revenueForEvent(event).toLocaleString()}</td>
+
+  <td>${event.status}</td>
+
+  <td class="space-x-2">
+
+      <a href="events.html?id=${event.id}"
+ >
+  ✍️
+</a>
+
+      <button
+          class="delete-btn"
+          data-id="${event.id}">
+          <i class="ri-delete-bin-line"></i>
+      </button>
+
+  </td>
+
+</tr>
+`).join("");
+      }
+
+      document.querySelectorAll(".delete-btn").forEach(button => {
+        button.addEventListener("click", function () {
+
+          if (!confirm("Delete this event?")) return;
+
+          const id = this.dataset.id;
+
+          let events = JSON.parse(localStorage.getItem("events")) || [];
+
+          // Remove the selected event
+          events = events.filter(event => event.id !== id);
+
+          localStorage.setItem("events", JSON.stringify(events));
+
+          // Reload the dashboard
+          location.reload();
+        });
+      });
+
+      /* ─── 5b. REAL STAT COUNTERS ─── */
+      const myEventIds = new Set(savedEvents.map(ev => ev.id));
+
+      const activeEvents = savedEvents.filter(ev => ev.status !== "Completed").length;
+
+      const uniqueAttendees = new Set(
+        allBookings
+          .filter(b => myEventIds.has(b.eventId))
+          .map(b => b.attendeeEmail)
+      ).size;
+
+      function animateCounter(el, target, prefix = "", suffix = "") {
+        if (!el) return;
+        let current = 0;
+        const step = Math.max(Math.ceil(target / 50), 1);
+        const timer = setInterval(() => {
+          current += step;
+          if (current >= target) { current = target; clearInterval(timer); }
+          el.textContent = prefix + current.toLocaleString("en-NG") + suffix;
+        }, 25);
+      }
+
+      animateCounter(document.getElementById("stat-revenue"), totalRevenue, "₦");
+      animateCounter(document.getElementById("stat-tickets"), totalTickets);
+      animateCounter(document.getElementById("stat-active-events"), activeEvents);
+      animateCounter(document.getElementById("stat-attendees"), uniqueAttendees);
+
+      /* ─── 5c. REAL SUBTITLE STATS ─── */
+      function isThisMonth(dateStr) {
+        const d = new Date(dateStr);
+        const now = new Date();
+        return d.getFullYear() === now.getFullYear() && d.getMonth() === now.getMonth();
+      }
+      function isLastMonth(dateStr) {
+        const d = new Date(dateStr);
+        const now = new Date();
+        const lastMonth = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+        return d.getFullYear() === lastMonth.getFullYear() && d.getMonth() === lastMonth.getMonth();
+      }
+
+      function pctChangeLabel(thisMonthVal, lastMonthVal) {
+        if (lastMonthVal === 0) {
+          return thisMonthVal > 0 ? { symbol: "▲", text: "new this month", color: "text-green-400" } : { symbol: "●", text: "no activity yet", color: "text-white/40" };
+        }
+        const pct = Math.round(((thisMonthVal - lastMonthVal) / lastMonthVal) * 100);
+        if (pct > 0) return { symbol: "▲", text: `${pct}% this month`, color: "text-green-400" };
+        if (pct < 0) return { symbol: "▼", text: `${Math.abs(pct)}% this month`, color: "text-red-400" };
+        return { symbol: "●", text: "no change", color: "text-white/40" };
+      }
+
+      const myBookings = allBookings.filter(b => myEventIds.has(b.eventId));
+
+      const revenueThisMonth = myBookings.filter(b => isThisMonth(b.bookedAt))
+        .reduce((sum, b) => sum + Math.max((Number(b.totalPaid) || 0) - SERVICE_FEE, 0), 0);
+      const revenueLastMonth = myBookings.filter(b => isLastMonth(b.bookedAt))
+        .reduce((sum, b) => sum + Math.max((Number(b.totalPaid) || 0) - SERVICE_FEE, 0), 0);
+
+      const ticketsThisMonth = myBookings.filter(b => isThisMonth(b.bookedAt))
+        .reduce((sum, b) => sum + (b.quantity || (b.seats ? b.seats.length : 1)), 0);
+      const ticketsLastMonth = myBookings.filter(b => isLastMonth(b.bookedAt))
+        .reduce((sum, b) => sum + (b.quantity || (b.seats ? b.seats.length : 1)), 0);
+
+      const attendeesThisMonth = new Set(myBookings.filter(b => isThisMonth(b.bookedAt)).map(b => b.attendeeEmail)).size;
+      const attendeesLastMonth = new Set(myBookings.filter(b => isLastMonth(b.bookedAt)).map(b => b.attendeeEmail)).size;
+
+      function renderSub(elId, change) {
+        const el = document.getElementById(elId);
+        if (!el) return;
+        el.className = `${change.color} text-xs flex items-center gap-1`;
+        el.innerHTML = `${change.symbol} <span class="text-white/30">${change.text}</span>`;
+      }
+
+      renderSub("stat-revenue-sub", pctChangeLabel(revenueThisMonth, revenueLastMonth));
+      renderSub("stat-tickets-sub", pctChangeLabel(ticketsThisMonth, ticketsLastMonth));
+      renderSub("stat-attendees-sub", pctChangeLabel(attendeesThisMonth, attendeesLastMonth));
+
+      // "Active Events" subtitle — how many are ending within the next 7 days
+      const now = new Date();
+      const endingSoonCount = savedEvents.filter(ev => {
+        const d = new Date(ev.date);
+        if (isNaN(d)) return false;
+        const daysUntil = Math.round((d - now) / (1000 * 60 * 60 * 24));
+        return daysUntil >= 0 && daysUntil <= 7;
+      }).length;
+
+      const activeSubEl = document.getElementById("stat-active-sub");
+      if (activeSubEl) {
+        activeSubEl.innerHTML = endingSoonCount > 0
+          ? `● <span class="text-white/30">${endingSoonCount} ending soon</span>`
+          : `● <span class="text-white/30">none ending soon</span>`;
+      }
+
+
+      /* ─── 7. PROGRESS BARS ─── */
+      const progressData = savedEvents.map(ev => {
+
+        const sold = Number(ev.sold) || 0;
+        const total = Number(ev.totalTickets) || 1;
+
+        return {
+
+          label: ev.name,
+          sold,
+          total,
+          pct: Math.round((sold / total) * 100),
+
+          color: "from-yellow-500 to-yellow-300",
+          textColor: "text-yellow-400"
+
+        };
+
+      });
+      const progressContainer = document.getElementById('progress-bars');
+      progressContainer.innerHTML = progressData.map(p => `
+      <div>
+        <div class="flex justify-between text-xs mb-2">
+          <span class="text-white/70">${p.label}</span>
+          <span class="${p.textColor} font-semibold">${p.sold} / ${p.total} <span class="text-white/40">(${p.pct}%)</span></span>
+        </div>
+        <div class="w-full h-2 bg-white/[0.06] rounded-full overflow-hidden">
+          <div class="progress-bar h-full bg-gradient-to-r ${p.color} rounded-full" data-width="${p.pct}"></div>
+        </div>
+      </div>
+    `).join('');
+
+      // Animate bars after a short delay
+      setTimeout(() => {
+        document.querySelectorAll('.progress-bar').forEach(bar => {
+          bar.style.width = bar.dataset.width + '%';
+        });
+      }, 500);
+
+      /* ─── 8. RECENT ATTENDEES — JSONPlaceholder API ─── */
+      const avatarColors = [
+        'from-yellow-400 to-orange-500 text-black',
+        'from-blue-400 to-purple-500 text-white',
+        'from-green-400 to-teal-500 text-black',
+        'from-pink-400 to-red-500 text-white',
+        'from-yellow-500 to-amber-600 text-black',
+      ];
+      const eventLabels = [
+        'RegTech Conference · VIP',
+        'Music Festival · Regular',
+        'Web Dev Workshop · Early Bird',
+        'RegTech Conference · Regular',
+        'AI Summit · Early Bird',
+      ];
+      const amounts = ['₦15,000', '₦5,000', '₦8,000', '₦10,000', '₦12,000'];
+
+      fetch('https://jsonplaceholder.typicode.com/users')
+        .then(res => res.json())
+        .then(users => {
+          const list = document.getElementById('attendees-list');
+          list.innerHTML = users.slice(0, 5).map((u, i) => {
+            const nameParts = u.name.split(' ');
+            const initials = (nameParts[0]?.charAt(0) || '') + (nameParts[1]?.charAt(0) || '');
+            return `
+            <div class="flex items-center gap-4">
+              <div class="w-9 h-9 rounded-full bg-gradient-to-br ${avatarColors[i]} flex items-center justify-center font-cinzel text-xs font-bold">${initials.toUpperCase()}</div>
+              <div class="flex-1 min-w-0">
+                <p class="text-white text-xs font-medium truncate">${u.name}</p>
+                <p class="text-white/40 text-[10px]">${eventLabels[i]}</p>
+              </div>
+              <span class="text-yellow-400 text-xs font-semibold">${amounts[i]}</span>
+            </div>
+          `;
+          }).join('');
+        })
+        .catch(() => {
+          document.getElementById('attendees-list').innerHTML = `
+          <p class="font-cinzel text-white/30 text-xs text-center py-4">Could not load attendees.</p>
+        `;
+        });
+
+
+
+    });
+  </script>
+
+</body>
+
+</html>

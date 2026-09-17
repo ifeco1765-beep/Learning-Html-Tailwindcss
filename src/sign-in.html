@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign In | Nice-Xclusive Events Platform</title>
+
+  <script>
+    (function () {
+      var user =
+        JSON.parse(localStorage.getItem("loggedInUser")) ||
+        JSON.parse(localStorage.getItem("currentUser"));
+
+      if (user) {
+        window.location.replace(user.role === "organizer" ? "organizer.html" : "dashboard.html");
+      }
+    })();
+  </script>
+
+  <link rel="stylesheet" href="/tailwind/src/output.css">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=Montserrat:wght@300;400;500;600&display=swap"
+    rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@4.9.0/fonts/remixicon.css" rel="stylesheet">
+
+  <style>
+    .font-cinzel {
+      font-family: 'Cinzel', serif;
+    }
+
+    .font-cormorant {
+      font-family: 'Cormorant Garamond', serif;
+    }
+
+    body {
+      font-family: 'Montserrat', sans-serif;
+    }
+
+    .gold-text {
+      font-family: 'Cinzel', serif;
+      background: linear-gradient(135deg, #F0C040 0%, #C9A84C 50%, #8B6914 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    @keyframes fadeUp {
+      0% {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes popIn {
+      0% {
+        opacity: 0;
+        transform: scale(0.9);
+      }
+
+      100% {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    @keyframes shakeX {
+
+      0%,
+      100% {
+        transform: translateX(0);
+      }
+
+      20%,
+      60% {
+        transform: translateX(-6px);
+      }
+
+      40%,
+      80% {
+        transform: translateX(6px);
+      }
+    }
+
+    .fade-up {
+      animation: fadeUp 0.7s ease forwards;
+    }
+
+    .fade-up-1 {
+      animation-delay: 0.1s;
+      opacity: 0;
+    }
+
+    .fade-up-2 {
+      animation-delay: 0.2s;
+      opacity: 0;
+    }
+
+    .fade-up-3 {
+      animation-delay: 0.3s;
+      opacity: 0;
+    }
+
+    .fade-up-4 {
+      animation-delay: 0.4s;
+      opacity: 0;
+    }
+
+    .fade-up-5 {
+      animation-delay: 0.5s;
+      opacity: 0;
+    }
+
+    .shake {
+      animation: shakeX 0.4s ease;
+    }
+
+    .success-pop {
+      animation: popIn 0.35s ease;
+    }
+
+    /* password toggle eye */
+    .pw-wrap {
+      position: relative;
+    }
+
+    .pw-wrap input {
+      padding-right: 3rem;
+    }
+
+    .pw-toggle {
+      position: absolute;
+      right: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: rgba(255, 255, 255, 0.4);
+      cursor: pointer;
+      font-size: 1.1rem;
+      transition: color 0.2s;
+    }
+
+    .pw-toggle:hover {
+      color: #eab308;
+    }
+
+    /* strength bar */
+    .strength-bar {
+      height: 3px;
+      border-radius: 2px;
+      transition: width 0.4s ease, background 0.4s ease;
+    }
+  </style>
+</head>
+
+<body class="relative min-h-screen bg-[#06030F] text-white overflow-x-hidden">
+
+  <div class="fixed inset-0 pointer-events-none z-0"
+    style="background: radial-gradient(ellipse 80% 70% at 10% 50%, rgba(80,20,120,0.45) 0%, transparent 65%), radial-gradient(ellipse 50% 60% at 90% 30%, rgba(60,10,100,0.25) 0%, transparent 60%);">
+  </div>
+
+  <div class="relative z-10 min-h-screen grid grid-cols-1 lg:grid-cols-2">
+
+    <!-- LEFT: Decorative panel -->
+    <div class="hidden lg:flex flex-col justify-between relative overflow-hidden">
+      <div class="absolute inset-0 bg-[#06030F]">
+        <!-- <img src="img/WhatsApp Image 2026-05-20 at 7.28.35 PM.jpeg" alt="Luxury event"
+          class="w-full h-full object-cover opacity-10" /> -->
+        <div class="absolute inset-0"
+          style="background: linear-gradient(135deg, rgba(6,3,15,0.75) 0%, rgba(80,20,120,0.4) 50%, rgba(6,3,15,0.85) 100%);">
+        </div>
+      </div>
+
+      <div class="relative z-10 p-12 flex flex-col justify-between h-full">
+
+        <!-- Logo -->
+        <a href="index.html" class="flex items-center gap-3">
+          <div
+            class="w-12 h-12 rounded-xl border border-yellow-500 flex items-center justify-center bg-gradient-to-br from-yellow-400 to-yellow-700 shadow-lg shadow-yellow-500/20">
+            <span class="font-cinzel text-lg font-bold text-black">NX</span>
+          </div>
+          <div>
+            <h1 class="font-cinzel text-white text-lg font-semibold tracking-wide">Nice-Xclusive</h1>
+            <p class="text-yellow-500 text-[9px] tracking-[4px] uppercase">Events Platform</p>
+          </div>
+        </a>
+
+        <!-- Center branding -->
+        <div>
+          <div class="inline-flex items-center gap-3 mb-6">
+            <span class="w-8 h-px bg-yellow-500 block"></span>
+            <span class="font-cinzel text-yellow-500 text-[10px] font-semibold tracking-[0.4em] uppercase">Welcome
+              Back</span>
+          </div>
+          <h2 class="font-cinzel text-4xl font-bold text-white leading-tight mb-4">
+            Your Next <br>Unforgettable<br>Event Awaits.
+          </h2>
+          <p class="font-cormorant text-white/60 text-lg leading-relaxed max-w-sm mb-8">
+            Sign back in and pick up where you left off. Your tickets, saved events, and rewards are waiting.
+          </p>
+
+          <!-- Feature highlights -->
+          <div class="space-y-4 mb-8">
+            <div class="flex items-center gap-4">
+              <div
+                class="w-10 h-10 rounded-xl bg-yellow-500/10 border border-yellow-500/20 flex items-center justify-center text-base">
+                🎟️</div>
+              <div>
+                <p class="font-cinzel text-white text-xs font-semibold">Instant Ticket Access</p>
+                <p class="text-white/50 text-[10px]">QR tickets delivered immediately after booking</p>
+              </div>
+            </div>
+            <div class="flex items-center gap-4">
+              <div
+                class="w-10 h-10 rounded-xl bg-yellow-500/10 border border-yellow-500/20 flex items-center justify-center text-base">
+                🎪</div>
+              <div>
+                <p class="font-cinzel text-white text-xs font-semibold">500+ Curated Events</p>
+                <p class="text-white/50 text-[10px]">Concerts, conferences, workshops & more</p>
+              </div>
+            </div>
+            <div class="flex items-center gap-4">
+              <div
+                class="w-10 h-10 rounded-xl bg-yellow-500/10 border border-yellow-500/20 flex items-center justify-center text-base">
+                🤝</div>
+              <div>
+                <p class="font-cinzel text-white text-xs font-semibold">200+ Verified Vendors</p>
+                <p class="text-white/50 text-[10px]">Trusted caterers, decorators, photographers</p>
+              </div>
+            </div>
+            <div class="flex items-center gap-4">
+              <div
+                class="w-10 h-10 rounded-xl bg-yellow-500/10 border border-yellow-500/20 flex items-center justify-center text-base">
+                🎁</div>
+              <div>
+                <p class="font-cinzel text-white text-xs font-semibold">Earn Reward Points</p>
+                <p class="text-white/50 text-[10px]">Every booking earns you loyalty rewards</p>
+              </div>
+            </div>
+            <div class="flex items-center gap-4">
+              <div
+                class="w-10 h-10 rounded-xl bg-yellow-500/10 border border-yellow-500/20 flex items-center justify-center text-base">
+                🔒</div>
+              <div>
+                <p class="font-cinzel text-white text-xs font-semibold">Secure Payments</p>
+                <p class="text-white/50 text-[10px]">Paystack, Flutterwave & bank transfer supported</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Testimonial -->
+          <div class="bg-white/[0.04] border border-yellow-500/20 rounded-2xl p-5">
+            <p class="font-cormorant text-white/70 text-base italic leading-relaxed mb-3">
+              "Nice-Xclusive made booking tickets for the RegTech Conference so seamless. I got my QR code instantly!"
+            </p>
+            <div class="flex items-center gap-3">
+              <div
+                class="w-8 h-8 rounded-full bg-gradient-to-br from-yellow-400 to-orange-500 flex items-center justify-center font-cinzel text-black text-xs font-bold">
+                CO</div>
+              <div>
+                <p class="font-cinzel text-yellow-400 text-xs font-semibold">Chiamaka Okonkwo</p>
+                <p class="text-white/40 text-[10px]">Gold Member · Lagos, Nigeria</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Stats -->
+        <div class="flex gap-8 pt-6 border-t border-yellow-500/20">
+          <div>
+            <p class="font-cinzel text-2xl font-bold gold-text">1000+</p>
+            <p class="text-white/50 text-xs mt-1">Happy Users</p>
+          </div>
+          <div class="w-px bg-yellow-500/20"></div>
+          <div>
+            <p class="font-cinzel text-2xl font-bold gold-text">500+</p>
+            <p class="text-white/50 text-xs mt-1">Events Hosted</p>
+          </div>
+          <div class="w-px bg-yellow-500/20"></div>
+          <div>
+            <p class="font-cinzel text-2xl font-bold gold-text">4.9★</p>
+            <p class="text-white/50 text-xs mt-1">Avg Rating</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- RIGHT: Sign in form -->
+    <div class="flex flex-col justify-center px-6 sm:px-12 lg:px-16 py-12">
+
+      <!-- Mobile logo -->
+      <div class="flex lg:hidden items-center gap-3 mb-10 fade-up fade-up-1">
+        <div
+          class="w-10 h-10 rounded-xl border border-yellow-500 flex items-center justify-center bg-gradient-to-br from-yellow-400 to-yellow-700">
+          <span class="font-cinzel text-base font-bold text-black">NX</span>
+        </div>
+        <div>
+          <h1 class="font-cinzel text-white text-base font-semibold tracking-wide">Nice-Xclusive</h1>
+          <p class="text-yellow-500 text-[8px] tracking-[3px] uppercase">Events Platform</p>
+        </div>
+      </div>
+
+      <!-- Heading -->
+      <div class="mb-8 fade-up fade-up-1">
+        <div class="inline-flex items-center gap-3 mb-4">
+          <span class="w-7 h-px bg-yellow-500 block"></span>
+          <span class="font-cinzel text-yellow-500 text-[10px] font-semibold tracking-[0.4em] uppercase">Sign In</span>
+        </div>
+        <h2 class="font-cinzel text-3xl font-bold text-white mb-2">Welcome Back</h2>
+      </div>
+
+    <!-- Last login info (dynamic) -->
+    <div id="last-login-banner"
+      class="hidden mb-5 py-2.5 px-4 bg-yellow-500/[0.08] border border-yellow-500/20 rounded-xl text-yellow-400/80 text-xs font-cinzel text-center">
+    </div>
+
+    <!-- Form -->
+    <form id="signin-form" novalidate class="space-y-5 fade-up fade-up-3">
+
+      <div class="flex flex-col gap-2">
+        <label class="font-cinzel text-yellow-500 text-[10px] font-semibold tracking-widest uppercase">Email
+          Address</label>
+        <input id="si-email" type="email" placeholder="nice@example.com" autocomplete="email"
+          class="w-full px-4 py-3.5 bg-white/[0.04] border border-yellow-500/20 rounded-xl text-white text-sm placeholder-white/30 focus:outline-none focus:border-yellow-500 focus:bg-yellow-500/[0.05] transition duration-300" />
+      </div>
+
+      <div class="flex flex-col gap-2">
+        <div class="flex items-center justify-between">
+          <label
+            class="font-cinzel text-yellow-500 text-[10px] font-semibold tracking-widest uppercase">Password</label>
+          <button type="button" id="forgot-btn"
+            class="font-cinzel text-yellow-400/70 hover:text-yellow-400 text-[10px] transition">Forgot
+            password?</button>
+        </div>
+        <div class="pw-wrap">
+          <input id="si-password" type="password" placeholder="Enter your password" autocomplete="current-password"
+            class="w-full px-4 py-3.5 bg-white/[0.04] border border-yellow-500/20 rounded-xl text-white text-sm placeholder-white/30 focus:outline-none focus:border-yellow-500 focus:bg-yellow-500/[0.05] transition duration-300" />
+          <span class="pw-toggle" id="pw-toggle-1"><i class="ri-eye-off-line"></i></span>
+        </div>
+      </div>
+
+      <!-- Remember me -->
+      <label class="flex items-center gap-3 cursor-pointer">
+        <input id="si-remember" type="checkbox" class="w-4 h-4 accent-yellow-500 cursor-pointer" />
+        <span class="text-white/60 text-xs">Keep me signed in on this device</span>
+      </label>
+
+      <!-- Error / success -->
+      <div id="si-error"
+        class="hidden py-3 px-4 bg-red-500/10 border border-red-500/30 rounded-xl text-red-400 text-sm font-cormorant">
+      </div>
+      <div id="si-success"
+        class="hidden py-3 px-4 bg-yellow-500/10 border border-yellow-500/30 rounded-xl text-yellow-400 text-sm font-cormorant text-center">
+        ✨ Signing you in... Redirecting to your dashboard.
+      </div>
+
+      <!-- Submit -->
+      <button type="submit" id="si-btn"
+        class="block w-full py-4 bg-yellow-500 hover:bg-yellow-400 text-black font-bold text-sm tracking-widest uppercase rounded-xl text-center transition duration-300 shadow-lg shadow-yellow-500/20 hover:-translate-y-0.5 font-cinzel">
+        Sign In →
+      </button>
+
+      <!-- Create account (moved below button) -->
+      <p class="font-cormorant text-white/60 text-base text-center">
+        Don't have an account?
+        <a href="sign-up.html"
+          class="text-yellow-400 hover:text-yellow-300 transition underline underline-offset-2">Create one here</a>
+      </p>
+
+      <!-- Divider -->
+      <div class="flex items-center gap-4">
+        <div class="flex-1 h-px bg-yellow-500/15"></div>
+        <span class="text-white/30 text-xs">or continue with</span>
+        <div class="flex-1 h-px bg-yellow-500/15"></div>
+      </div>
+
+      <!-- Social logins -->
+      <div class="grid grid-cols-2 gap-3">
+        <button type="button" onclick="socialLogin('Google')"
+          class="flex items-center justify-center gap-2 py-3 bg-white/[0.04] border border-yellow-500/20 rounded-xl text-white/70 text-xs font-medium hover:border-yellow-500/40 hover:text-white transition font-cinzel">
+          <i class="ri-google-fill text-base"></i> Google
+        </button>
+        <button type="button" onclick="socialLogin('GitHub')"
+          class="flex items-center justify-center gap-2 py-3 bg-white/[0.04] border border-yellow-500/20 rounded-xl text-white/70 text-xs font-medium hover:border-yellow-500/40 hover:text-white transition font-cinzel">
+          <i class="ri-github-line text-base"></i> GitHub
+        </button>
+      </div>
+
+      <!-- What you get -->
+      <div class="bg-white/[0.03] border border-yellow-500/20 rounded-2xl p-5 space-y-3 fade-up fade-up-4">
+        <p class="font-cinzel text-yellow-500 text-[10px] font-semibold tracking-widest uppercase mb-3">What you get
+          with Nice-Xclusive</p>
+        <div class="grid grid-cols-2 gap-3">
+          <div class="flex items-center gap-2"><span class="text-yellow-500 text-xs">✦</span><span
+              class="text-white/60 text-[11px]">Browse all events</span></div>
+          <div class="flex items-center gap-2"><span class="text-yellow-500 text-xs">✦</span><span
+              class="text-white/60 text-[11px]">Secure payments</span></div>
+          <div class="flex items-center gap-2"><span class="text-yellow-500 text-xs">✦</span><span
+              class="text-white/60 text-[11px]">QR e-tickets</span></div>
+          <div class="flex items-center gap-2"><span class="text-yellow-500 text-xs">✦</span><span
+              class="text-white/60 text-[11px]">Vendor connect</span></div>
+          <div class="flex items-center gap-2"><span class="text-yellow-500 text-xs">✦</span><span
+              class="text-white/60 text-[11px]">Reward points</span></div>
+          <div class="flex items-center gap-2"><span class="text-yellow-500 text-xs">✦</span><span
+              class="text-white/60 text-[11px]">Event reminders</span></div>
+        </div>
+      </div>
+
+      </form>
+
+      <p class="text-white/30 text-[10px] text-center mt-8 leading-relaxed fade-up fade-up-5">
+        © 2026 Nice-Xclusive Events Platform. All rights reserved.<br>
+        <a href="terms.html" class="hover:text-yellow-400 transition">Terms</a> ·
+        <a href="terms.html#privacy" class="hover:text-yellow-400 transition">Privacy</a> ·
+        <a href="Contact-us.html" class="hover:text-yellow-400 transition">Support</a>
+      </p>
+
+    </div>
+  </div>
+
+  <!-- ═══════ JAVASCRIPT ═══════ -->
+  <script>
+    /* ─────────────────────────────────────────
+       1. SHOW LAST LOGIN TIME
+    ───────────────────────────────────────── */
+    const lastLogin = localStorage.getItem('nx_last_login');
+    if (lastLogin) {
+      const banner = document.getElementById('last-login-banner');
+      const date = new Date(lastLogin);
+      banner.textContent = `Last signed in: ${date.toLocaleDateString('en-NG', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' })} at ${date.toLocaleTimeString('en-NG', { hour: '2-digit', minute: '2-digit' })}`;
+      banner.classList.remove('hidden');
+    }
+
+    /* ─────────────────────────────────────────
+       2. RESTORE SAVED EMAIL (remember me)
+    ───────────────────────────────────────── */
+    const savedEmail = localStorage.getItem('nx_remembered_email');
+    if (savedEmail) {
+      document.getElementById('si-email').value = savedEmail;
+      document.getElementById('si-remember').checked = true;
+    }
+
+    /* ─────────────────────────────────────────
+       3. PASSWORD VISIBILITY TOGGLE
+    ───────────────────────────────────────── */
+    document.getElementById('pw-toggle-1').addEventListener('click', function () {
+      const input = document.getElementById('si-password');
+      const icon = this.querySelector('i');
+      if (input.type === 'password') {
+        input.type = 'text';
+        icon.className = 'ri-eye-line';
+      } else {
+        input.type = 'password';
+        icon.className = 'ri-eye-off-line';
+      }
+    });
+
+    /* ─────────────────────────────────────────
+       4. FORGOT PASSWORD FLOW
+    ───────────────────────────────────────── */
+    document.getElementById('forgot-btn').addEventListener('click', () => {
+      const email = document.getElementById('si-email').value.trim();
+      if (!email) {
+        showError('Please enter your email address first, then click Forgot Password.');
+        return;
+      }
+      showSuccess(`Password reset link sent to ${email}. Check your inbox.`);
+    });
+
+    /* ─────────────────────────────────────────
+       5. SOCIAL LOGIN PLACEHOLDER
+    ───────────────────────────────────────── */
+    function socialLogin(provider) {
+      showSuccess(`Redirecting to ${provider} login...`);
+      setTimeout(() => { window.location.href = 'client-dashboard.html'; }, 1200);
+    }
+
+    /* ─────────────────────────────────────────
+       6. FORM VALIDATION + SIGN IN
+    ───────────────────────────────────────── */
+    document.getElementById('signin-form').addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      const email = document.getElementById('si-email').value.trim();
+      const password = document.getElementById('si-password').value;
+      const remember = document.getElementById('si-remember').checked;
+      const redirectTo = new URLSearchParams(window.location.search).get('redirect');
+
+
+      // Basic validation
+      if (!email) { showError('Please enter your email address.'); return; }
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { showError('Please enter a valid email address.'); return; }
+      if (!password) { showError('Please enter your password.'); return; }
+      if (password.length < 6) { showError('Password must be at least 6 characters.'); return; }
+
+      const btn = document.getElementById('si-btn');
+      btn.disabled = true;
+      btn.textContent = 'Signing in...';
+
+      // Save to localStorage
+      // if (remember) {
+      //   localStorage.setItem('nx_remembered_email', email);
+      // } else {
+      //   localStorage.removeItem('nx_remembered_email');
+      // }
+      // localStorage.setItem('nx_last_login', new Date().toISOString());
+      // localStorage.setItem('nx_user_email', email);
+
+      // Get all registered users
+      const users = JSON.parse(localStorage.getItem("users")) || [];
+
+      // Find a matching user
+      const foundUser = users.find(user => user.email === email);
+
+      if (!foundUser) {
+        showError("No account found with this email.");
+        btn.disabled = false;
+        btn.textContent = "Sign In";
+        return;
+      }
+
+      if (foundUser.password !== password) {
+        showError("Incorrect password.");
+        btn.disabled = false;
+        btn.textContent = "Sign In";
+        return;
+      }
+
+      // Save logged in user
+      localStorage.setItem("loggedInUser", JSON.stringify(foundUser));
+      localStorage.setItem("currentUser", JSON.stringify(foundUser));
+      localStorage.setItem("nx_last_login", new Date().toISOString());
+
+      // Remember email if checked
+      if (remember) {
+        localStorage.setItem("nx_remembered_email", email);
+      } else {
+        localStorage.removeItem("nx_remembered_email");
+      }
+
+      setTimeout(() => {
+
+        showSuccess("✨ Signing you in... Redirecting...");
+
+        setTimeout(() => {
+
+          btn.disabled = false;
+          btn.textContent = "Sign In";
+
+          if (redirectTo) {
+            window.location.href = decodeURIComponent(redirectTo);
+          } else if (foundUser.role === "organizer") {
+            window.location.href = "organizer.html";
+          } else {
+            window.location.href = "dashboard.html";
+          }
+
+        }, 1000);
+
+      }, 900);
+    });
+
+    /* ─────────────────────────────────────────
+       HELPERS
+    ───────────────────────────────────────── */
+    function showError(msg) {
+      const box = document.getElementById('si-error');
+      const suc = document.getElementById('si-success');
+      suc.classList.add('hidden');
+      box.textContent = msg;
+      box.classList.remove('hidden');
+      box.classList.add('shake');
+      setTimeout(() => box.classList.remove('shake'), 400);
+    }
+
+    function showSuccess(msg) {
+      const box = document.getElementById('si-success');
+      const err = document.getElementById('si-error');
+      err.classList.add('hidden');
+      box.textContent = msg;
+      box.classList.remove('hidden');
+      box.classList.add('success-pop');
+    }
+  </script>
+
+</body>
+
+</html>

@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ticket Purchase | Nice-Xclusive Events Platform</title>
+
+  <script>
+    (function () {
+      var user =
+        JSON.parse(localStorage.getItem("loggedInUser")) ||
+        JSON.parse(localStorage.getItem("currentUser"));
+
+      if (!user) {
+        // preserve where they were trying to go, so sign-in can send them back
+        var redirectTarget = encodeURIComponent(window.location.pathname + window.location.search);
+        window.location.replace("sign-in.html?redirect=" + redirectTarget);
+      }
+    })();
+  </script>
+
+  <link rel="stylesheet" href="/tailwind/src/output.css">
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@4.9.0/fonts/remixicon.css" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=Montserrat:wght@300;400;500;600&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="ticket.css">
+</head>
+
+<body class="relative min-h-screen bg-[#06030F] text-white overflow-x-hidden">
+
+  <!-- Background glow -->
+  <div class="fixed inset-0 pointer-events-none z-0"
+    style="background: radial-gradient(ellipse 70% 60% at 20% 40%, rgba(80,20,120,0.4) 0%, transparent 65%), radial-gradient(ellipse 50% 50% at 80% 70%, rgba(60,10,100,0.25) 0%, transparent 60%);">
+  </div>
+
+  <!-- LIGHTBOX -->
+  <div id="lightbox">
+    <button id="lightbox-close" aria-label="Close"><i class="ri-close-line"></i></button>
+    <img id="lightbox-img" src="" alt="Event image zoomed" />
+  </div>
+
+  <!-- NAVBAR -->
+  <header class="relative z-50">
+    <nav id="main-nav"
+      class="w-full bg-[#050816]/90 backdrop-blur-xl border-b border-yellow-500/20 sticky top-0 left-0 z-50 transition-all duration-300">
+      <div class="max-w-7xl mx-auto px-6 lg:px-10">
+        <div class="flex items-center justify-between h-20">
+
+          <div class="flex items-center gap-3">
+            <div
+              class="w-14 h-14 rounded-xl border border-yellow-500 flex items-center justify-center bg-gradient-to-br from-yellow-400 to-yellow-700 shadow-lg shadow-yellow-500/20">
+              <span class="font-cinzel text-2xl font-bold text-black">NX</span>
+            </div>
+            <div>
+              <p class="font-cinzel text-white text-xl font-semibold tracking-wide">Nice-Xclusive</p>
+              <p class="text-yellow-500 text-xs tracking-[4px] uppercase">Events Platform</p>
+            </div>
+          </div>
+
+          <ul class="hidden lg:flex items-center gap-10 text-white font-medium text-sm">
+            <li><a href="index.html" class="font-cinzel hover:text-yellow-400 transition duration-300">Home</a></li>
+            <li><a href="Aboutus.html" class="font-cinzel hover:text-yellow-400 transition duration-300">About Us</a>
+            </li>
+            <li><a href="/tailwind/src/index.html#events"
+                class="font-cinzel hover:text-yellow-400 transition duration-300">Events</a></li>
+            <li><a href="Services.html" class="font-cinzel hover:text-yellow-400 transition duration-300">Services</a>
+            </li>
+            
+            <li><a href="Contact-us.html" class="font-cinzel hover:text-yellow-400 transition duration-300">Contact</a>
+            </li>
+          </ul>
+
+          <div class="hidden lg:flex items-center gap-4">
+            <a href="sign-in.html"
+              class="font-cinzel px-5 py-2.5 border border-yellow-500 text-yellow-400 rounded-xl hover:bg-yellow-500 hover:text-black transition duration-300 text-sm">Sign
+              In</a>
+            <a href="sign-up.html"
+              class="font-cinzel px-5 py-2.5 bg-yellow-500 text-black font-semibold rounded-xl hover:bg-yellow-400 transition duration-300 shadow-lg shadow-yellow-500/30 text-sm">Create
+              Account</a>
+          </div>
+
+          <button id="hamburger"
+            class="lg:hidden text-yellow-500 text-3xl focus:outline-none cursor-pointer hover:text-yellow-300 transition duration-300"
+            aria-label="Toggle menu">
+            <i id="ham-icon" class="ri-menu-line"></i>
+          </button>
+        </div>
+      </div>
+
+      <div id="mobile-menu" class="lg:hidden bg-[#0b1023] border-t border-yellow-500/20">
+        <ul class="flex flex-col p-6 gap-5 text-white font-medium">
+          <li><a href="index.html" class="font-cinzel hover:text-yellow-400 text-sm">Home</a></li>
+          <li><a href="Aboutus.html" class="font-cinzel hover:text-yellow-400 text-sm">About Us</a></li>
+          <li><a href="/tailwind/src/index.html#events" class="font-cinzel hover:text-yellow-400 text-sm">Events</a></li>
+          <li><a href="Services.html" class="font-cinzel hover:text-yellow-400 text-sm">Services</a></li>
+          
+          <li><a href="Contact-us.html" class="font-cinzel hover:text-yellow-400 text-sm">Contact</a></li>
+          <li class="flex flex-col gap-3 pt-2">
+            <a href="sign-in.html"
+              class="font-cinzel w-full py-3 border border-yellow-500 text-yellow-400 rounded-xl text-center text-sm">Sign
+              In</a>
+            <a href="sign-up.html"
+              class="font-cinzel w-full py-3 bg-yellow-500 text-black font-semibold rounded-xl text-center text-sm">Create
+              Account</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+  </header>
+
+  <main class="relative z-10 max-w-7xl mx-auto px-6 lg:px-10 py-16 space-y-10">
+
+    <!-- Page Header -->
+    <div class="text-center mb-10 reveal">
+      <div class="inline-flex items-center gap-3 mb-4">
+        <span class="w-9 h-px bg-yellow-500 block"></span>
+        <span class="font-cinzel text-yellow-500 text-[10px] font-semibold tracking-[0.4em] uppercase">Secure
+          Booking</span>
+        <span class="w-9 h-px bg-yellow-500 block"></span>
+      </div>
+      <h1 class="gold-text text-4xl lg:text-5xl font-bold mb-3">Complete Your Purchase</h1>
+      <p class="font-cormorant text-white/75 text-lg">Review your booking and confirm your ticket purchase with
+        confidence.</p>
+    </div>
+
+    <!-- MAIN PURCHASE SECTION -->
+    <section
+      class="reveal reveal-delay-1 relative bg-white/[0.03] border border-yellow-500/20 rounded-3xl overflow-hidden before:absolute before:top-0 before:left-0 before:right-0 before:h-0.5 before:bg-gradient-to-r before:from-transparent before:via-yellow-500 before:to-transparent">
+      <div class="grid grid-cols-1 lg:grid-cols-[1.1fr_0.9fr] gap-0">
+
+        <!-- LEFT: Main content -->
+        <div class="p-8 lg:p-10 border-b lg:border-b-0 lg:border-r border-yellow-500/20">
+
+          <div class="flex items-center gap-3 mb-8">
+            <div
+              class="w-10 h-10 rounded-xl bg-yellow-500/10 border border-yellow-500/20 flex items-center justify-center">
+              <i class="ri-shopping-cart-2-line text-yellow-400"></i>
+            </div>
+            <div>
+              <p class="font-cinzel text-yellow-500 text-[10px] tracking-widest uppercase">Booking Summary</p>
+              <h2 class="font-cinzel text-2xl font-bold text-white">Your Selected Event</h2>
+            </div>
+          </div>
+
+          <!-- Event Card -->
+          <div class="relative bg-white/[0.04] border border-yellow-500/20 rounded-2xl p-6 mb-8 overflow-hidden">
+            <div class="flex items-center gap-5 mb-5">
+              <img id="ticket-event-img" src="" alt="Event thumbnail"
+                class="zoom-img w-20 h-20 rounded-2xl object-cover border border-yellow-500/20" />
+              <div class="flex-1 min-w-0">
+                <span id="ticket-event-category"
+                  class="inline-block bg-yellow-500/10 border border-yellow-500/20 text-yellow-400 text-[10px] font-cinzel tracking-widest uppercase px-3 py-1 rounded-full mb-2"></span>
+                <h3 id="ticket-event-title" class="font-cinzel text-lg font-bold text-white leading-tight"></h3>
+                <p id="ticket-event-venue" class="text-white/65 text-xs mt-1">📍</p>
+                <p id="ticket-event-date" class="text-white/65 text-xs">📅</p>
+              </div>
+            </div>
+            <div class="grid grid-cols-2 gap-4">
+              <div class="bg-white/[0.04] border border-yellow-500/15 rounded-xl p-4">
+                <p class="font-cinzel text-yellow-500/70 text-[10px] tracking-widest uppercase mb-1">Quantity</p>
+                <p id="ticket-qty" class="font-cinzel text-white font-semibold text-lg">0</p>
+              </div>
+              <div class="bg-white/[0.04] border border-yellow-500/15 rounded-xl p-4">
+                <p class="font-cinzel text-yellow-500/70 text-[10px] tracking-widest uppercase mb-1">Ticket Price</p>
+                <p id="ticket-event-price" class="font-cinzel font-semibold text-lg gold-text"></p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Attendee Info -->
+          <div class="mb-8">
+            <div class="flex items-center gap-3 mb-5">
+              <div
+                class="w-8 h-8 rounded-lg bg-yellow-500/10 border border-yellow-500/20 flex items-center justify-center">
+                <i class="ri-user-line text-yellow-400 text-sm"></i>
+              </div>
+              <h4 class="font-cinzel text-base font-semibold text-white">Attendee Information</h4>
+            </div>
+            <div class="space-y-4">
+              <div class="flex flex-col gap-2">
+                <label class="font-cinzel text-yellow-500 text-[10px] font-semibold tracking-widest uppercase">Full
+                  Name</label>
+                <input id="full-name" type="text" placeholder="Nice Xclusive"
+                  class="w-full px-4 py-3.5 bg-white/[0.04] border border-yellow-500/20 rounded-xl text-white text-sm placeholder-white/40 focus:outline-none focus:border-yellow-500 focus:bg-yellow-500/[0.05] transition duration-300" />
+              </div>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div class="flex flex-col gap-2">
+                  <label class="font-cinzel text-yellow-500 text-[10px] font-semibold tracking-widest uppercase">Email
+                    Address</label>
+                  <input id="email" type="email" placeholder="you@example.com"
+                    class="w-full px-4 py-3.5 bg-white/[0.04] border border-yellow-500/20 rounded-xl text-white text-sm placeholder-white/40 focus:outline-none focus:border-yellow-500 focus:bg-yellow-500/[0.05] transition duration-300" />
+                </div>
+                <div class="flex flex-col gap-2">
+                  <label class="font-cinzel text-yellow-500 text-[10px] font-semibold tracking-widest uppercase">Phone
+                    Number</label>
+                  <input id="phone" type="tel" placeholder="+234 800 000 0000"
+                    class="w-full px-4 py-3.5 bg-white/[0.04] border border-yellow-500/20 rounded-xl text-white text-sm placeholder-white/40 focus:outline-none focus:border-yellow-500 focus:bg-yellow-500/[0.05] transition duration-300" />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Payment Info -->
+          <div>
+            <div class="flex items-center gap-3 mb-5">
+              <div
+                class="w-8 h-8 rounded-lg bg-yellow-500/10 border border-yellow-500/20 flex items-center justify-center">
+                <i class="ri-bank-card-line text-yellow-400 text-sm"></i>
+              </div>
+              <h4 class="font-cinzel text-base font-semibold text-white">Payment Details</h4>
+            </div>
+            <div class="space-y-4">
+              <div class="flex flex-col gap-2">
+                <!-- <label
+                  class="font-cinzel text-yellow-500 text-[10px] font-semibold tracking-widest uppercase">Cardholder
+                  Name</label>
+                <input type="text" placeholder="Name on card"
+                  class="w-full px-4 py-3.5 bg-white/[0.04] border border-yellow-500/20 rounded-xl text-white text-sm placeholder-white/40 focus:outline-none focus:border-yellow-500 focus:bg-yellow-500/[0.05] transition duration-300" /> -->
+              </div>
+              <div class="flex flex-col gap-2">
+                <!-- <label class="font-cinzel text-yellow-500 text-[10px] font-semibold tracking-widest uppercase">Card
+                  Number</label>
+                <input type="text" maxlength="19" placeholder="0000 0000 0000 0000" id="card-number"
+                  class="w-full px-4 py-3.5 bg-white/[0.04] border border-yellow-500/20 rounded-xl text-white text-sm placeholder-white/40 focus:outline-none focus:border-yellow-500 focus:bg-yellow-500/[0.05] transition duration-300" /> -->
+              </div>
+              <div class="grid grid-cols-2 gap-4">
+                <div class="flex flex-col gap-2">
+                  <!-- <label class="font-cinzel text-yellow-500 text-[10px] font-semibold tracking-widest uppercase">Expiry
+                    Date</label>
+                  <input type="text" maxlength="5" id="card-expiry" placeholder="MM / YY"
+                    class="w-full px-4 py-3.5 bg-white/[0.04] border border-yellow-500/20 rounded-xl text-white text-sm placeholder-white/40 focus:outline-none focus:border-yellow-500 focus:bg-yellow-500/[0.05] transition duration-300" /> -->
+                </div>
+                <div class="flex flex-col gap-2">
+                  <!-- <label
+                    class="font-cinzel text-yellow-500 text-[10px] font-semibold tracking-widest uppercase">CVV</label>
+                  <input type="password" maxlength="3" placeholder="• • •"
+                    class="w-full px-4 py-3.5 bg-white/[0.04] border border-yellow-500/20 rounded-xl text-white text-sm placeholder-white/40 focus:outline-none focus:border-yellow-500 focus:bg-yellow-500/[0.05] transition duration-300" /> -->
+                </div>
+              </div>
+              <div class="flex items-center gap-3 pt-2">
+                <!-- <span class="font-cinzel text-white/65 text-[10px] uppercase tracking-widest">Also pay with</span>
+                <span
+                  class="px-3 py-1 bg-white/[0.05] border border-yellow-500/20 rounded-lg text-yellow-400 text-[10px] font-cinzel">Paystack</span>
+                <span
+                  class="px-3 py-1 bg-white/[0.05] border border-yellow-500/20 rounded-lg text-yellow-400 text-[10px] font-cinzel">Flutterwave</span> -->
+
+                  Secure payment will be completed using Paystack after you click Confirm Payment.
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- RIGHT: Order Summary -->
+        <aside class="p-8 lg:p-10 bg-yellow-500/[0.04]">
+
+          <div class="mb-6">
+            <div class="inline-flex items-center gap-3 mb-4">
+              <span class="w-6 h-px bg-yellow-500 block"></span>
+              <span class="font-cinzel text-yellow-500 text-[10px] font-semibold tracking-[0.4em] uppercase">Order
+                Total</span>
+            </div>
+            <h3 class="font-cinzel text-2xl font-bold text-white mb-1">Confirm Purchase</h3>
+            <p class="font-cormorant text-white/75 text-base">Select your seats below, then review your order.</p>
+          </div>
+
+
+          <!-- Discount code -->
+<div class="mb-4">
+  <div class="flex gap-2">
+    <!-- <input id="discount-code-input" type="text" placeholder="Have a discount code?"
+      class="flex-1 px-4 py-3 bg-white/[0.04] border border-yellow-500/20 rounded-xl text-white text-sm placeholder-white/40 focus:outline-none focus:border-yellow-500 transition uppercase" />
+    <button id="apply-discount-btn" type="button"
+      class="font-cinzel px-4 py-3 bg-white/[0.06] border border-yellow-500/30 text-yellow-400 text-xs tracking-widest uppercase rounded-xl hover:bg-yellow-500/10 transition">
+      Apply
+    </button>
+  </div>
+  <p id="discount-msg" class="hidden text-xs mt-2"></p> -->
+</div>
+
+          <!-- Price breakdown -->
+          <div class="space-y-3 mb-6">
+            <div class="flex items-center justify-between py-3 border-b border-yellow-500/10">
+              <p class="font-cinzel text-white/75 text-xs" id="seat-count-label">0 × VIP Tickets</p>
+              <p id="subtotal" class="font-cinzel text-white text-sm font-semibold">₦0</p>
+            </div>
+            <div class="flex items-center justify-between py-3 border-b border-yellow-500/10">
+              <p class="font-cinzel text-white/75 text-xs">Service Fee</p>
+              <p id="service-fee" class="font-cinzel text-white text-sm font-semibold">₦0</p>
+            </div>
+            <div
+              class="flex items-center justify-between py-4 bg-yellow-500/10 border border-yellow-500/20 rounded-xl px-4">
+              <p class="font-cinzel text-yellow-400 text-sm font-semibold">Total Amount</p>
+              <p id="total-amount" class="font-cinzel text-2xl font-bold gold-text">₦0</p>
+            </div>
+          </div>
+
+<div id="discount-row" class="hidden flex items-center justify-between py-3 border-b border-yellow-500/10">
+  <p class="font-cinzel text-green-400 text-xs">Discount (<span id="discount-code-label"></span>)</p>
+  <p id="discount-amount" class="font-cinzel text-green-400 text-sm font-semibold">−₦0</p>
+</div>
+
+          <!-- What's included -->
+          <div class="bg-white/[0.03] border border-yellow-500/15 rounded-2xl p-5 mb-6">
+            <p class="font-cinzel text-yellow-500 text-[10px] tracking-widest uppercase mb-3">What's Included</p>
+            <div class="space-y-2">
+              <div class="flex items-center gap-2 text-white/75 text-xs"><span class="text-yellow-500 text-xs">✦</span>
+                QR Code e-ticket via email</div>
+              <div class="flex items-center gap-2 text-white/75 text-xs"><span class="text-yellow-500 text-xs">✦</span>
+                VIP access & priority entry</div>
+              <div class="flex items-center gap-2 text-white/75 text-xs"><span class="text-yellow-500 text-xs">✦</span>
+                Event program & networking</div>
+              <div class="flex items-center gap-2 text-white/75 text-xs"><span class="text-yellow-500 text-xs">✦</span>
+                150 reward points earned</div>
+            </div>
+          </div>
+
+          <!-- Confirm button -->
+          <button id="confirm-btn" disabled
+            class="font-cinzel w-full py-4 bg-white/[0.06] text-white/30 font-bold text-sm tracking-widest uppercase rounded-xl transition duration-300 cursor-not-allowed mb-4">
+            Select Seats to Continue
+          </button>
+
+          <div class="flex items-center justify-center gap-2 text-white/55 text-[10px]">
+            <i class="ri-shield-check-line text-yellow-500/60"></i>
+            <span>256-bit SSL encryption · Secured by Paystack</span>
+          </div>
+
+        </aside>
+      </div>
+    </section>
+
+    <!-- SEAT SELECTION -->
+    <section
+      class="reveal reveal-delay-2 relative bg-white/[0.03] border border-yellow-500/20 rounded-3xl p-8 lg:p-10 overflow-hidden before:absolute before:top-0 before:left-0 before:right-0 before:h-0.5 before:bg-gradient-to-r before:from-transparent before:via-yellow-500 before:to-transparent">
+
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-3">
+        <div class="flex items-center gap-3">
+          <div
+            class="w-10 h-10 rounded-xl bg-yellow-500/10 border border-yellow-500/20 flex items-center justify-center">
+            <i class="ri-map-pin-line text-yellow-400"></i>
+          </div>
+          <div>
+            <h3 class="font-cinzel text-2xl font-bold text-white">Select Your Seats</h3>
+            <p class="font-cormorant text-white/75 text-base">Click a seat to select it. Click again to deselect.</p>
+          </div>
+        </div>
+        <button id="clear-seats"
+          class="font-cinzel self-start sm:self-auto px-4 py-2 border border-yellow-500/25 text-yellow-400/80 hover:text-yellow-400 hover:border-yellow-500/50 text-[11px] tracking-widest uppercase rounded-lg transition">
+          Clear Selection
+        </button>
+      </div>
+
+      <!-- AI Recommend -->
+      <div
+        class="flex flex-col sm:flex-row sm:items-center gap-3 mb-6 mt-6 bg-yellow-500/[0.05] border border-yellow-500/15 rounded-2xl p-4">
+        <div class="flex items-center gap-3 flex-1">
+          <i class="ri-sparkling-line text-yellow-400 text-lg"></i>
+          <div class="flex items-center gap-2">
+            <label class="font-cinzel text-white/70 text-xs">Seats needed:</label>
+            <select id="group-size"
+              class="bg-white/[0.06] border border-yellow-500/20 rounded-lg px-3 py-1.5 text-white text-xs focus:outline-none focus:border-yellow-500">
+              <option value="1" class="bg-[#06030F] text-white">1</option>
+              <option value="2" class="bg-[#06030F] text-white">2</option>
+              <option value="3" class="bg-[#06030F] text-white">3</option>
+              <option value="4" class="bg-[#06030F] text-white">4</option>
+              <option value="5" class="bg-[#06030F] text-white">5</option>
+            </select>
+          </div>
+        </div>
+        <button id="ai-recommend-btn"
+          class="font-cinzel flex items-center gap-1.5 px-4 py-2 bg-yellow-500 hover:bg-yellow-400 text-black text-xs font-bold tracking-wider uppercase rounded-lg transition">
+          <i class="ri-sparkling-line"></i> AI Recommend Seats
+        </button>
+      </div>
+      <p id="ai-recommend-status" class="font-cormorant text-yellow-400/80 text-sm mb-4"></p>
+
+      <!-- Stage -->
+      <div class="mb-6">
+        <p class="font-cinzel text-yellow-500/60 text-[10px] tracking-widest uppercase text-center mb-3">Stage / Screen
+        </p>
+        <div
+          class="h-10 rounded-2xl bg-gradient-to-r from-yellow-500/20 via-yellow-500/40 to-yellow-500/20 border border-yellow-500/30 flex items-center justify-center">
+          <span class="font-cinzel text-yellow-400 text-xs tracking-widest uppercase">▲ Stage</span>
+        </div>
+      </div>
+
+      <!-- Seats grid -->
+      <!-- Tier price legend (filled in by JS from the real event data) -->
+      <div class="grid grid-cols-3 gap-3 mb-6">
+        <div class="bg-yellow-500/10 border border-yellow-500/30 rounded-xl p-3 text-center">
+          <p class="font-cinzel text-yellow-400 text-[9px] tracking-widest uppercase mb-1">VIP · Row A</p>
+          <p id="tier-price-vip" class="font-cinzel text-white font-bold text-sm">₦0</p>
+        </div>
+        <div class="bg-white/[0.04] border border-yellow-500/15 rounded-xl p-3 text-center">
+          <p class="font-cinzel text-white/60 text-[9px] tracking-widest uppercase mb-1">Regular · Row B</p>
+          <p id="tier-price-regular" class="font-cinzel text-white font-bold text-sm">₦0</p>
+        </div>
+        <div class="bg-green-500/10 border border-green-500/20 rounded-xl p-3 text-center">
+          <p class="font-cinzel text-green-400/80 text-[9px] tracking-widest uppercase mb-1">Early Bird · Row C</p>
+          <p id="tier-price-earlybird" class="font-cinzel text-white font-bold text-sm">₦0</p>
+        </div>
+      </div>
+
+      <div id="seat-map" class="space-y-2 mb-6">
+        <div class="flex items-center gap-1">
+          <span class="font-cinzel text-white/40 text-[10px] w-5">A</span>
+          <div class="flex-1 grid grid-cols-10 gap-2">
+            <button data-seat="A1" data-tier="vip" data-price="0"
+              class="seat h-9 rounded-xl bg-white/[0.04] border border-yellow-500/20 flex items-center justify-center text-white/65 text-[9px]">A1</button>
+            <button data-seat="A2" data-tier="vip" data-price="0"
+              class="seat h-9 rounded-xl bg-white/[0.04] border border-yellow-500/20 flex items-center justify-center text-white/65 text-[9px]">A2</button>
+            <button data-seat="A3" data-tier="vip" data-price="0"
+              class="seat h-9 rounded-xl bg-white/[0.04] border border-yellow-500/20 flex items-center justify-center text-white/65 text-[9px]">A3</button>
+            <button data-seat="A4" data-tier="vip" data-price="0"
+              class="seat h-9 rounded-xl bg-white/[0.04] border border-yellow-500/20 flex items-center justify-center text-white/65 text-[9px]">A4</button>
+            <button data-seat="A5" data-tier="vip" data-price="0"
+              class="seat h-9 rounded-xl bg-white/[0.04] border border-yellow-500/20 flex items-center justify-center text-white/65 text-[9px]">A5</button>
+            <button data-seat="A6" data-tier="vip" data-price="0"
+              class="seat h-9 rounded-xl bg-white/[0.04] border border-yellow-500/20 flex items-center justify-center text-white/65 text-[9px]">A6</button>
+            <button data-seat="A7" data-tier="vip" data-price="0"
+              class="seat h-9 rounded-xl bg-white/[0.04] border border-yellow-500/20 flex items-center justify-center text-white/65 text-[9px]">A7</button>
+            <button data-seat="A8" data-tier="vip" data-price="0"
+              class="seat h-9 rounded-xl bg-white/[0.04] border border-yellow-500/20 flex items-center justify-center text-white/65 text-[9px]">A8</button>
+            <button data-seat="A9" data-tier="vip" data-price="0"
+              class="seat h-9 rounded-xl bg-white/[0.04] border border-yellow-500/20 flex items-center justify-center text-white/65 text-[9px]">A9</button>
+            <button data-seat="A10" data-tier="vip" data-price="0"
+              class="seat h-9 rounded-xl bg-white/[0.04] border border-yellow-500/20 flex items-center justify-center text-white/65 text-[9px]">A10</button>
+          </div>
+        </div>
+        <div class="flex items-center gap-1">
+          <span class="font-cinzel text-white/40 text-[10px] w-5">B</span>
+          <div class="flex-1 grid grid-cols-10 gap-2">
+            <button data-seat="B1" data-tier="regular" data-price="0"
+              class="seat h-9 rounded-xl bg-white/[0.04] border border-yellow-500/20 flex items-center justify-center text-white/65 text-[9px]">B1</button>
+            <button data-seat="B2" data-tier="regular" data-price="0"
+              class="seat h-9 rounded-xl bg-white/[0.04] border border-yellow-500/20 flex items-center justify-center text-white/65 text-[9px]">B2</button>
+            <button data-seat="B3" data-tier="regular" data-price="0"
+              class="seat h-9 rounded-xl bg-white/[0.04] border border-yellow-500/20 flex items-center justify-center text-white/65 text-[9px]">B3</button>
+            <button data-seat="B4" data-tier="regular" data-price="0"
+              class="seat h-9 rounded-xl bg-white/[0.04] border border-yellow-500/20 flex items-center justify-center text-white/65 text-[9px]">B4</button>
+            <button data-seat="B5" data-tier="regular" data-price="0"
+              class="seat h-9 rounded-xl bg-white/[0.04] border border-yellow-500/20 flex items-center justify-center text-white/65 text-[9px]">B5</button>
+            <button data-seat="B6" data-tier="regular" data-price="0"
+              class="seat h-9 rounded-xl bg-white/[0.04] border border-yellow-500/20 flex items-center justify-center text-white/65 text-[9px]">B6</button>
+            <button data-seat="B7" data-tier="regular" data-price="0"
+              class="seat h-9 rounded-xl bg-white/[0.04] border border-yellow-500/20 flex items-center justify-center text-white/65 text-[9px]">B7</button>
+            <button data-seat="B8" data-tier="regular" data-price="0"
+              class="seat h-9 rounded-xl bg-white/[0.04] border border-yellow-500/20 flex items-center justify-center text-white/65 text-[9px]">B8</button>
+            <button data-seat="B9" data-tier="regular" data-price="0"
+              class="seat h-9 rounded-xl bg-white/[0.04] border border-yellow-500/20 flex items-center justify-center text-white/65 text-[9px]">B9</button>
+            <button data-seat="B10" data-tier="regular" data-price="0"
+              class="seat h-9 rounded-xl bg-white/[0.04] border border-yellow-500/20 flex items-center justify-center text-white/65 text-[9px]">B10</button>
+          </div>
+        </div>
+        <div class="flex items-center gap-1">
+          <span class="font-cinzel text-white/40 text-[10px] w-5">C</span>
+          <div class="flex-1 grid grid-cols-10 gap-2">
+            <button data-seat="C1" data-tier="earlybird" data-price="0"
+              class="seat h-9 rounded-xl bg-white/[0.04] border border-yellow-500/20 flex items-center justify-center text-white/65 text-[9px]">C1</button>
+            <button data-seat="C2" data-tier="earlybird" data-price="0"
+              class="seat h-9 rounded-xl bg-white/[0.04] border border-yellow-500/20 flex items-center justify-center text-white/65 text-[9px]">C2</button>
+            <button data-seat="C3" data-tier="earlybird" data-price="0"
+              class="seat h-9 rounded-xl bg-white/[0.04] border border-yellow-500/20 flex items-center justify-center text-white/65 text-[9px]">C3</button>
+            <button data-seat="C4" data-tier="earlybird" data-price="0"
+              class="seat h-9 rounded-xl bg-white/[0.04] border border-yellow-500/20 flex items-center justify-center text-white/65 text-[9px]">C4</button>
+            <button data-seat="C5" data-tier="earlybird" data-price="0"
+              class="seat h-9 rounded-xl bg-white/[0.04] border border-yellow-500/20 flex items-center justify-center text-white/65 text-[9px]">C5</button>
+            <button data-seat="C6" data-tier="earlybird" data-price="0"
+              class="seat h-9 rounded-xl bg-white/[0.04] border border-yellow-500/20 flex items-center justify-center text-white/65 text-[9px]">C6</button>
+            <button data-seat="C7" data-tier="earlybird" data-price="0"
+              class="seat h-9 rounded-xl bg-white/[0.04] border border-yellow-500/20 flex items-center justify-center text-white/65 text-[9px]">C7</button>
+            <button data-seat="C8" data-tier="earlybird" data-price="0"
+              class="seat h-9 rounded-xl bg-white/[0.04] border border-yellow-500/20 flex items-center justify-center text-white/65 text-[9px]">C8</button>
+            <button data-seat="C9" data-tier="earlybird" data-price="0"
+              class="seat h-9 rounded-xl bg-white/[0.04] border border-yellow-500/20 flex items-center justify-center text-white/65 text-[9px]">C9</button>
+            <button data-seat="C10" data-tier="earlybird" data-price="0"
+              class="seat h-9 rounded-xl bg-white/[0.04] border border-yellow-500/20 flex items-center justify-center text-white/65 text-[9px]">C10</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Legend -->
+      <div class="flex flex-wrap items-center justify-between gap-4 pt-4 border-t border-yellow-500/10">
+        <div class="flex flex-wrap gap-4">
+          <div class="flex items-center gap-2">
+            <div class="w-6 h-6 rounded-lg bg-yellow-500 border border-yellow-600"></div>
+            <span class="font-cinzel text-white/75 text-[10px] uppercase tracking-wider">Selected</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <div class="w-6 h-6 rounded-lg bg-white/[0.04] border border-yellow-500/20"></div>
+            <span class="font-cinzel text-white/75 text-[10px] uppercase tracking-wider">Available</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <div class="w-6 h-6 rounded-lg bg-white/[0.15] border border-white/10"></div>
+            <span class="font-cinzel text-white/75 text-[10px] uppercase tracking-wider">Taken</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <div class="w-6 h-6 rounded-lg bg-white/[0.04] border-2 border-yellow-400"></div>
+            <span class="font-cinzel text-white/75 text-[10px] uppercase tracking-wider">AI Suggested</span>
+          </div>
+        </div>
+        <p class="text-white/65 text-xs font-cinzel">
+          Selected: <span id="selected-list" class="text-yellow-400">None</span>
+        </p>
+      </div>
+
+    </section>
+
+    <div class="text-center text-yellow-500/20 text-lg tracking-[8px]">— ✦ —</div>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="relative z-10 border-t border-yellow-500/20 py-12 mt-10">
+    <div class="max-w-7xl mx-auto px-6 lg:px-10">
+      <div class="grid gap-8 md:grid-cols-4 mb-8">
+        <div>
+          <h4 class="font-cinzel text-xl font-bold mb-4 text-white">Nice-Xclusive</h4>
+          <p class="text-sky-200 text-sm font-cormorant">A premium platform for discovering and booking events you love.
+          </p>
+        </div>
+        <div>
+          <h4 class="font-cinzel text-xl font-bold mb-4 text-white">Quick Links</h4>
+          <ul class="space-y-2 text-sky-200 text-sm">
+            <li><a href="Aboutus.html" class="font-cinzel hover:text-yellow-400 transition text-xs">About Us</a></li>
+            <li><a href="Services.html" class="font-cinzel hover:text-yellow-400 transition text-xs">Services</a></li>
+            <li><a href="Contact-us.html" class="font-cinzel hover:text-yellow-400 transition text-xs">Contact</a></li>
+            <li><a href="terms.html" class="font-cinzel hover:text-yellow-400 transition text-xs">Terms & Policy</a>
+            </li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="font-cinzel text-xl font-bold mb-4 text-white">Categories</h4>
+          <ul class="space-y-2 text-sky-200 text-sm">
+            <li><a href="#" class="font-cinzel hover:text-yellow-400 transition text-xs">Tech Events</a></li>
+            <li><a href="#" class="font-cinzel hover:text-yellow-400 transition text-xs">Music & Arts</a></li>
+            <li><a href="#" class="font-cinzel hover:text-yellow-400 transition text-xs">Workshops</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="font-cinzel text-xl font-bold mb-4 text-white">Follow Us</h4>
+          <div class="flex gap-4 text-sky-200">
+            <a href="#"
+              class="w-9 h-9 rounded-lg border border-yellow-500/20 bg-white/[0.04] flex items-center justify-center hover:border-yellow-500 hover:text-yellow-400 transition font-bold text-sm">f</a>
+            <a href="#"
+              class="w-9 h-9 rounded-lg border border-yellow-500/20 bg-white/[0.04] flex items-center justify-center hover:border-yellow-500 hover:text-yellow-400 transition font-bold text-sm">X</a>
+            <a href="#"
+              class="w-9 h-9 rounded-lg border border-yellow-500/20 bg-white/[0.04] flex items-center justify-center hover:border-yellow-500 hover:text-yellow-400 transition text-base">📷</a>
+            <a href="#"
+              class="w-9 h-9 rounded-lg border border-yellow-500/20 bg-white/[0.04] flex items-center justify-center hover:border-yellow-500 hover:text-yellow-400 transition font-bold text-sm">in</a>
+          </div>
+        </div>
+      </div>
+      <div class="border-t border-white/10 pt-6 text-center text-sky-200 text-xs font-cinzel">
+        © 2026 Nice-Exclusive Event Booking Platform. All rights reserved.
+      </div>
+    </div>
+  </footer>
+
+<script src="https://js.paystack.co/v1/inline.js"></script>
+  <script src="/tailwind/ticket.js"></script>
+
+</body>
+
+</html>

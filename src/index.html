@@ -1,0 +1,884 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nice-Xclusive Event Booking Platform</title>
+  <link rel="stylesheet" href="./output.css">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=Montserrat:wght@300;400;500;600&display=swap"
+    rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@4.9.0/fonts/remixicon.css" rel="stylesheet">
+  <link rel="stylesheet" href="index.css">
+
+  <style>
+    .font-cinzel {
+      font-family: 'Cinzel', serif;
+    }
+
+    .font-cormorant {
+      font-family: 'Cormorant Garamond', serif;
+    }
+
+    body {
+      font-family: 'Montserrat', sans-serif;
+    }
+
+    .gold-text {
+      font-family: 'Cinzel', serif;
+      background: linear-gradient(135deg, #F0C040 0%, #C9A84C 50%, #8B6914 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    @keyframes fadeUp {
+      0% {
+        opacity: 0;
+        transform: translateY(24px);
+      }
+
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes floatSlow {
+
+      0%,
+      100% {
+        transform: translateY(0);
+      }
+
+      50% {
+        transform: translateY(-10px);
+      }
+    }
+
+    @keyframes countPulse {
+      0% {
+        transform: scale(1);
+      }
+
+      30% {
+        transform: scale(1.15);
+      }
+
+      100% {
+        transform: scale(1);
+      }
+    }
+
+    .hero-anim {
+      opacity: 0;
+      animation: fadeUp 0.9s ease forwards;
+    }
+
+    .hero-anim-1 {
+      animation-delay: 0.1s;
+    }
+
+    .hero-anim-2 {
+      animation-delay: 0.3s;
+    }
+
+    .hero-anim-3 {
+      animation-delay: 0.5s;
+    }
+
+    .hero-anim-4 {
+      animation-delay: 0.7s;
+    }
+
+    .nx-float {
+      animation: floatSlow 4s ease-in-out infinite;
+    }
+
+    .count-pulse {
+      animation: countPulse 0.4s ease;
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity .7s ease, transform .7s ease;
+    }
+
+    .reveal.in-view {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .reveal-delay-1.in-view {
+      transition-delay: .1s;
+    }
+
+    .reveal-delay-2.in-view {
+      transition-delay: .2s;
+    }
+
+    .reveal-delay-3.in-view {
+      transition-delay: .3s;
+    }
+
+    #mobile-menu {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.35s ease;
+    }
+
+    #mobile-menu.open {
+      max-height: 600px;
+    }
+
+    /* ── LIGHTBOX ── */
+    #lightbox {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      background: rgba(0, 0, 0, 0.92);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+
+    #lightbox.active {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    #lightbox img {
+      max-width: 90vw;
+      max-height: 85vh;
+      border-radius: 16px;
+      box-shadow: 0 0 60px rgba(234, 179, 8, 0.2);
+      transform: scale(0.9);
+      transition: transform 0.3s ease;
+      object-fit: contain;
+    }
+
+    #lightbox.active img {
+      transform: scale(1);
+    }
+
+    #lightbox-close {
+      position: absolute;
+      top: 20px;
+      right: 24px;
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 2rem;
+      cursor: pointer;
+      transition: color 0.2s;
+      background: none;
+      border: none;
+      line-height: 1;
+    }
+
+    #lightbox-close:hover {
+      color: #eab308;
+    }
+
+    /* zoom cursor on card images */
+    .zoom-img {
+      cursor: zoom-in;
+      transition: transform 0.4s ease;
+    }
+
+    .zoom-img:hover {
+      transform: scale(1.04);
+    }
+  </style>
+</head>
+
+<body class="relative min-h-screen overflow-x-hidden bg-[#06030F]">
+
+  <div class="fixed inset-0 pointer-events-none z-0"
+    style="background: radial-gradient(ellipse 70% 60% at 20% 40%, rgba(80,20,120,0.4) 0%, transparent 65%), radial-gradient(ellipse 50% 50% at 80% 70%, rgba(60,10,100,0.25) 0%, transparent 60%);">
+  </div>
+
+  <!-- LIGHTBOX -->
+  <div id="lightbox">
+    <button id="lightbox-close" aria-label="Close"><i class="ri-close-line"></i></button>
+    <img id="lightbox-img" src="" alt="Event image zoomed" />
+  </div>
+
+  <!-- NAVBAR -->
+  <header class="relative z-50">
+    <nav id="main-nav"
+      class="w-full bg-[#050816]/90 backdrop-blur-xl border-b border-yellow-500/20 sticky top-0 left-0 z-50 transition-all duration-300">
+      <div class="max-w-7xl mx-auto px-6 lg:px-10">
+        <div class="flex items-center justify-between h-20">
+          <div class="flex items-center gap-3">
+            <div
+              class="w-14 h-14 rounded-xl border border-yellow-500 flex items-center justify-center bg-gradient-to-br from-yellow-400 to-yellow-700 shadow-lg shadow-yellow-500/20">
+              <span class="font-cinzel text-2xl font-bold text-black">NX</span>
+            </div>
+            <div>
+              <p class="font-cinzel text-white text-xl font-semibold tracking-wide">Nice-Xclusive</p>
+              <p class="text-yellow-500 text-xs tracking-[4px] uppercase">Events Platform</p>
+            </div>
+          </div>
+          <ul class="hidden lg:flex items-center gap-10 text-white font-medium text-sm">
+            <li><a href="index.html" class="font-cinzel hover:text-yellow-400 transition duration-300">Home</a></li>
+            <li><a href="/tailwind/src/Aboutus.html"
+                class="font-cinzel hover:text-yellow-400 transition duration-300">About Us</a></li>
+            <li><a href="/tailwind/src/index.html#events"
+                class="font-cinzel hover:text-yellow-400 transition duration-300">Events</a></li>
+            <li><a href="/tailwind/src/Services.html"
+                class="font-cinzel hover:text-yellow-400 transition duration-300">Services</a></li>
+
+            <li><a href="/tailwind/src/Contact-us.html"
+                class="font-cinzel hover:text-yellow-400 transition duration-300">Contact</a></li>
+          </ul>
+          <div class="hidden lg:flex items-center gap-4">
+            <a href="/tailwind/src/sign-in.html"
+              class="font-cinzel px-5 py-2.5 border border-yellow-500 text-yellow-400 rounded-xl hover:bg-yellow-500 hover:text-black transition duration-300 text-sm">Sign
+              In</a>
+            <a href="/tailwind/src/sign-up.html"
+              class="font-cinzel px-5 py-2.5 bg-yellow-500 text-black font-semibold rounded-xl hover:bg-yellow-400 transition duration-300 shadow-lg shadow-yellow-500/30 text-sm">Create
+              Account</a>
+          </div>
+          <button id="hamburger"
+            class="lg:hidden text-yellow-500 text-3xl focus:outline-none cursor-pointer hover:text-yellow-300 transition duration-300"
+            aria-label="Toggle menu">
+            <i id="ham-icon" class="ri-menu-line"></i>
+          </button>
+        </div>
+      </div>
+      <div id="mobile-menu" class="lg:hidden bg-[#0b1023] border-t border-yellow-500/20">
+        <ul class="flex flex-col p-6 gap-5 text-white font-medium">
+          <li><a href="index.html" class="font-cinzel hover:text-yellow-400 text-sm">Home</a></li>
+          <li><a href="/tailwind/src/Aboutus.html" class="font-cinzel hover:text-yellow-400 text-sm">About Us</a></li>
+          <li><a href="/tailwind/src/index.html#events" class="font-cinzel hover:text-yellow-400 text-sm">Events</a>
+          </li>
+          <li><a href="/tailwind/src/Services.html" class="font-cinzel hover:text-yellow-400 text-sm">Services</a></li>
+
+          <li><a href="/tailwind/src/Contact-us.html" class="font-cinzel hover:text-yellow-400 text-sm">Contact</a></li>
+          <li class="flex flex-col gap-3 pt-2">
+            <a href="/tailwind/src/sign-in.html"
+              class="font-cinzel w-full py-3 border border-yellow-500 text-yellow-400 rounded-xl text-center text-sm">Sign
+              In</a>
+            <a href="/tailwind/src/sign-up.html"
+              class="font-cinzel w-full py-3 bg-yellow-500 text-black font-semibold rounded-xl text-center text-sm">Create
+              Account</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+  </header>
+
+  <main class="relative z-10 min-h-screen w-full">
+
+    <!-- HERO -->
+    <section class="max-w-7xl mx-auto px-6 lg:px-10 py-20 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+      <div>
+        <div class="inline-flex items-center gap-3 mb-6 hero-anim hero-anim-1">
+          <span class="w-8 h-px bg-yellow-500 block"></span>
+          <p
+            class="inline-flex items-center gap-2 rounded-full bg-yellow-500/10 border border-yellow-500/30 px-4 py-2 font-cinzel text-xs font-semibold text-yellow-400 tracking-widest uppercase">
+            Best event booking experience
+          </p>
+        </div>
+        <h2
+          class="hero-anim hero-anim-2 font-cinzel text-5xl lg:text-6xl font-bold tracking-tight mb-6 leading-tight text-white">
+          Discover the best events in your city.
+        </h2>
+        <p class="hero-anim hero-anim-3 font-cormorant text-lg text-white/70 max-w-xl mb-8 leading-relaxed">
+          Browse concerts, conferences, workshops and more with a premium booking platform designed for modern
+          experiences.
+        </p>
+        <div class="hero-anim hero-anim-4 flex flex-col sm:flex-row gap-4">
+          <a href="/tailwind/src/index.html#events"
+            class="inline-flex items-center justify-center gap-2 rounded-xl bg-yellow-500 hover:bg-yellow-400 px-6 py-3.5 text-black font-bold shadow-lg shadow-yellow-500/30 transition hover:-translate-y-0.5 font-cinzel text-sm tracking-wider">✦
+            Explore Events</a>
+          <a href="/tailwind/src/organizer.html"
+            class="inline-flex items-center justify-center gap-2 rounded-xl border border-yellow-500/40 px-6 py-3.5 text-yellow-400 hover:bg-yellow-500/10 font-medium transition hover:-translate-y-0.5 font-cinzel text-sm tracking-wider">✦
+            Create Event</a>
+        </div>
+        <div class="hero-anim hero-anim-4 flex gap-8 mt-10 pt-8 border-t border-yellow-500/20">
+          <div>
+            <p class="font-cinzel text-2xl font-bold gold-text">1000+</p>
+            <p class="text-white/50 text-xs mt-1">Happy Users</p>
+          </div>
+          <div class="w-px bg-yellow-500/20"></div>
+          <div>
+            <p class="font-cinzel text-2xl font-bold gold-text">500+</p>
+            <p class="text-white/50 text-xs mt-1">Events Hosted</p>
+          </div>
+          <div class="w-px bg-yellow-500/20"></div>
+          <div>
+            <p class="font-cinzel text-2xl font-bold gold-text">200+</p>
+            <p class="text-white/50 text-xs mt-1">Verified Vendors</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-anim hero-anim-3 relative grid grid-cols-2 grid-rows-2 gap-3 h-[480px]">
+        <div class="row-span-2 rounded-2xl overflow-hidden">
+          <img src="img/WhatsApp Image 2026-05-22 at 4.34.52 PM (2).jpeg" alt="Elegant venue"
+            class="w-full h-full object-cover zoom-img" />
+        </div>
+        <div class="rounded-2xl overflow-hidden">
+          <img src="https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?w=400&q=80" alt="Concert"
+            class="w-full h-full object-cover zoom-img" />
+        </div>
+        <div class="rounded-2xl overflow-hidden relative">
+          <img src="img/WhatsApp Image 2026-05-22 at 4.34.52 PM.jpeg" alt="Event"
+            class="w-full h-full object-cover zoom-img" />
+          <div class="absolute inset-0 bg-[#06030F]/40 flex items-end p-4 pointer-events-none">
+            <p class="font-cinzel text-yellow-400 text-xs tracking-widest uppercase">Nice-Xclusive Events</p>
+          </div>
+        </div>
+        <div
+          class="nx-float absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-16 h-16 rounded-full bg-black/90 border-2 border-yellow-500 flex items-center justify-center shadow-xl shadow-yellow-500/30 z-10 pointer-events-none">
+          <span class="font-cinzel text-yellow-400 font-bold text-lg">NX</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- FEATURES BAR -->
+    <section class="max-w-7xl mx-auto px-6 lg:px-10 mb-16 reveal">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 bg-white/[0.03] border border-yellow-500/20 rounded-2xl p-6">
+        <div class="flex items-center gap-4">
+          <div
+            class="w-12 h-12 rounded-xl bg-yellow-500/10 border border-yellow-500/20 flex items-center justify-center text-xl">
+            🔍</div>
+          <div>
+            <p class="font-cinzel text-white text-xs font-semibold">Discover Events</p>
+            <p class="text-white/50 text-[10px] mt-0.5">Find events near you</p>
+          </div>
+        </div>
+        <div class="flex items-center gap-4">
+          <div
+            class="w-12 h-12 rounded-xl bg-yellow-500/10 border border-yellow-500/20 flex items-center justify-center text-xl">
+            📅</div>
+          <div>
+            <p class="font-cinzel text-white text-xs font-semibold">Plan Effortlessly</p>
+            <p class="text-white/50 text-[10px] mt-0.5">All tools in one place</p>
+          </div>
+        </div>
+        <div class="flex items-center gap-4">
+          <div
+            class="w-12 h-12 rounded-xl bg-yellow-500/10 border border-yellow-500/20 flex items-center justify-center text-xl">
+            🤝</div>
+          <div>
+            <p class="font-cinzel text-white text-xs font-semibold">Trusted Vendors</p>
+            <p class="text-white/50 text-[10px] mt-0.5">Verified professionals</p>
+          </div>
+        </div>
+        <div class="flex items-center gap-4">
+          <div
+            class="w-12 h-12 rounded-xl bg-yellow-500/10 border border-yellow-500/20 flex items-center justify-center text-xl">
+            🔒</div>
+          <div>
+            <p class="font-cinzel text-white text-xs font-semibold">Secure & Reliable</p>
+            <p class="text-white/50 text-[10px] mt-0.5">Your data is safe</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FEATURED EVENTS -->
+    <section id="events" class="max-w-7xl mx-auto px-6 lg:px-10 py-10">
+      <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10 reveal">
+        <div>
+          <div class="inline-flex items-center gap-3 mb-3">
+            <span class="w-8 h-px bg-yellow-500 block"></span>
+            <span class="font-cinzel text-yellow-500 text-[10px] font-semibold tracking-[0.4em] uppercase">Curated For
+              You</span>
+          </div>
+          <h3 class="font-cinzel text-3xl font-bold text-white mb-2">Featured Events</h3>
+          <p class="font-cormorant text-white/60 text-base">Book your spot at top curated events this season.</p>
+        </div>
+        <div class="flex flex-wrap gap-3" id="filter-bar">
+          <span data-filter="all"
+            class="filter-tag active rounded-full bg-yellow-500 text-black px-4 py-2 text-xs font-bold font-cinzel tracking-wider cursor-pointer">All
+            Events</span>
+          <span data-filter="tech"
+            class="filter-tag rounded-full bg-white/[0.04] border border-yellow-500/20 text-white/70 px-4 py-2 text-xs font-cinzel hover:border-yellow-500/50 hover:text-yellow-400 cursor-pointer transition">Tech</span>
+          <span data-filter="music"
+            class="filter-tag rounded-full bg-white/[0.04] border border-yellow-500/20 text-white/70 px-4 py-2 text-xs font-cinzel hover:border-yellow-500/50 hover:text-yellow-400 cursor-pointer transition">Music</span>
+          <span data-filter="workshop"
+            class="filter-tag rounded-full bg-white/[0.04] border border-yellow-500/20 text-white/70 px-4 py-2 text-xs font-cinzel hover:border-yellow-500/50 hover:text-yellow-400 cursor-pointer transition">Workshop</span>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6" id="events-grid">
+
+
+
+      </div>
+      <p id="no-results" class="hidden text-center text-white/60 font-cormorant text-lg mt-10">No events found in this
+        category yet — check back soon!</p>
+    </section>
+
+    <!-- COUNTDOWN -->
+    <section class="max-w-7xl mx-auto px-6 lg:px-10 py-16 reveal">
+      <div
+        class="relative rounded-3xl bg-yellow-500/10 border border-yellow-500/25 p-12 overflow-hidden before:absolute before:top-0 before:left-0 before:right-0 before:h-px before:bg-gradient-to-r before:from-transparent before:via-yellow-500 before:to-transparent after:absolute after:bottom-0 after:left-0 after:right-0 after:h-px after:bg-gradient-to-r after:from-transparent after:via-yellow-500/40 after:to-transparent">
+        <div class="grid gap-10 lg:grid-cols-2 items-center">
+          <div>
+            <div class="inline-flex items-center gap-3 mb-4">
+              <span class="w-8 h-px bg-yellow-500 block"></span>
+              <span class="font-cinzel text-yellow-500 text-[10px] font-semibold tracking-[0.4em] uppercase">Upcoming
+                Highlight</span>
+            </div>
+            <h3 class="font-cinzel text-3xl lg:text-4xl font-bold text-white mb-4 leading-tight">
+              Join the <span class="gold-text">AI Summit</span> and innovate with the future.
+            </h3>
+            <p class="font-cormorant text-white/70 text-lg leading-relaxed max-w-xl">A premium gathering for builders
+              and creators to explore AI breakthroughs, product showcases, and immersive panels.</p>
+          </div>
+          <div class="grid grid-cols-2 gap-4">
+            <div class="rounded-2xl bg-white/[0.05] border border-yellow-500/20 p-6 text-center">
+              <p id="cd-days" class="font-cinzel text-4xl font-bold text-white">00</p>
+              <p class="mt-2 text-xs text-white/50 tracking-widest uppercase font-cinzel">Days</p>
+            </div>
+            <div class="rounded-2xl bg-white/[0.05] border border-yellow-500/20 p-6 text-center">
+              <p id="cd-hours" class="font-cinzel text-4xl font-bold text-white">00</p>
+              <p class="mt-2 text-xs text-white/50 tracking-widest uppercase font-cinzel">Hours</p>
+            </div>
+            <div class="rounded-2xl bg-white/[0.05] border border-yellow-500/20 p-6 text-center">
+              <p id="cd-mins" class="font-cinzel text-4xl font-bold text-white">00</p>
+              <p class="mt-2 text-xs text-white/50 tracking-widest uppercase font-cinzel">Mins</p>
+            </div>
+            <div class="rounded-2xl bg-white/[0.05] border border-yellow-500/20 p-6 text-center">
+              <p id="cd-secs" class="font-cinzel text-4xl font-bold text-white">00</p>
+              <p class="mt-2 text-xs text-white/50 tracking-widest uppercase font-cinzel">Secs</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="text-center pb-10 text-yellow-500/20 text-lg tracking-[8px]">— ✦ —</div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="relative z-10 py-12 mt-4 border-t border-yellow-500/20">
+    <div class="max-w-7xl mx-auto px-6 lg:px-10">
+      <div class="grid gap-8 md:grid-cols-4 mb-8">
+        <div>
+          <h4 class="font-cinzel text-xl font-bold mb-4 text-white">Nice-Xclusive</h4>
+          <p class="font-cormorant text-white/70 text-sm">A premium platform for discovering and booking events you
+            love.</p>
+        </div>
+        <div>
+          <h4 class="font-cinzel text-xl font-bold mb-4 text-white">Quick Links</h4>
+          <ul class="space-y-2">
+            <li><a href="/tailwind/src/Aboutus.html"
+                class="font-cinzel text-white/70 hover:text-yellow-400 transition text-xs">About Us</a></li>
+            <li><a href="/tailwind/src/Services.html"
+                class="font-cinzel text-white/70 hover:text-yellow-400 transition text-xs">Services</a></li>
+            <li><a href="/tailwind/src/Contact-us.html"
+                class="font-cinzel text-white/70 hover:text-yellow-400 transition text-xs">Contact</a></li>
+            <li><a href="/tailwind/src/terms.html"
+                class="font-cinzel text-white/70 hover:text-yellow-400 transition text-xs">Terms & Policy</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="font-cinzel text-xl font-bold mb-4 text-white">Categories</h4>
+          <ul class="space-y-2">
+            <li><a href="#" class="font-cinzel text-white/70 hover:text-yellow-400 transition text-xs">Tech Events</a>
+            </li>
+            <li><a href="#" class="font-cinzel text-white/70 hover:text-yellow-400 transition text-xs">Music & Arts</a>
+            </li>
+            <li><a href="#" class="font-cinzel text-white/70 hover:text-yellow-400 transition text-xs">Workshops</a>
+            </li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="font-cinzel text-xl font-bold mb-4 text-white">Follow Us</h4>
+          <div class="flex gap-4">
+            <a href="https://www.facebook.com/share/18bfwdgMj4/"
+              class="w-9 h-9 rounded-lg border border-yellow-500/20 bg-white/[0.04] flex items-center justify-center text-white/70 hover:border-yellow-500 hover:text-yellow-400 transition font-bold text-sm">f</a>
+            <a href="https://x.com/ExclusiveNice4"
+              class="w-9 h-9 rounded-lg border border-yellow-500/20 bg-white/[0.04] flex items-center justify-center text-white/70 hover:border-yellow-500 hover:text-yellow-400 transition font-bold text-sm">X</a>
+            <a href="https://www.snapchat.com/add/ngodwill8"
+              class="w-9 h-9 rounded-lg border border-yellow-500/20 bg-white/[0.04] flex items-center justify-center text-white/70 hover:border-yellow-500 hover:text-yellow-400 transition text-base">📷</a>
+            <a href="https://www.instagram.com/ifeanyichukwu5555"
+              class="w-9 h-9 rounded-lg border border-yellow-500/20 bg-white/[0.04] flex items-center justify-center text-white/70 hover:border-yellow-500 hover:text-yellow-400 transition font-bold text-sm">in</a>
+          </div>
+        </div>
+      </div>
+      <div class="border-t border-white/10 pt-6 text-center font-cinzel text-white/40 text-xs">
+        © 2026 Nice-Xclusive Event Booking Platform. All rights reserved.
+      </div>
+    </div>
+  </footer>
+
+  <script>
+
+    document.addEventListener('DOMContentLoaded', function () {
+
+      /* 1. HAMBURGER */
+      const hamburger = document.getElementById('hamburger');
+      const mobileMenu = document.getElementById('mobile-menu');
+      const hamIcon = document.getElementById('ham-icon');
+      hamburger.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const open = mobileMenu.classList.toggle('open');
+        hamIcon.className = open ? 'ri-close-line' : 'ri-menu-line';
+      });
+      mobileMenu.querySelectorAll('a').forEach(a => {
+        a.addEventListener('click', () => { mobileMenu.classList.remove('open'); hamIcon.className = 'ri-menu-line'; });
+      });
+      document.addEventListener('click', (e) => {
+        if (!mobileMenu.contains(e.target) && !hamburger.contains(e.target)) {
+          mobileMenu.classList.remove('open'); hamIcon.className = 'ri-menu-line';
+        }
+      });
+
+      /* 2. NAVBAR SHADOW */
+      const nav = document.getElementById('main-nav');
+      window.addEventListener('scroll', () => {
+        nav.classList.toggle('shadow-lg', window.scrollY > 40);
+        nav.classList.toggle('shadow-black/40', window.scrollY > 40);
+      });
+
+      /* 3. SCROLL REVEAL */
+      const revealObserver = new IntersectionObserver((entries) => {
+        entries.forEach(e => {
+          if (e.isIntersecting) { e.target.classList.add('in-view'); revealObserver.unobserve(e.target); }
+        });
+      }, { threshold: 0.12 });
+      // document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+      /* 4. LIGHTBOX */
+      const lightbox = document.getElementById('lightbox');
+      const lightboxImg = document.getElementById('lightbox-img');
+      const lightboxClose = document.getElementById('lightbox-close');
+
+      function enableLightbox() {
+        document.querySelectorAll(".zoom-img").forEach(img => {
+          img.onclick = () => {
+            lightboxImg.src = img.src;
+            lightboxImg.alt = img.alt;
+            lightbox.classList.add("active");
+            document.body.style.overflow = "hidden";
+          };
+        });
+      }
+
+
+      function enableReveal() {
+        document.querySelectorAll(".reveal").forEach(card => {
+          revealObserver.observe(card);
+        });
+      }
+      // Open on click for any image with data-lightbox
+      // document.querySelectorAll('img[data-lightbox]').forEach(img => {
+      //   img.addEventListener('click', () => {
+      //     lightboxImg.src = img.src;
+      //     lightboxImg.alt = img.alt;
+      //     lightbox.classList.add('active');
+      //     document.body.style.overflow = 'hidden'; // prevent background scroll
+      //   });
+      // });
+
+      // // Also open hero collage images
+      // document.querySelectorAll('.zoom-img').forEach(img => {
+      //   img.addEventListener('click', () => {
+      //     lightboxImg.src = img.src;
+      //     lightboxImg.alt = img.alt || 'Event image';
+      //     lightbox.classList.add('active');
+      //     document.body.style.overflow = 'hidden';
+      //   });
+      // });
+
+      // Close on X button
+      lightboxClose.addEventListener('click', closeLightbox);
+
+      // Close on clicking outside the image (on the dark overlay)
+      lightbox.addEventListener('click', (e) => {
+        if (e.target === lightbox) closeLightbox();
+      });
+
+      // Close on Escape key
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') closeLightbox();
+      });
+
+      function closeLightbox() {
+        lightbox.classList.remove('active');
+        document.body.style.overflow = '';
+        setTimeout(() => { lightboxImg.src = ''; }, 300);
+      }
+
+      enableLightbox();
+
+      // Lightbox
+      // document.querySelectorAll(".zoom-img").forEach(img => {
+      //     img.addEventListener("click", () => {
+      //         lightboxImg.src = img.src;
+      //         lightboxImg.alt = img.alt;
+      //         lightbox.classList.add("active");
+      //         document.body.style.overflow = "hidden";
+      //     });
+      // });
+
+
+
+
+      // document.querySelectorAll(".zoom-img").forEach(img => {
+      //     img.addEventListener("click", () => {
+      //         lightboxImg.src = img.src;
+      //         lightboxImg.alt = img.alt;
+      //         lightbox.classList.add("active");
+      //         document.body.style.overflow = "hidden";
+      //     });
+      // });
+
+      /* 5. Render Events*/
+      const eventsGrid = document.getElementById("events-grid");
+
+      const events = JSON.parse(localStorage.getItem("events")) || [];
+
+      // ---- saved events helpers ----
+      function getCurrentUser() {
+        return JSON.parse(localStorage.getItem("loggedInUser")) ||
+          JSON.parse(localStorage.getItem("currentUser"));
+      }
+
+      function getSavedEvents() {
+        return JSON.parse(localStorage.getItem("savedEvents")) || [];
+      }
+
+      function isSaved(eventId) {
+        const user = getCurrentUser();
+        if (!user) return false;
+        return getSavedEvents().some(s => s.email === user.email && s.eventId === eventId);
+      }
+
+      function toggleSave(eventId, btn) {
+        const user = getCurrentUser();
+        if (!user) {
+          alert("Please sign in to save events.");
+          window.location.href = "sign-in.html";
+          return;
+        }
+
+        let saved = getSavedEvents();
+        const exists = saved.some(s => s.email === user.email && s.eventId === eventId);
+
+        if (exists) {
+          saved = saved.filter(s => !(s.email === user.email && s.eventId === eventId));
+        } else {
+          saved.push({ email: user.email, eventId: eventId, savedAt: new Date().toISOString() });
+        }
+
+        localStorage.setItem("savedEvents", JSON.stringify(saved));
+        updateHeartIcon(btn, !exists);
+      }
+
+      function updateHeartIcon(btn, saved) {
+        const icon = btn.querySelector("i");
+        if (saved) {
+          icon.classList.remove("ri-heart-3-line");
+          icon.classList.add("ri-heart-3-fill");
+          btn.classList.add("text-yellow-400");
+          btn.classList.remove("text-white/70");
+        } else {
+          icon.classList.remove("ri-heart-3-fill");
+          icon.classList.add("ri-heart-3-line");
+          btn.classList.remove("text-yellow-400");
+          btn.classList.add("text-white/70");
+        }
+      }
+
+      // ---- render ----
+      if (events.length > 0) {
+
+        eventsGrid.innerHTML = events.map(event => `
+        <article
+            data-category="${event.category.toLowerCase()}"
+            class="event-card reveal flex flex-col border border-yellow-500/20 bg-white/[0.03] rounded-3xl overflow-hidden hover:-translate-y-2 hover:border-yellow-500/50 transition">
+
+            <div class="relative h-56 overflow-hidden">
+
+                <img
+                    src="${event.banner || 'https://via.placeholder.com/600x400'}"
+                    class="zoom-img w-full h-full object-cover"
+                    alt="${event.name}"
+                    data-lightbox="true">
+
+                <div class="absolute inset-0"
+                    style="background:linear-gradient(to top,rgba(6,3,15,.5),transparent);">
+                </div>
+
+                <span class="absolute top-4 left-4
+                    rounded-full
+                    bg-yellow-500/20
+                    border border-yellow-500/40
+                    px-3 py-1
+                    text-[10px]
+                    text-yellow-400
+                    uppercase">
+
+                    ${event.category}
+
+                </span>
+
+                <button
+                    class="save-btn absolute top-4 right-4 w-9 h-9 rounded-full bg-black/40 backdrop-blur-sm border border-white/10 flex items-center justify-center text-white/70 hover:text-yellow-400 transition"
+                    data-id="${event.id}"
+                    aria-label="Save event">
+                    <i class="ri-heart-3-line text-lg"></i>
+                </button>
+
+            </div>
+
+            <div class="flex flex-col flex-1 p-6 gap-3">
+
+                <h4 class="font-cinzel text-xl text-white">
+                    ${event.name}
+                </h4>
+
+                <p class="text-white/60 text-sm line-clamp-2">
+                    ${event.description}
+                </p>
+
+                <div class="mt-auto pt-4 border-t border-yellow-500/10 flex justify-between">
+
+                    <div class="text-xs text-white/60">
+
+                        <p>
+                            <span class="text-yellow-500">Date:</span>
+                            ${event.date}
+                        </p>
+
+                        <p>
+                            <span class="text-yellow-500">Location:</span>
+                            ${event.venue}
+                        </p>
+
+                    </div>
+
+                    <a href="event-details.html?id=${event.id}"
+   class="bg-yellow-500 px-5 py-2 rounded-xl text-black text-xs font-bold">
+   Details
+</a>
+
+                </div>
+
+            </div>
+
+        </article>
+
+    `).join("");
+
+        // wire up heart buttons + reflect already-saved state
+        eventsGrid.querySelectorAll(".save-btn").forEach(btn => {
+          const eventId = btn.dataset.id;
+          updateHeartIcon(btn, isSaved(eventId));
+          btn.addEventListener("click", (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            toggleSave(eventId, btn);
+          });
+        });
+
+      } else {
+        eventsGrid.innerHTML = `
+        <div class="col-span-full text-center py-12 text-white/60">
+            No events available yet.
+        </div>
+    `;
+      }
+      enableLightbox();
+      // Reattach lightbox to newly created images
+      // document.querySelectorAll(".zoom-img").forEach(img => {
+      //     img.addEventListener("click", () => {
+      //         lightboxImg.src = img.src;
+      //         lightboxImg.alt = img.alt;
+      //         lightbox.classList.add("active");
+      //         document.body.style.overflow = "hidden";
+      //     });
+      // });
+
+      // Observe newly created cards
+
+
+      enableReveal();
+
+      /* 6. EVENT FILTER */
+      const filterTags = document.querySelectorAll(".filter-tag");
+      const noResults = document.getElementById("no-results");
+
+      filterTags.forEach(tag => {
+        tag.addEventListener("click", () => {
+
+          const eventCards = document.querySelectorAll(".event-card");
+
+          filterTags.forEach(t => {
+            t.classList.remove("active", "bg-yellow-500", "text-black");
+            t.classList.add(
+              "bg-white/[0.04]",
+              "border",
+              "border-yellow-500/20",
+              "text-white/70"
+            );
+          });
+
+          tag.classList.add("active", "bg-yellow-500", "text-black");
+          tag.classList.remove(
+            "bg-white/[0.04]",
+            "border",
+            "border-yellow-500/20",
+            "text-white/70"
+          );
+
+          const filter = tag.dataset.filter;
+          let visible = 0;
+
+          eventCards.forEach(card => {
+            const show =
+              filter === "all" ||
+              card.dataset.category === filter;
+
+            card.style.display = show ? "" : "none";
+
+            if (show) visible++;
+          });
+
+          noResults.classList.toggle("hidden", visible > 0);
+
+        });
+      });
+
+      /* 7. COUNTDOWN */
+      const target = new Date();
+      target.setDate(target.getDate() + 28);
+      target.setHours(target.getHours() + 14);
+      target.setMinutes(target.getMinutes() + 32);
+      const pad = n => String(n).padStart(2, '0');
+      const daysEl = document.getElementById('cd-days');
+      const hoursEl = document.getElementById('cd-hours');
+      const minsEl = document.getElementById('cd-mins');
+      const secsEl = document.getElementById('cd-secs');
+      function tick() {
+        const diff = Math.max(0, target - new Date());
+        daysEl.textContent = pad(Math.floor(diff / 86400000));
+        hoursEl.textContent = pad(Math.floor((diff / 3600000) % 24));
+        minsEl.textContent = pad(Math.floor((diff / 60000) % 60));
+        secsEl.textContent = pad(Math.floor((diff / 1000) % 60));
+        secsEl.classList.remove('count-pulse');
+        void secsEl.offsetWidth;
+        secsEl.classList.add('count-pulse');
+      }
+      tick();
+      setInterval(tick, 1000);
+
+
+    });
+
+  </script>
+
+</body>
+
+</html>
